@@ -143,17 +143,18 @@
                     </div><!-- end col -->
                     <div class="col-xl-6">
                         <div class="card card-height-100">
-                            <div class="card-header border-bottom-dashed align-items-center d-flex">
+                            {{-- <div class="card-header border-bottom-dashed align-items-center d-flex">
                                 <h4 class="card-title mb-0 flex-grow-1">Recent Activity</h4>
                                 <div class="flex-shrink-0">
                                     <button type="button" class="btn btn-soft-primary btn-sm shadow-none">
                                         View All Activity
                                     </button>
                                 </div>
-                            </div><!-- end cardheader -->
+                            </div><!-- end cardheader --> --}}
                             <div class="card-body p-0">
                                 <div data-simplebar style="max-height: 364px;" class="p-3">
-                                    <div class="acitivity-timeline acitivity-main">
+                                    do something here
+                                    {{-- <div class="acitivity-timeline acitivity-main">
                                         <div class="acitivity-item d-flex">
                                             <div class="flex-shrink-0 avatar-xs acitivity-avatar">
                                                 <div class="avatar-title bg-soft-success text-success rounded-circle shadow">
@@ -286,7 +287,7 @@
                                                 <small class="mb-0 text-muted">26 Aug, 2021</small>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div><!-- end card body -->
                         </div><!-- end card -->

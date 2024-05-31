@@ -1,3 +1,4 @@
+
 <?php $__env->startSection('title'); ?>
     <?php echo app('translator')->get('translation.signup'); ?>
 <?php $__env->stopSection(); ?>
@@ -203,7 +204,7 @@ unset($__errorArgs, $__bag); ?>
                         <!-- end card -->
 
                         <div class="mt-4 text-center">
-                            <p class="mb-0">Already have an account ? <a href="auth-signin-basic"
+                            <p class="mb-0">Already have an account ? <a href="login"
                                     class="fw-semibold text-primary text-decoration-underline"> Signin </a> </p>
                         </div>
 
