@@ -105,8 +105,8 @@ unset($__errorArgs, $__bag); ?>
 
                                                 <div class="mb-3">
                                                     <div class="float-end">
-                                                        <a href="auth-pass-reset-cover" class="text-muted">Forgot
-                                                            password?</a>
+                                                        <a href="<?php echo e(route('forgot-password-form')); ?>" class="text-muted">Forgot password?</a>
+
                                                     </div>
                                                     <label class="form-label" for="password-input">Password</label>
                                                     <div class="position-relative auth-pass-inputgroup mb-3">

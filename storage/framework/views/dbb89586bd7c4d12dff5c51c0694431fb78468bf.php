@@ -19,7 +19,7 @@
                                         <div class="position-relative h-100 d-flex flex-column">
                                             <div class="mb-4">
                                                 <a href="index" class="d-block">
-                                                    <img src="<?php echo e(URL::asset('assets/images/logo-light.png')); ?>" alt="" height="18">
+                                                    <img src="<?php echo e(URL::asset('assets/images/logo-light-new.png')); ?>" alt="" height="18">
                                                 </a>
                                             </div>
                                             <div class="mt-auto">
@@ -114,20 +114,7 @@
         <!-- end auth page content -->
 
         <!-- footer -->
-        <footer class="footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="text-center">
-                            <script>
-                                document.write(new Date().getFullYear())
-                            </script> Velzon. Crafted with <i
-                                    class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        
         <!-- end Footer -->
     </div>
     <!-- end auth-page-wrapper -->
