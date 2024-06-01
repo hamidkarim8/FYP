@@ -1,23 +1,23 @@
-@extends('layouts.master-without-nav')
-@section('title') Landing @endsection
-@section('css')
-<link href="{{ URL::asset('assets/libs/swiper/swiper.min.css') }}" rel="stylesheet" type="text/css" />
 
-@endsection
-@section('body')
+<?php $__env->startSection('title'); ?> Landing <?php $__env->stopSection(); ?>
+<?php $__env->startSection('css'); ?>
+<link href="<?php echo e(URL::asset('assets/libs/swiper/swiper.min.css')); ?>" rel="stylesheet" type="text/css" />
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('body'); ?>
 
 <body data-bs-spy="scroll" data-bs-target="#navbar-example">
-@endsection
-@section('content')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
 
 
    <!-- Begin page -->
    <div class="layout-wrapper landing">
     <nav class="navbar navbar-expand-lg navbar-landing fixed-top" id="navbar">
         <div class="container">
-            <a class="navbar-brand" href="{{URL::asset('/index')}}">
-                <img src="{{ URL::asset('assets/images/logo-dark.png') }}" class="card-logo card-logo-dark" alt="logo dark" height="17">
-                <img src="{{ URL::asset('assets/images/logo-light.png') }}" class="card-logo card-logo-light" alt="logo light"
+            <a class="navbar-brand" href="<?php echo e(URL::asset('/index')); ?>">
+                <img src="<?php echo e(URL::asset('assets/images/logo-dark.png')); ?>" class="card-logo card-logo-dark" alt="logo dark" height="17">
+                <img src="<?php echo e(URL::asset('assets/images/logo-light.png')); ?>" class="card-logo card-logo-light" alt="logo light"
                     height="17">
             </a>
             <button class="navbar-toggler py-0 fs-20 text-body" type="button" data-bs-toggle="collapse"
@@ -52,34 +52,34 @@
                 </ul>
 
                 <div class="">
-                    <a href="{{URL::asset('/auth-signin-basic')}}" class="btn btn-link fw-medium text-decoration-none text-dark">Sign
+                    <a href="<?php echo e(URL::asset('/auth-signin-basic')); ?>" class="btn btn-link fw-medium text-decoration-none text-dark">Sign
                         in</a>
-                    <a href="{{URL::asset('/auth-signup-basic')}}" class="btn btn-primary">Sign Up</a>
+                    <a href="<?php echo e(URL::asset('/auth-signup-basic')); ?>" class="btn btn-primary">Sign Up</a>
                 </div>
                 <div class="dropdown ms-sm-3 header-item topbar-user">
                     <button type="button" class="btn shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         <span class="d-flex align-items-center">
-                            <img class="rounded-circle header-profile-user" src="@if (Auth::user()->avatar != ''){{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('images/default-avatar.jpg') }}@endif"
+                            <img class="rounded-circle header-profile-user" src="<?php if(Auth::user()->avatar != ''): ?><?php echo e(URL::asset('images/' . Auth::user()->avatar)); ?><?php else: ?><?php echo e(URL::asset('images/default-avatar.jpg')); ?><?php endif; ?>"
                                 alt="Header Avatar">
                             <span class="text-start ms-xl-2">
-                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{Auth::user()->name}}</span>
-                                <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">{{Auth::user()->role}}</span>
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text"><?php echo e(Auth::user()->name); ?></span>
+                                <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text"><?php echo e(Auth::user()->role); ?></span>
                             </span>
                         </span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
                         <!-- item-->
-                        <h6 class="dropdown-header">Welcome {{Auth::user()->name}}!</h6>
+                        <h6 class="dropdown-header">Welcome <?php echo e(Auth::user()->name); ?>!</h6>
                         <a class="dropdown-item" href="pages-profile-settings"><i
                                 class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Profile</span></a>
                         <a class="dropdown-item " href="javascript:void();"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
                                 class="bx bx-power-off font-size-16 align-middle me-1"></i> <span
-                                key="t-logout">@lang('translation.logout')</span></a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
+                                key="t-logout"><?php echo app('translator')->get('translation.logout'); ?></span></a>
+                        <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
+                            <?php echo csrf_field(); ?>
                         </form>
                     </div>
                 </div>
@@ -101,40 +101,40 @@
                         <p class="lead text-muted lh-base">Velzon is a fully responsive, multipurpose and premium Bootstrap 5 Admin & Dashboard Template built in multiple frameworks.</p>
 
                         <div class="d-flex gap-2 justify-content-center mt-4">
-                            <a href="{{URL::asset('/auth-signup-basic')}}" class="btn btn-primary">Get Started <i class="ri-arrow-right-line align-middle ms-1"></i></a>
-                            <a href="{{URL::asset('/pages-pricing')}}" class="btn btn-danger">View Plans <i class="ri-eye-line align-middle ms-1"></i></a>
+                            <a href="<?php echo e(URL::asset('/auth-signup-basic')); ?>" class="btn btn-primary">Get Started <i class="ri-arrow-right-line align-middle ms-1"></i></a>
+                            <a href="<?php echo e(URL::asset('/pages-pricing')); ?>" class="btn btn-danger">View Plans <i class="ri-eye-line align-middle ms-1"></i></a>
                         </div>
                     </div>
 
                     <div class="mt-4 mt-sm-5 pt-sm-5 mb-sm-n5 demo-carousel">
                         <div class="demo-img-patten-top d-none d-sm-block">
-                            <img src="{{ URL::asset('assets/images/landing/img-pattern.png') }}" class="d-block img-fluid" alt="...">
+                            <img src="<?php echo e(URL::asset('assets/images/landing/img-pattern.png')); ?>" class="d-block img-fluid" alt="...">
                         </div>
                         <div class="demo-img-patten-bottom d-none d-sm-block">
-                            <img src="{{ URL::asset('assets/images/landing/img-pattern.png') }}" class="d-block img-fluid" alt="...">
+                            <img src="<?php echo e(URL::asset('assets/images/landing/img-pattern.png')); ?>" class="d-block img-fluid" alt="...">
                         </div>
                         <div class="carousel slide carousel-fade" data-bs-ride="carousel">
                             <div class="carousel-inner shadow-lg p-2 bg-white rounded">
                                 <div class="carousel-item active" data-bs-interval="2000">
-                                    <img src="{{ URL::asset('assets/images/demos/default.png') }}" class="d-block w-100" alt="...">
+                                    <img src="<?php echo e(URL::asset('assets/images/demos/default.png')); ?>" class="d-block w-100" alt="...">
                                 </div>
                                 <div class="carousel-item" data-bs-interval="2000">
-                                    <img src="{{ URL::asset('assets/images/demos/saas.png') }}" class="d-block w-100" alt="...">
+                                    <img src="<?php echo e(URL::asset('assets/images/demos/saas.png')); ?>" class="d-block w-100" alt="...">
                                 </div>
                                 <div class="carousel-item" data-bs-interval="2000">
-                                    <img src="{{ URL::asset('assets/images/demos/material.png') }}" class="d-block w-100" alt="...">
+                                    <img src="<?php echo e(URL::asset('assets/images/demos/material.png')); ?>" class="d-block w-100" alt="...">
                                 </div>
                                 <div class="carousel-item" data-bs-interval="2000">
-                                    <img src="{{ URL::asset('assets/images/demos/minimal.png') }}" class="d-block w-100" alt="...">
+                                    <img src="<?php echo e(URL::asset('assets/images/demos/minimal.png')); ?>" class="d-block w-100" alt="...">
                                 </div>
                                 <div class="carousel-item" data-bs-interval="2000">
-                                    <img src="{{ URL::asset('assets/images/demos/creative.png') }}" class="d-block w-100" alt="...">
+                                    <img src="<?php echo e(URL::asset('assets/images/demos/creative.png')); ?>" class="d-block w-100" alt="...">
                                 </div>
                                 <div class="carousel-item" data-bs-interval="2000">
-                                    <img src="{{ URL::asset('assets/images/demos/modern.png') }}" class="d-block w-100" alt="...">
+                                    <img src="<?php echo e(URL::asset('assets/images/demos/modern.png')); ?>" class="d-block w-100" alt="...">
                                 </div>
                                 <div class="carousel-item" data-bs-interval="2000">
-                                    <img src="{{ URL::asset('assets/images/demos/interactive.png') }}" class="d-block w-100" alt="...">
+                                    <img src="<?php echo e(URL::asset('assets/images/demos/interactive.png')); ?>" class="d-block w-100" alt="...">
                                 </div>
                             </div>
                         </div>
@@ -171,37 +171,37 @@
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
                                     <div class="client-images">
-                                        <img src="{{ URL::asset('assets/images/clients/amazon.svg') }}" alt="client-img"
+                                        <img src="<?php echo e(URL::asset('assets/images/clients/amazon.svg')); ?>" alt="client-img"
                                             class="mx-auto img-fluid d-block">
                                     </div>
                                 </div>
                                 <div class="swiper-slide">
                                     <div class="client-images">
-                                        <img src="{{ URL::asset('assets/images/clients/walmart.svg') }}" alt="client-img"
+                                        <img src="<?php echo e(URL::asset('assets/images/clients/walmart.svg')); ?>" alt="client-img"
                                             class="mx-auto img-fluid d-block">
                                     </div>
                                 </div>
                                 <div class="swiper-slide">
                                     <div class="client-images">
-                                        <img src="{{ URL::asset('assets/images/clients/lenovo.svg') }}" alt="client-img"
+                                        <img src="<?php echo e(URL::asset('assets/images/clients/lenovo.svg')); ?>" alt="client-img"
                                             class="mx-auto img-fluid d-block">
                                     </div>
                                 </div>
                                 <div class="swiper-slide">
                                     <div class="client-images">
-                                        <img src="{{ URL::asset('assets/images/clients/paypal.svg') }}" alt="client-img"
+                                        <img src="<?php echo e(URL::asset('assets/images/clients/paypal.svg')); ?>" alt="client-img"
                                             class="mx-auto img-fluid d-block">
                                     </div>
                                 </div>
                                 <div class="swiper-slide">
                                     <div class="client-images">
-                                        <img src="{{ URL::asset('assets/images/clients/shopify.svg') }}" alt="client-img"
+                                        <img src="<?php echo e(URL::asset('assets/images/clients/shopify.svg')); ?>" alt="client-img"
                                             class="mx-auto img-fluid d-block">
                                     </div>
                                 </div>
                                 <div class="swiper-slide">
                                     <div class="client-images">
-                                        <img src="{{ URL::asset('assets/images/clients/verizon.svg') }}" alt="client-img"
+                                        <img src="<?php echo e(URL::asset('assets/images/clients/verizon.svg')); ?>" alt="client-img"
                                             class="mx-auto img-fluid d-block">
                                     </div>
                                 </div>
@@ -418,7 +418,7 @@
             <div class="row align-items-center gy-4">
                 <div class="col-lg-6 col-sm-7 mx-auto">
                     <div>
-                        <img src="{{ URL::asset('assets/images/landing/features/img-1.png') }}" alt="" class="img-fluid mx-auto">
+                        <img src="<?php echo e(URL::asset('assets/images/landing/features/img-1.png')); ?>" alt="" class="img-fluid mx-auto">
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -573,14 +573,14 @@
                         </div>
 
                         <div class="mt-4">
-                            <a href="{{URL::asset('/index')}}" class="btn btn-primary">Learn More <i class="ri-arrow-right-line align-middle ms-1"></i></a>
+                            <a href="<?php echo e(URL::asset('/index')); ?>" class="btn btn-primary">Learn More <i class="ri-arrow-right-line align-middle ms-1"></i></a>
                         </div>
                     </div>
                 </div>
                 <!-- end col -->
                 <div class="col-lg-6 col-sm-7 col-10 ms-auto order-1 order-lg-2">
                     <div>
-                        <img src="{{ URL::asset('assets/images/landing/features/img-2.png') }}" alt="" class="img-fluid">
+                        <img src="<?php echo e(URL::asset('assets/images/landing/features/img-2.png')); ?>" alt="" class="img-fluid">
                     </div>
                 </div>
             </div>
@@ -589,7 +589,7 @@
             <div class="row align-items-center mt-5 pt-lg-5 gy-4">
                 <div class="col-lg-6 col-sm-7 col-10 mx-auto">
                     <div>
-                        <img src="{{ URL::asset('assets/images/landing/features/img-3.png') }}" alt="" class="img-fluid">
+                        <img src="<?php echo e(URL::asset('assets/images/landing/features/img-3.png')); ?>" alt="" class="img-fluid">
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -1326,7 +1326,7 @@
                 <div class="col-lg-4">
                     <div class="process-card mt-4">
                         <div class="process-arrow-img d-none d-lg-block">
-                            <img src="{{ URL::asset('assets/images/landing/process-arrow-img.png') }}" alt="" class="img-fluid">
+                            <img src="<?php echo e(URL::asset('assets/images/landing/process-arrow-img.png')); ?>" alt="" class="img-fluid">
                         </div>
                         <div class="avatar-sm icon-effect mx-auto mb-4">
                             <div class="avatar-title bg-transparent text-success rounded-circle h1">
@@ -1342,7 +1342,7 @@
                 <div class="col-lg-4">
                     <div class="process-card mt-4">
                         <div class="process-arrow-img d-none d-lg-block">
-                            <img src="{{ URL::asset('assets/images/landing/process-arrow-img.png') }}" alt="" class="img-fluid">
+                            <img src="<?php echo e(URL::asset('assets/images/landing/process-arrow-img.png')); ?>" alt="" class="img-fluid">
                         </div>
                         <div class="avatar-sm icon-effect mx-auto mb-4">
                             <div class="avatar-title bg-transparent text-success rounded-circle h1">
@@ -1393,8 +1393,8 @@
                     <div class="card">
                         <div class="card-body text-center p-4">
                             <div class="avatar-xl mx-auto mb-4 position-relative">
-                                <img src="{{ URL::asset('assets/images/users/avatar-2.jpg') }}" alt="" class="img-fluid rounded-circle">
-                                <a href="{{URL::asset('/apps-mailbox')}}"
+                                <img src="<?php echo e(URL::asset('assets/images/users/avatar-2.jpg')); ?>" alt="" class="img-fluid rounded-circle">
+                                <a href="<?php echo e(URL::asset('/apps-mailbox')); ?>"
                                     class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
                                     <div class="avatar-title bg-transparent">
                                         <i class="ri-mail-fill align-bottom"></i>
@@ -1402,7 +1402,7 @@
                                 </a>
                             </div>
                             <!-- end card body -->
-                            <h5 class="mb-1"><a href="{{URL::asset('/pages-profile')}}" class="text-body">Nancy Martino</a></h5>
+                            <h5 class="mb-1"><a href="<?php echo e(URL::asset('/pages-profile')); ?>" class="text-body">Nancy Martino</a></h5>
                             <p class="text-muted mb-0 ff-secondary">Team Leader</p>
                         </div>
                     </div>
@@ -1413,8 +1413,8 @@
                     <div class="card">
                         <div class="card-body text-center p-4">
                             <div class="avatar-xl mx-auto mb-4 position-relative">
-                                <img src="{{ URL::asset('assets/images/users/avatar-10.jpg') }}" alt="" class="img-fluid rounded-circle">
-                                <a href="{{URL::asset('/apps-mailbox')}}"
+                                <img src="<?php echo e(URL::asset('assets/images/users/avatar-10.jpg')); ?>" alt="" class="img-fluid rounded-circle">
+                                <a href="<?php echo e(URL::asset('/apps-mailbox')); ?>"
                                     class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
                                     <div class="avatar-title bg-transparent">
                                         <i class="ri-mail-fill align-bottom"></i>
@@ -1422,7 +1422,7 @@
                                 </a>
                             </div>
                             <!-- end card body -->
-                            <h5 class="mb-1"><a href="{{URL::asset('/pages-profile')}}" class="text-body">Henry Baird</a></h5>
+                            <h5 class="mb-1"><a href="<?php echo e(URL::asset('/pages-profile')); ?>" class="text-body">Henry Baird</a></h5>
                             <p class="text-muted mb-0 ff-secondary">Full Stack Developer</p>
                         </div>
                     </div>
@@ -1433,8 +1433,8 @@
                     <div class="card">
                         <div class="card-body text-center p-4">
                             <div class="avatar-xl mx-auto mb-4 position-relative">
-                                <img src="{{ URL::asset('assets/images/users/avatar-3.jpg') }}" alt="" class="img-fluid rounded-circle">
-                                <a href="{{URL::asset('/apps-mailbox')}}"
+                                <img src="<?php echo e(URL::asset('assets/images/users/avatar-3.jpg')); ?>" alt="" class="img-fluid rounded-circle">
+                                <a href="<?php echo e(URL::asset('/apps-mailbox')); ?>"
                                     class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
                                     <div class="avatar-title bg-transparent">
                                         <i class="ri-mail-fill align-bottom"></i>
@@ -1442,7 +1442,7 @@
                                 </a>
                             </div>
                             <!-- end card body -->
-                            <h5 class="mb-1"><a href="{{URL::asset('/pages-profile')}}" class="text-body">Frank Hook</a></h5>
+                            <h5 class="mb-1"><a href="<?php echo e(URL::asset('/pages-profile')); ?>" class="text-body">Frank Hook</a></h5>
                             <p class="text-muted mb-0 ff-secondary">Project Manager</p>
                         </div>
                     </div>
@@ -1453,8 +1453,8 @@
                     <div class="card">
                         <div class="card-body text-center p-4">
                             <div class="avatar-xl mx-auto mb-4 position-relative">
-                                <img src="{{ URL::asset('assets/images/users/avatar-8.jpg') }}" alt="" class="img-fluid rounded-circle">
-                                <a href="{{URL::asset('/apps-mailbox')}}"
+                                <img src="<?php echo e(URL::asset('assets/images/users/avatar-8.jpg')); ?>" alt="" class="img-fluid rounded-circle">
+                                <a href="<?php echo e(URL::asset('/apps-mailbox')); ?>"
                                     class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
                                     <div class="avatar-title bg-transparent">
                                         <i class="ri-mail-fill align-bottom"></i>
@@ -1462,7 +1462,7 @@
                                 </a>
                             </div>
                             <!-- end card body -->
-                            <h5 class="mb-1"><a href="{{URL::asset('/pages-profile')}}" class="text-body">Donald Palmer</a></h5>
+                            <h5 class="mb-1"><a href="<?php echo e(URL::asset('/pages-profile')); ?>" class="text-body">Donald Palmer</a></h5>
                             <p class="text-muted mb-0 ff-secondary">UI/UX Designer</p>
                         </div>
                     </div>
@@ -1476,8 +1476,8 @@
                     <div class="card">
                         <div class="card-body text-center p-4">
                             <div class="avatar-xl mx-auto mb-4 position-relative">
-                                <img src="{{ URL::asset('assets/images/users/avatar-5.jpg') }}" alt="" class="img-fluid rounded-circle">
-                                <a href="{{URL::asset('/apps-mailbox')}}"
+                                <img src="<?php echo e(URL::asset('assets/images/users/avatar-5.jpg')); ?>" alt="" class="img-fluid rounded-circle">
+                                <a href="<?php echo e(URL::asset('/apps-mailbox')); ?>"
                                     class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
                                     <div class="avatar-title bg-transparent">
                                         <i class="ri-mail-fill align-bottom"></i>
@@ -1485,7 +1485,7 @@
                                 </a>
                             </div>
                             <!-- end card body -->
-                            <h5 class="mb-1"><a href="{{URL::asset('/pages-profile')}}" class="text-body">Erica Kernan</a></h5>
+                            <h5 class="mb-1"><a href="<?php echo e(URL::asset('/pages-profile')); ?>" class="text-body">Erica Kernan</a></h5>
                             <p class="text-muted mb-0 ff-secondary">Web Designer</p>
                         </div>
                     </div>
@@ -1496,8 +1496,8 @@
                     <div class="card">
                         <div class="card-body text-center p-4">
                             <div class="avatar-xl mx-auto mb-4 position-relative">
-                                <img src="{{ URL::asset('assets/images/users/avatar-4.jpg') }}" alt="" class="img-fluid rounded-circle">
-                                <a href="{{URL::asset('/apps-mailbox')}}"
+                                <img src="<?php echo e(URL::asset('assets/images/users/avatar-4.jpg')); ?>" alt="" class="img-fluid rounded-circle">
+                                <a href="<?php echo e(URL::asset('/apps-mailbox')); ?>"
                                     class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
                                     <div class="avatar-title bg-transparent">
                                         <i class="ri-mail-fill align-bottom"></i>
@@ -1505,7 +1505,7 @@
                                 </a>
                             </div>
                             <!-- end card body -->
-                            <h5 class="mb-1"><a href="{{URL::asset('/pages-profile')}}" class="text-body">Alexis Clarke</a></h5>
+                            <h5 class="mb-1"><a href="<?php echo e(URL::asset('/pages-profile')); ?>" class="text-body">Alexis Clarke</a></h5>
                             <p class="text-muted mb-0 ff-secondary">Backend Developer</p>
                         </div>
                     </div>
@@ -1516,8 +1516,8 @@
                     <div class="card">
                         <div class="card-body text-center p-4">
                             <div class="avatar-xl mx-auto mb-4 position-relative">
-                                <img src="{{ URL::asset('assets/images/users/avatar-6.jpg') }}" alt="" class="img-fluid rounded-circle">
-                                <a href="{{URL::asset('/apps-mailbox')}}"
+                                <img src="<?php echo e(URL::asset('assets/images/users/avatar-6.jpg')); ?>" alt="" class="img-fluid rounded-circle">
+                                <a href="<?php echo e(URL::asset('/apps-mailbox')); ?>"
                                     class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
                                     <div class="avatar-title bg-transparent">
                                         <i class="ri-mail-fill align-bottom"></i>
@@ -1525,7 +1525,7 @@
                                 </a>
                             </div>
                             <!-- end card body -->
-                            <h5 class="mb-1"><a href="{{URL::asset('/pages-profile')}}" class="text-body">Marie Ward</a></h5>
+                            <h5 class="mb-1"><a href="<?php echo e(URL::asset('/pages-profile')); ?>" class="text-body">Marie Ward</a></h5>
                             <p class="text-muted mb-0 ff-secondary">Full Stack Developer</p>
                         </div>
                     </div>
@@ -1537,8 +1537,8 @@
                     <div class="card">
                         <div class="card-body text-center p-4">
                             <div class="avatar-xl mx-auto mb-4 position-relative">
-                                <img src="{{ URL::asset('assets/images/users/avatar-7.jpg') }}" alt="" class="img-fluid rounded-circle">
-                                <a href="{{URL::asset('/apps-mailbox')}}"
+                                <img src="<?php echo e(URL::asset('assets/images/users/avatar-7.jpg')); ?>" alt="" class="img-fluid rounded-circle">
+                                <a href="<?php echo e(URL::asset('/apps-mailbox')); ?>"
                                     class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
                                     <div class="avatar-title bg-transparent">
                                         <i class="ri-mail-fill align-bottom"></i>
@@ -1546,7 +1546,7 @@
                                 </a>
                             </div>
                             <!-- end card body -->
-                            <h5 class="mb-1"><a href="{{URL::asset('/pages-profile')}}" class="text-body">Jack Gough</a></h5>
+                            <h5 class="mb-1"><a href="<?php echo e(URL::asset('/pages-profile')); ?>" class="text-body">Jack Gough</a></h5>
                             <p class="text-muted mb-0 ff-secondary">React Js Developer</p>
                         </div>
                     </div>
@@ -1558,7 +1558,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="text-center mt-2">
-                        <a href="{{URL::asset('/pages-team')}}" class="btn btn-primary">View All Members <i
+                        <a href="<?php echo e(URL::asset('/pages-team')); ?>" class="btn btn-primary">View All Members <i
                                 class="ri-arrow-right-line ms-1 align-bottom"></i></a>
                     </div>
                 </div>
@@ -1687,7 +1687,7 @@
                 <div class="col-lg-4 mt-4">
                     <div>
                         <div>
-                            <img src="{{ URL::asset('assets/images/logo-light.png') }}" alt="logo light" height="17">
+                            <img src="<?php echo e(URL::asset('assets/images/logo-light.png')); ?>" alt="logo light" height="17">
                         </div>
                         <div class= mt-4 fs-13">
                             <p>Premium Multipurpose Admin & Dashboard Template</p>
@@ -1703,10 +1703,10 @@
                             <h5 class="text-white mb-0">Company</h5>
                             <div class="text-muted mt-3">
                                 <ul class="list-unstyled ff-secondary footer-list fs-14">
-                                    <li><a href="{{URL::asset('/pages-profile')}}">About Us</a></li>
-                                    <li><a href="{{URL::asset('/pages-gallery')}}">Gallery</a></li>
-                                    <li><a href="{{URL::asset('/apps-projects-overview')}}">Projects</a></li>
-                                    <li><a href="{{URL::asset('/pages-timeline')}}">Timeline</a></li>
+                                    <li><a href="<?php echo e(URL::asset('/pages-profile')); ?>">About Us</a></li>
+                                    <li><a href="<?php echo e(URL::asset('/pages-gallery')); ?>">Gallery</a></li>
+                                    <li><a href="<?php echo e(URL::asset('/apps-projects-overview')); ?>">Projects</a></li>
+                                    <li><a href="<?php echo e(URL::asset('/pages-timeline')); ?>">Timeline</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -1714,11 +1714,11 @@
                             <h5 class="text-white mb-0">Apps Pages</h5>
                             <div class="text-muted mt-3">
                                 <ul class="list-unstyled ff-secondary footer-list fs-14">
-                                    <li><a href="{{URL::asset('/pages-pricing')}}">Calendar</a></li>
-                                    <li><a href="{{URL::asset('/apps-mailbox')}}">Mailbox</a></li>
-                                    <li><a href="{{URL::asset('/apps-chat')}}">Chat</a></li>
-                                    <li><a href="{{URL::asset('/apps-crm-deals')}}">Deals</a></li>
-                                    <li><a href="{{URL::asset('/apps-tasks-kanban')}}">Kanban Board</a></li>
+                                    <li><a href="<?php echo e(URL::asset('/pages-pricing')); ?>">Calendar</a></li>
+                                    <li><a href="<?php echo e(URL::asset('/apps-mailbox')); ?>">Mailbox</a></li>
+                                    <li><a href="<?php echo e(URL::asset('/apps-chat')); ?>">Chat</a></li>
+                                    <li><a href="<?php echo e(URL::asset('/apps-crm-deals')); ?>">Deals</a></li>
+                                    <li><a href="<?php echo e(URL::asset('/apps-tasks-kanban')); ?>">Kanban Board</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -1726,8 +1726,8 @@
                             <h5 class="text-white mb-0">Support</h5>
                             <div class="text-muted mt-3">
                                 <ul class="list-unstyled ff-secondary footer-list fs-14">
-                                    <li><a href="{{URL::asset('/pages-faqs')}}">FAQ</a></li>
-                                    <li><a href="{{URL::asset('/pages-faqs')}}">Contact</a></li>
+                                    <li><a href="<?php echo e(URL::asset('/pages-faqs')); ?>">FAQ</a></li>
+                                    <li><a href="<?php echo e(URL::asset('/pages-faqs')); ?>">Contact</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -1797,8 +1797,10 @@
 <!-- end layout wrapper -->
 
 
-    @endsection
-    @section('script')
-        <script src="{{ URL::asset('/assets/libs/swiper/swiper.min.js') }}"></script>
-        <script src="{{ URL::asset('/assets/js/pages/landing.init.js') }}"></script>
-    @endsection
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('script'); ?>
+        <script src="<?php echo e(URL::asset('/assets/libs/swiper/swiper.min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('/assets/js/pages/landing.init.js')); ?>"></script>
+    <?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master-without-nav', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\FYP-TESTING\resources\views/landing.blade.php ENDPATH**/ ?>
