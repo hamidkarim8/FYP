@@ -37,21 +37,30 @@
                     <a class="nav-link menu-link" href="/">
                         <i class="mdi mdi-speedometer"></i> <span><?php echo app('translator')->get('translation.dashboards'); ?></span>
                     </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link menu-link" href="#report">
                         <i class="mdi mdi-file-document-outline"></i> <span>Reports</span>
                     </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link menu-link" href="#items">
                         <i class="mdi mdi-cube-outline"></i> <span>Items</span>
                     </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link menu-link" href="#users">
                         <i class="mdi mdi-account-outline"></i> <span>Users</span>
                     </a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link menu-link" href="#feedback">
                         <i class="mdi mdi-comment-outline"></i> <span>Feedback</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="pages-profile">
+                    <a class="nav-link menu-link" href="pages-profile-settings">
                         <i class="mdi mdi-account-circle-outline"></i> <span>Profile</span>
                     </a>
                 </li>

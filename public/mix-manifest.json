@@ -288,5 +288,6 @@
     "/assets/js/pages/calendar.init.js": "/assets/js/pages/calendar.init.js",
     "/assets/js/pages/plugins/lord-icon-2.1.0.min.js": "/assets/js/pages/plugins/lord-icon-2.1.0.min.js",
     "/assets/js/pages/plugins/jsonfull-emoji-list.json": "/assets/js/pages/plugins/jsonfull-emoji-list.json",
-    "/assets/js/pages/plugins/event.init.json": "/assets/js/pages/plugins/event.init.json"
+    "/assets/js/pages/plugins/event.init.json": "/assets/js/pages/plugins/event.init.json",
+    "/assets/images/about-bg.jpg": "/assets/images/about-bg.jpg"
 }
