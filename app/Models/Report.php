@@ -8,22 +8,24 @@ use Illuminate\Database\Eloquent\Model;
 class Report extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        'reportType', 'reportMessage', 'dateSubmitted', 'user_id', 'lost_item_id', 'found_item_id'
+        'item_id',
+        'user_id',
+        'type',
+        'description',
+        'location',
+        'reported_at',
     ];
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
-    public function lostItem()
-    {
-        return $this->belongsTo(LostItem::class);
-    }
-
-    public function foundItem()
-    {
-        return $this->belongsTo(FoundItem::class);
-    }
 }
+

@@ -69,6 +69,22 @@ class RegisterController extends Controller
         ]);
     }
 
+    // {
+    //     return Validator::make($data, [
+    //         'name' => ['required', 'string', 'max:255'],
+    //         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+    //         'password' => ['required', 'string', 'min:8', 'confirmed'],
+    //     ], [
+    //         'name.required' => 'Please enter your name.',
+    //         'email.required' => 'Please enter your email address.',
+    //         'email.email' => 'Please enter a valid email address.',
+    //         'email.unique' => 'This email address is already registered.',
+    //         'password.required' => 'Please enter a password.',
+    //         'password.min' => 'Password must be at least 8 characters long.',
+    //         'password.confirmed' => 'Passwords do not match.',
+    //     ]);
+    // }
+
     /**
      * Create a new user instance after a valid registration.
      *
@@ -92,4 +108,18 @@ class RegisterController extends Controller
             'avatar' =>  $avatarName,
         ]);
     }
+    // {
+    //     $user = User::create([
+    //         'name' => $data['name'],
+    //         'email' => $data['email'],
+    //         'password' => bcrypt($data['password']),
+    //     ]);
+
+    //     // Create a corresponding profile with default null values
+    //     Profile::create([
+    //         'user_id' => $user->id,
+    //     ]);
+
+    //     return $user;
+    // }
 }

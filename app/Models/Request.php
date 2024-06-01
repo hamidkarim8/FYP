@@ -5,16 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FoundItem extends Model
+class Request extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'itemName', 'description', 'location', 'dateFound', 'isResolved', 'user_id'
+        'item_id',
+        'user_id',
+        'type',
+        'status',
     ];
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 }
+

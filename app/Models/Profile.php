@@ -5,12 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LostItem extends Model
+class Profile extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'itemName', 'description', 'location', 'dateLost', 'isResolved', 'user_id'
+        'user_id',
+        'fullname',
+        'address',
+        'phone_number',
+        'avatar',
+        'social_media',
+    ];
+
+    protected $casts = [
+        'social_media' => 'array',
     ];
 
     public function user()
@@ -18,3 +27,4 @@ class LostItem extends Model
         return $this->belongsTo(User::class);
     }
 }
+
