@@ -72,6 +72,9 @@ trait AuthenticatesUsers
         $request->validate([
             $this->username() => 'required|string',
             'password' => 'required|string',
+        ], [
+            'name.required' => 'Please enter your username.',
+            'password.required' => 'Please enter your password.',
         ]);
     }
 
@@ -143,7 +146,7 @@ trait AuthenticatesUsers
     protected function sendFailedLoginResponse(Request $request)
     {
         throw ValidationException::withMessages([
-            $this->username() => [trans('auth.failed')],
+            $this->username() => [trans('Incorrect Username or Password. Please try again.')],
         ]);
     }
 
@@ -154,7 +157,7 @@ trait AuthenticatesUsers
      */
     public function username()
     {
-        return 'email';
+        return 'name';
     }
 
     /**

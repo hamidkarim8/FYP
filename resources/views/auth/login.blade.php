@@ -80,10 +80,10 @@
                                                 <div class="mb-3">
                                                     <label for="username" class="form-label">Username</label>
                                                     <input type="text"
-                                                        class="form-control @error('email') is-invalid @enderror"
-                                                        value="{{ old('email') }}" id="username" name="email"
+                                                        class="form-control @error('name') is-invalid @enderror"
+                                                        value="{{ old('name') }}" id="username" name="name"
                                                         placeholder="Enter username">
-                                                    @error('email')
+                                                    @error('name')
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $message }}</strong>
                                                         </span>

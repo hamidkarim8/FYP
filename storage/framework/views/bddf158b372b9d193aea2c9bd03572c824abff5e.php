@@ -153,42 +153,9 @@ unset($__errorArgs, $__bag); ?>"
                                                 <i data-feather="lock"></i>
                                             </div>
                                         </div>
-                                        <div class=" mb-4">
-                                            <input type="file" class="form-control <?php $__errorArgs = ['avatar'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>"
-                                                name="avatar" id="input-avatar" required>
-                                            <?php $__errorArgs = ['avatar'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong><?php echo e($message); ?></strong>
-                                                </span>
-                                            <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                            <div class="invalid-feedback">
-                                                Please enter avatar
-                                            </div>
-                                            <div class="">
-                                                <i data-feather="file"></i>
-                                            </div>
-                                        </div>
+                                        
 
-                                        <div class="mb-4">
-                                            <p class="mb-0 fs-12 text-muted fst-italic">By registering you agree to the
-                                                ApFound <a href="#"
-                                                    class="text-primary text-decoration-underline fst-normal fw-medium">Terms
-                                                    of Use</a></p>
-                                        </div>
+                                        
 
                                         <div class="mt-4">
                                             <button class="btn btn-success w-100" type="submit">Sign Up</button>
