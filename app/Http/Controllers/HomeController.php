@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\FoundItem;
-use App\Models\LostItem;
+use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -36,50 +35,14 @@ class HomeController extends Controller
         }
         return abort(404);
     }
-    public function count()
-    {
-        $countUser = User::count();
-        $countFound = FoundItem::count();
-        $countLost = LostItem::count();
-
-        return view('index', compact('countUser', 'countFound', 'countLost'));
-    }
-    public function test()
-    {
-        $foundItems = FoundItem::all();
-        // dd($foundItems);
-
-        return view('found-items.index', compact('foundItems'));
-    }
-    public function foundItemCount()
-    {
-        $countFound = FoundItem::count();
-        // dd($countFound);
-
-        return view('index', compact('countFound'));
-    }
-    public function userCount()
-    {
-        $countUser = User::count();
-        // dd($countUser);
-
-        return view('index', compact('countUser'));
-    }
-    public function lostItemCount()
-    {
-        $countLost = LostItem::count();
-        // dd($countLost);
-
-        return view('index', compact('countLost'));
-    }
 
     public function root()
     {
-        // $countUser = User::count();
-        // $countFound = FoundItem::count();
-        // $countLost = LostItem::count();
-        // return view('index', compact('countUser', 'countFound', 'countLost'));
-        return view('index');
+        $countUser = User::count();
+        $countFound = Item::where('type', 'found')->count();
+        $countLost = Item::where('type', 'lost')->count();
+
+        return view('index', compact('countUser', 'countFound', 'countLost'));
     }
 
     public function timeline(Request $request)
@@ -90,9 +53,9 @@ class HomeController extends Controller
     
         try {
             if ($filter === 'lost') {
-                $items = LostItem::orderBy('created_at', 'desc')->get();
+                $items = Item::orderBy('created_at', 'desc')->where('type', 'lost')->get();
             } else {
-                $items = FoundItem::orderBy('created_at', 'desc')->get();
+                $items = Item::orderBy('created_at', 'desc')->where('type', 'found')->get();
             }
     
             $formattedItems = $items->map(function ($item) {
@@ -119,9 +82,6 @@ class HomeController extends Controller
             return view('timeline', ['formattedItems' => []]);
         }
     }
-    
-    
-    
 
     /*Language Translation*/
     public function lang($locale)
