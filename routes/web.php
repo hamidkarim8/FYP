@@ -49,7 +49,7 @@ Route::get('{any}', [App\Http\Controllers\HomeController::class, 'index'])->name
 //     return 'This is a test route.';
 // });
 
-Route::group(['middleware' => 'auth'],function(){
-    Route::post('/store-token', [NotificationSendController::class, 'updateDeviceToken'])->name('store.token');
-    Route::post('/send-web-notification', [NotificationSendController::class, 'sendNotification'])->name('send.web-notification');
-});
+// Route::group(['middleware' => 'auth'],function(){
+//     Route::post('/store-token', [NotificationSendController::class, 'updateDeviceToken'])->name('store.token');
+//     Route::post('/send-web-notification', [NotificationSendController::class, 'sendNotification'])->name('send.web-notification');
+// });

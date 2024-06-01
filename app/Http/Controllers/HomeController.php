@@ -75,10 +75,11 @@ class HomeController extends Controller
 
     public function root()
     {
-        $countUser = User::count();
-        $countFound = FoundItem::count();
-        $countLost = LostItem::count();
-        return view('index', compact('countUser', 'countFound', 'countLost'));
+        // $countUser = User::count();
+        // $countFound = FoundItem::count();
+        // $countLost = LostItem::count();
+        // return view('index', compact('countUser', 'countFound', 'countLost'));
+        return view('index');
     }
 
     public function timeline(Request $request)
