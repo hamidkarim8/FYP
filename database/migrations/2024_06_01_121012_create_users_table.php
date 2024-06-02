@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->enum('role', ['admin', 'normal_user']);
             $table->timestamps();
         });
-        User::create(['name' => 'admin','email' => 'admin@gmail.com','password' => Hash::make('123456'),'role'=>'admin','created_at' => now(),]);
+        User::create(['name' => 'admin','email' => 'admin@gmail.com','password' => Hash::make('123456'),'role'=>'admin','created_at' => now(),]);//admin
     }
 
     public function down()

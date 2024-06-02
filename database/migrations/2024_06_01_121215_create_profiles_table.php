@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+use App\Models\Profile;
+
 class CreateProfilesTable extends Migration
 {
     public function up()
@@ -20,6 +22,8 @@ class CreateProfilesTable extends Migration
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
+        Profile::create(['user_id' => 1]);//admin
+
     }
 
     public function down()

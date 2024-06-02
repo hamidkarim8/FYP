@@ -3,6 +3,8 @@
     <?php echo app('translator')->get('translation.settings'); ?>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
+    
+
     <div class="position-relative mx-n4 mt-n4">
         <div class="profile-wid-bg profile-setting-img">
             <img src="<?php echo e(URL::asset('assets/images/about-bg.jpg')); ?>" class="profile-wid-img" alt="">
@@ -10,25 +12,48 @@
         </div>
     </div>
 
+    <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.custom-toast','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('custom-toast'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>
+<?php $component = $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4; ?>
+<?php unset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4); ?>
+<?php endif; ?>
+
     <div class="row">
         <div class="col-xxl-3">
             <div class="card mt-n5">
                 <div class="card-body p-4">
                     <div class="text-center">
-                        <div class="profile-user position-relative d-inline-block mx-auto mb-4">
-                            <img src="<?php echo e($profile->avatar ? URL::asset('images/' . $profile->avatar) : URL::asset('images/default-avatar.jpg')); ?>"
-                                class="rounded-circle avatar-xl img-thumbnail user-profile-image shadow"
-                                alt="user-profile-image">
-                            <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
-                                <input id="profile-img-file-input" type="file" class="profile-img-file-input">
-                                <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
-                                    <span class="avatar-title rounded-circle bg-light text-body shadow">
-                                        <i class="ri-camera-fill"></i>
-                                    </span>
-                                </label>
+                        <form action="<?php echo e(route('updateAvatar', ['id' => Auth::id()])); ?>" method="POST"
+                            enctype="multipart/form-data">
+                            <?php echo csrf_field(); ?>
+                            <?php echo method_field('POST'); ?>
+                            <!-- Avatar upload field -->
+                            <div class="profile-user position-relative d-inline-block mx-auto mb-4">
+                                <img src="<?php echo e($profile->avatar ? URL::asset('images/' . $profile->avatar) : URL::asset('images/default-avatar.jpg')); ?>"
+                                    class="rounded-circle avatar-xl img-thumbnail user-profile-image shadow"
+                                    alt="user-profile-image">
+                                <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+                                    <input id="profile-img-file-input" name="avatar" type="file"
+                                        class="profile-img-file-input">
+                                    <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
+                                        <span class="avatar-title rounded-circle bg-light text-body shadow">
+                                            <i class="ri-camera-fill"></i>
+                                        </span>
+                                    </label>
+                                </div>
                             </div>
-                        </div>
-                        <h5 class="fs-16 mb-1"><?php echo e($profile->username); ?></h5>
+                        </form>
+                        <h5 class="fs-16 mb-1"><?php echo e(Auth::user()->name); ?></h5>
                         <p class="text-muted mb-0"><?php echo e(Auth::user()->role == 'admin' ? 'Admin' : 'Normal User'); ?></p>
                     </div>
                 </div>
@@ -41,9 +66,10 @@
                             <h5 class="card-title mb-0">Social Media</h5>
                         </div>
                     </div>
-                    <form action="<?php echo e(route('profile.update')); ?>" method="POST" enctype="multipart/form-data">
+                    <form action="<?php echo e(route('updateSocialMedia', ['id' => Auth::id()])); ?>" method="POST"
+                        enctype="multipart/form-data">
                         <?php echo csrf_field(); ?>
-                        <?php echo method_field('PUT'); ?>
+                        <?php echo method_field('POST'); ?>
                         <?php
                             $socialMedia = json_decode($profile->social_media, true);
                         ?>
@@ -53,8 +79,8 @@
                                     <i class="ri-instagram-fill"></i>
                                 </span>
                             </div>
-                            <input type="text" class="form-control" id="igUsername" name="ig_username" placeholder="Username"
-                                value="<?php echo e($socialMedia['ig_username'] ?? ''); ?>">
+                            <input type="text" class="form-control" id="igUsername" name="ig_username"
+                                placeholder="Username" value="<?php echo e($socialMedia['ig_username'] ?? ''); ?>">
                         </div>
                         <div class="mb-3 d-flex">
                             <div class="avatar-xs d-block flex-shrink-0 me-3">
@@ -62,8 +88,8 @@
                                     <i class="ri-twitter-fill"></i>
                                 </span>
                             </div>
-                            <input type="text" class="form-control" id="twitterUsername" name="twitter_username" placeholder="Username"
-                                value="<?php echo e($socialMedia['twitter_username'] ?? ''); ?>">
+                            <input type="text" class="form-control" id="twitterUsername" name="twitter_username"
+                                placeholder="Username" value="<?php echo e($socialMedia['twitter_username'] ?? ''); ?>">
                         </div>
                         <div class="mb-3 d-flex">
                             <div class="avatar-xs d-block flex-shrink-0 me-3">
@@ -71,8 +97,8 @@
                                     <i class="bx bxl-tiktok"></i>
                                 </span>
                             </div>
-                            <input type="text" class="form-control" id="tiktokUsername" name="tiktok_username" placeholder="Username"
-                                value="<?php echo e($socialMedia['tiktok_username'] ?? ''); ?>">
+                            <input type="text" class="form-control" id="tiktokUsername" name="tiktok_username"
+                                placeholder="Username" value="<?php echo e($socialMedia['tiktok_username'] ?? ''); ?>">
                         </div>
                         <div class="text-end">
                             <button type="submit" class="btn btn-primary">Update Social Media</button>
@@ -110,38 +136,43 @@
                 <div class="card-body p-4">
                     <div class="tab-content">
                         <div class="tab-pane active" id="personalDetails" role="tabpanel">
-                            <form action="<?php echo e(route('profile.update')); ?>" method="POST" enctype="multipart/form-data">
+                            <form action="<?php echo e(route('updateProfile', ['id' => Auth::id()])); ?>" method="POST"
+                                enctype="multipart/form-data">
                                 <?php echo csrf_field(); ?>
-                                <?php echo method_field('PUT'); ?>
+                                <?php echo method_field('POST'); ?>
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label for="usernameInput" class="form-label">Username</label>
-                                            <input type="text" class="form-control" id="usernameInput" name="username"
-                                                placeholder="Enter your username" value="<?php echo e($profile->username); ?>">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label for="fullNameInput" class="form-label">Full Name</label>
-                                            <input type="text" class="form-control" id="fullNameInput" name="full_name"
-                                                placeholder="Enter your full name" value="<?php echo e($profile->full_name); ?>">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label for="phonenumberInput" class="form-label">Phone Number</label>
-                                            <input type="text" class="form-control" id="phonenumberInput" name="phone_number"
-                                                placeholder="Enter your phone number" value="<?php echo e($profile->phone_number); ?>">
+                                            <input type="text" class="form-control" id="usernameInput"
+                                                name="username" placeholder="Enter your username"
+                                                value="<?php echo e(Auth::user()->name); ?>" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label for="emailInput" class="form-label">Email</label>
                                             <input type="email" class="form-control" id="emailInput" name="email"
-                                                placeholder="Enter your email" value="<?php echo e(Auth::user()->email); ?>">
+                                                placeholder="Enter your email" value="<?php echo e(Auth::user()->email); ?>" required>
                                         </div>
                                     </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="fullNameInput" class="form-label">Full Name</label>
+                                            <input type="text" class="form-control" id="fullNameInput"
+                                                name="full_name" placeholder="Enter your full name"
+                                                value="<?php echo e($profile->fullname); ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="phonenumberInput" class="form-label">Phone Number</label>
+                                            <input type="number" class="form-control" id="phonenumberInput"
+                                                name="phone_number" placeholder="Enter your phone number"
+                                                value="<?php echo e($profile->phone_number); ?>">
+                                        </div>
+                                    </div>
+
                                     <div class="col-lg-4">
                                         <div class="mb-3">
                                             <label for="cityInput" class="form-label">City</label>
@@ -159,8 +190,9 @@
                                     <div class="col-lg-4">
                                         <div class="mb-3">
                                             <label for="postcodeInput" class="form-label">Postcode</label>
-                                            <input type="text" class="form-control" id="postcodeInput" name="postcode"
-                                                placeholder="Enter postcode" value="<?php echo e($profile->postcode); ?>">
+                                            <input type="text" class="form-control" id="postcodeInput"
+                                                name="postcode" placeholder="Enter postcode"
+                                                value="<?php echo e($profile->postcode); ?>">
                                         </div>
                                     </div>
                                     <div class="col-lg-12 mt-4">
@@ -181,27 +213,28 @@
                                     <div class="col-lg-4">
                                         <div>
                                             <label for="oldpasswordInput" class="form-label">Old Password*</label>
-                                            <input type="password" class="form-control" id="oldpasswordInput" name="old_password"
-                                                placeholder="Enter current password">
+                                            <input type="password" class="form-control" id="oldpasswordInput"
+                                                name="old_password" placeholder="Enter current password">
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div>
                                             <label for="newpasswordInput" class="form-label">New Password*</label>
-                                            <input type="password" class="form-control" id="newpasswordInput" name="new_password"
-                                                placeholder="Enter new password">
+                                            <input type="password" class="form-control" id="newpasswordInput"
+                                                name="new_password" placeholder="Enter new password">
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div>
                                             <label for="confirmpasswordInput" class="form-label">Confirm Password*</label>
-                                            <input type="password" class="form-control" id="confirmpasswordInput" name="confirm_password"
-                                                placeholder="Confirm password">
+                                            <input type="password" class="form-control" id="confirmpasswordInput"
+                                                name="confirm_password" placeholder="Confirm password">
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="mb-3">
-                                            <a href="<?php echo e(route('forgot-password-form')); ?>" class="link-primary text-decoration-underline">Forgot Password?</a>
+                                            <a href="<?php echo e(route('forgot-password-form')); ?>"
+                                                class="link-primary text-decoration-underline">Forgot Password?</a>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
@@ -221,11 +254,13 @@
                                             <label class="form-check-label fs-14" for="allowNotification">
                                                 Allow notifications
                                             </label>
-                                            <p class="text-muted">Enable this to receive notifications and updates from the system.</p>
+                                            <p class="text-muted">Enable this to receive notifications and updates from the
+                                                system.</p>
                                         </div>
                                         <div class="flex-shrink-0">
                                             <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch" id="allowNotification" />
+                                                <input class="form-check-input" type="checkbox" role="switch"
+                                                    id="allowNotification" />
                                             </div>
                                         </div>
                                     </li>
@@ -234,11 +269,13 @@
                                             <label class="form-check-label fs-14" for="allowLocation">
                                                 Allow sharing current location
                                             </label>
-                                            <p class="text-muted">Enable this to share your current location with the system.</p>
+                                            <p class="text-muted">Enable this to share your current location with the
+                                                system.</p>
                                         </div>
                                         <div class="flex-shrink-0">
                                             <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch" id="allowLocation" />
+                                                <input class="form-check-input" type="checkbox" role="switch"
+                                                    id="allowLocation" />
                                             </div>
                                         </div>
                                     </li>
@@ -246,12 +283,15 @@
                             </div>
                             <div>
                                 <h5 class="card-title text-decoration-underline mb-3">Delete This Account:</h5>
-                                <p class="text-muted">Your account will be permanently removed from the system. Please enter your password to confirm.</p>
+                                <p class="text-muted">Your account will be permanently removed from the system. Please
+                                    enter your password to confirm.</p>
                                 <div>
-                                    <input type="password" class="form-control" id="passwordInput" name="password" placeholder="Enter your password" value="" style="max-width: 265px;">
+                                    <input type="password" class="form-control" id="passwordInput" name="password"
+                                        placeholder="Enter your password" value="" style="max-width: 265px;">
                                 </div>
                                 <div class="hstack gap-2 mt-3">
-                                    <a href="javascript:void(0);" class="btn btn-soft-danger">Close & Delete This Account</a>
+                                    <a href="javascript:void(0);" class="btn btn-soft-danger">Close & Delete This
+                                        Account</a>
                                     <a href="javascript:void(0);" class="btn btn-light">Cancel</a>
                                 </div>
                             </div>
@@ -268,6 +308,48 @@
 <?php $__env->startSection('script'); ?>
     <script src="<?php echo e(URL::asset('assets/js/pages/profile-setting.init.js')); ?>"></script>
     <script src="<?php echo e(URL::asset('/assets/js/app.min.js')); ?>"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Function to handle avatar file upload
+            $('#profile-img-file-input').change(function() {
+                var formData = new FormData();
+                formData.append('avatar', $(this)[0].files[0]);
+
+                $.ajax({
+                    url: '<?php echo e(route('updateAvatar', ['id' => Auth::id()])); ?>',
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        Toastify({
+                            text: 'Avatar updated successfully.',
+                            duration: 3000,
+                            backgroundColor: '#28a745',
+                            gravity: 'top',
+                            position: 'center',
+                            close: true
+                        }).showToast();
+                    },
+                    error: function(xhr, status, error) {
+                        Toastify({
+                            text: 'Failed to update avatar.',
+                            duration: 3000,
+                            backgroundColor: '#dc3545',
+                            gravity: 'top',
+                            position: 'center',
+                            close: true
+                        }).showToast();
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\FYP-TESTING\resources\views/pages-profile-settings.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\FYP-TESTING\resources\views/profile.blade.php ENDPATH**/ ?>

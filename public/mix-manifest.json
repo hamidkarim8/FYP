@@ -216,6 +216,7 @@
     "/assets/fonts/summernote.ttf": "/assets/fonts/summernote.ttf",
     "/assets/fonts/summernote.woff": "/assets/fonts/summernote.woff",
     "/assets/images/404-error.png": "/assets/images/404-error.png",
+    "/assets/images/about-bg.jpg": "/assets/images/about-bg.jpg",
     "/assets/images/auth-offline.gif": "/assets/images/auth-offline.gif",
     "/assets/images/auth-one-bg.jpg": "/assets/images/auth-one-bg.jpg",
     "/assets/images/bg-auth.jpg": "/assets/images/bg-auth.jpg",
@@ -288,6 +289,5 @@
     "/assets/js/pages/calendar.init.js": "/assets/js/pages/calendar.init.js",
     "/assets/js/pages/plugins/lord-icon-2.1.0.min.js": "/assets/js/pages/plugins/lord-icon-2.1.0.min.js",
     "/assets/js/pages/plugins/jsonfull-emoji-list.json": "/assets/js/pages/plugins/jsonfull-emoji-list.json",
-    "/assets/js/pages/plugins/event.init.json": "/assets/js/pages/plugins/event.init.json",
-    "/assets/images/about-bg.jpg": "/assets/images/about-bg.jpg"
+    "/assets/js/pages/plugins/event.init.json": "/assets/js/pages/plugins/event.init.json"
 }

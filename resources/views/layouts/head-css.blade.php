@@ -9,4 +9,7 @@
 <link href="{{ URL::asset('assets/css/app.min.css') }}"  rel="stylesheet" type="text/css" />
 <!-- custom Css-->
 <link href="{{ URL::asset('assets/css/custom.min.css') }}"  rel="stylesheet" type="text/css" />
+
+<link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
+
 {{-- @yield('css') --}}

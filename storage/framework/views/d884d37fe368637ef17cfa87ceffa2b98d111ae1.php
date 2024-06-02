@@ -10,4 +10,7 @@
 <!-- custom Css-->
 <link href="<?php echo e(URL::asset('assets/css/custom.min.css')); ?>"  rel="stylesheet" type="text/css" />
 
+<link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
+
+
 <?php /**PATH C:\xampp\htdocs\FYP-TESTING\resources\views/layouts/head-css.blade.php ENDPATH**/ ?>

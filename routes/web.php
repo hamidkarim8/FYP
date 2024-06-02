@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\NotificationSendController;
 use  App\Http\Controllers\Auth\ForgotPasswordController;
 use  App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\ProfileController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,7 +21,7 @@ use  App\Http\Controllers\Auth\ResetPasswordController;
 Auth::routes();
 Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('root');
 
-Route::get('/pages-starter', [App\Http\Controllers\FoundItemController::class, 'index'])->name('pages-starter');
+// Route::get('/pages-starter', [App\Http\Controllers\FoundItemController::class, 'index'])->name('pages-starter');
 Route::get('/report', [App\Http\Controllers\ReportController::class, 'index']);
 Route::get('/timeline', [App\Http\Controllers\HomeController::class, 'timeline'])->name('timeline');
 
@@ -31,8 +33,8 @@ Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang'
 
 
 //Update User Details
-Route::post('/update-profile/{id}', [App\Http\Controllers\HomeController::class, 'updateProfile'])->name('updateProfile');
-Route::post('/update-password/{id}', [App\Http\Controllers\HomeController::class, 'updatePassword'])->name('updatePassword');
+// Route::post('/update-profile/{id}', [App\Http\Controllers\HomeController::class, 'updateProfile'])->name('updateProfile');
+// Route::post('/update-password/{id}', [App\Http\Controllers\HomeController::class, 'updatePassword'])->name('updatePassword');
 
 
 //forgot password
@@ -40,6 +42,13 @@ Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestF
 Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+
+//Update profile
+Route::get('/profile', [ProfileController::class, 'show']);
+Route::post('/update-profile/{id}', [ProfileController::class, 'update'])->name('updateProfile');
+Route::post('/update-socialmedia/{id}', [ProfileController::class, 'updateSocialMedia'])->name('updateSocialMedia');
+Route::post('/update-avatar/{id}', [ProfileController::class, 'updateAvatar'])->name('updateAvatar');
+Route::put('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
 
 
 Route::get('{any}', [App\Http\Controllers\HomeController::class, 'index'])->name('index');

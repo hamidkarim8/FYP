@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />    
 
     @include('layouts.head-css')
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </head>
 
 @section('body')

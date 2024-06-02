@@ -60,7 +60,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="pages-profile-settings">
+                    <a class="nav-link menu-link" href="profile">
                         <i class="mdi mdi-account-circle-outline"></i> <span>Profile</span>
                     </a>
                 </li>
