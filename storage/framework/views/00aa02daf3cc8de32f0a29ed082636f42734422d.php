@@ -206,29 +206,29 @@
                         </div>
                         <!--end tab-pane-->
                         <div class="tab-pane" id="changePassword" role="tabpanel">
-                            <form action="<?php echo e(route('profile.change-password')); ?>" method="POST">
+                            <form action="<?php echo e(route('changePassword', ['id' => Auth::id()])); ?>" method="POST">
                                 <?php echo csrf_field(); ?>
-                                <?php echo method_field('PUT'); ?>
+                                <?php echo method_field('POST'); ?>
                                 <div class="row g-2">
                                     <div class="col-lg-4">
                                         <div>
                                             <label for="oldpasswordInput" class="form-label">Old Password*</label>
                                             <input type="password" class="form-control" id="oldpasswordInput"
-                                                name="old_password" placeholder="Enter current password">
+                                                name="old_password" placeholder="Enter current password" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div>
                                             <label for="newpasswordInput" class="form-label">New Password*</label>
                                             <input type="password" class="form-control" id="newpasswordInput"
-                                                name="new_password" placeholder="Enter new password">
+                                                name="new_password" placeholder="Enter new password" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div>
                                             <label for="confirmpasswordInput" class="form-label">Confirm Password*</label>
                                             <input type="password" class="form-control" id="confirmpasswordInput"
-                                                name="confirm_password" placeholder="Confirm password">
+                                                name="confirm_password" placeholder="Confirm password" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">

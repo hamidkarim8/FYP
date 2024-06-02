@@ -48,7 +48,7 @@ Route::get('/profile', [ProfileController::class, 'show']);
 Route::post('/update-profile/{id}', [ProfileController::class, 'update'])->name('updateProfile');
 Route::post('/update-socialmedia/{id}', [ProfileController::class, 'updateSocialMedia'])->name('updateSocialMedia');
 Route::post('/update-avatar/{id}', [ProfileController::class, 'updateAvatar'])->name('updateAvatar');
-Route::put('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
+Route::post('/update-password/{id}', [ProfileController::class, 'changePassword'])->name('changePassword');
 
 
 Route::get('{any}', [App\Http\Controllers\HomeController::class, 'index'])->name('index');

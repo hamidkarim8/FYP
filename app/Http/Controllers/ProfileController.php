@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+
 use Illuminate\Http\Request;
 use Toast;
 
@@ -88,7 +91,7 @@ class ProfileController extends Controller
             'city' => 'nullable|string|max:255',
             'country' => 'nullable|string|max:255',
             'postcode' => 'nullable|string|max:10',
-        ],[
+        ], [
             'username.required' => 'Please enter your username.',
             'email.required' => 'Please enter your email.',
         ]);
@@ -96,11 +99,11 @@ class ProfileController extends Controller
         if (empty($request->username)) {
             return redirect()->back()->with('error', 'Please enter your username.');
         }
-    
+
         if (empty($request->email)) {
             return redirect()->back()->with('error', 'Please enter your email.');
         }
-        
+
         //update table user
         $user = User::find($id);
         $user->name = $request->get('username');
@@ -122,12 +125,11 @@ class ProfileController extends Controller
 
         $profile->update();
         $user->update();
-        
+
         if ($profile && $user) {
             return redirect()->back()->with('success', 'Profile updated successfully.');
         } else {
             return redirect()->back()->with('error', 'Something went wrong!');
-
         }
     }
     public function updateAvatar(Request $request, $id)
@@ -155,7 +157,6 @@ class ProfileController extends Controller
             return redirect()->back()->with('success', 'Profile updated successfully.');
         } else {
             return redirect()->back()->with('error', 'Something went wrong!');
-
         }
     }
     public function updateSocialMedia(Request $request, $id)
@@ -181,9 +182,61 @@ class ProfileController extends Controller
             return redirect()->back()->with('success', 'Profile updated successfully.');
         } else {
             return redirect()->back()->with('error', 'Something went wrong!');
-
         }
     }
+
+    public function changePassword(Request $request, $id)
+    {
+        // Validate the request
+        // $validator = Validator::make($request->all(), [
+        //     'old_password' => 'required',
+        //     'new_password' => 'required|string|min:8',
+        //     'confirm_password' => 'required|same:new_password',
+        // ]);
+
+        // // If validation fails, redirect back with errors
+        // if ($validator->fails()) {
+        //     return redirect()->back()->withErrors($validator)->withInput();
+        // }
+
+        // // Get the authenticated user
+        // $user = User::findOrFail($id);
+        // $user->updated_at = now();
+
+        // dd($user);
+        // // Check if the old password matches
+        // if (!Hash::check($request->old_password, $user->password)) {
+        //     return redirect()->back()->with('error', 'Current password is incorrect.');
+        // }
+
+        // // Update the user's password
+        // $user->password = Hash::make($request->new_password);
+        // $user->save();
+
+        // // Redirect back with success message
+        // return redirect()->back()->with('success', 'Password changed successfully.');
+
+        $request->validate([
+            'old_password' => ['required', 'string'],
+            'new_password' => ['required', 'string', 'min:8'],
+            'confirm_password' => ['required', 'same:new_password'],
+        ]);
+
+        if (!(Hash::check($request->get('old_password'), Auth::user()->password))) {
+            return redirect()->back()->with('error', 'Current password is incorrect.');
+        } else {
+            $user = User::find($id);
+            $user->password = Hash::make($request->get('confirm_password'));
+            $user->update();
+            if ($user) {
+                return redirect()->back()->with('success', 'Password changed successfully.');
+            } else {
+                return redirect()->back()->with('error', 'Something went wrong.');//need to fix
+            }
+        }
+    }
+
+
 
     /**
      * Remove the specified resource from storage.
