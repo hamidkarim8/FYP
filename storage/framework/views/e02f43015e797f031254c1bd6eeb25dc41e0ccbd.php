@@ -1,8 +1,8 @@
-@extends('layouts.master-without-nav')
-@section('title')
-    @lang('translation.password-reset')
-@endsection
-@section('content')
+
+<?php $__env->startSection('title'); ?>
+    <?php echo app('translator')->get('translation.password-reset'); ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
     <div class="auth-page-wrapper pt-5">
         <!-- auth page bg -->
         <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
@@ -24,7 +24,7 @@
                         <div class="text-center mt-sm-5 mb-4 text-white-50">
                             <div>
                                 <a href="index" class="d-inline-block auth-logo">
-                                    <img src="{{ URL::asset('assets/images/logo-light-new.png') }}" alt="" height="20">
+                                    <img src="<?php echo e(URL::asset('assets/images/logo-light-new.png')); ?>" alt="" height="20">
                                 </a>
                             </div>
                             <p class="mt-3 fs-15 fw-medium">Lost and Found System</p>
@@ -52,28 +52,56 @@
                                     Enter your new password!
                                 </div>
                                 <div class="p-2">
-                                    <form class="form-horizontal" method="POST" action="{{ route('password.update') }}">
-                                        @csrf
-                                        <input type="hidden" name="token" value="{{ $token }}">
-                                        <input type="hidden" name="email" value="{{ $email ?? old('email') }}">
+                                    <form class="form-horizontal" method="POST" action="<?php echo e(route('password.update')); ?>">
+                                        <?php echo csrf_field(); ?>
+                                        <input type="hidden" name="token" value="<?php echo e($token); ?>">
+                                        <input type="hidden" name="email" value="<?php echo e($email ?? old('email')); ?>">
                                         <div class="mb-3">
                                             <label for="useremail" class="form-label">Email</label>
-                                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="useremail" name="email" placeholder="Enter email" value="{{ $email ?? old('email') }}" id="email" disabled>
-                                            @error('email')
+                                            <input type="email" class="form-control <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" id="useremail" name="email" placeholder="Enter email" value="<?php echo e($email ?? old('email')); ?>" id="email" disabled>
+                                            <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                             <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
+                                                <strong><?php echo e($message); ?></strong>
                                             </span>
-                                            @enderror
+                                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                         </div>
 
                                         <div class="mb-3">
                                             <label for="userpassword">Password</label>
-                                            <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" id="userpassword" placeholder="Enter password">
-                                            @error('password')
+                                            <input type="password" class="form-control <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" name="password" id="userpassword" placeholder="Enter password">
+                                            <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                             <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
+                                                <strong><?php echo e($message); ?></strong>
                                             </span>
-                                            @enderror
+                                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                         </div>
 
                                         <div class="mb-3">
@@ -93,7 +121,7 @@
                         <!-- end card -->
 
                         <div class="mt-4 text-center">
-                            <p class="mb-0">Wait, I remember my password... <a href="{{ route('login') }}"
+                            <p class="mb-0">Wait, I remember my password... <a href="<?php echo e(route('login')); ?>"
                                     class="fw-semibold text-primary text-decoration-underline"> Click here </a> </p>
                         </div>
 
@@ -106,25 +134,14 @@
         <!-- end auth page content -->
 
         <!-- footer -->
-        {{-- <footer class="footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="text-center">
-                            <script>
-                                document.write(new Date().getFullYear())
-                            </script> Velzon. Crafted with <i
-                                    class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer> --}}
+        
         <!-- end Footer -->
     </div>
     <!-- end auth-page-wrapper -->
-@endsection
-@section('script')
-    <script src="{{ URL::asset('assets/libs/particles.js/particles.js.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/js/pages/particles.app.js') }}"></script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+    <script src="<?php echo e(URL::asset('assets/libs/particles.js/particles.js.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('assets/js/pages/particles.app.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master-without-nav', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\FYP-TESTING\resources\views/auth/passwords/reset.blade.php ENDPATH**/ ?>

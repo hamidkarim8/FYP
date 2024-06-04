@@ -1,0 +1,1 @@
+hey <?php echo e($name); ?><?php /**PATH C:\xampp\htdocs\FYP-TESTING\resources\views/mail/test-email.blade.php ENDPATH**/ ?>

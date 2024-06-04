@@ -65,7 +65,7 @@
                                 <div class="col-lg-6">
                                     <div class="p-lg-5 p-4">
                                         <h5 class="text-primary">Forgot Password?</h5>
-                                        <p class="text-muted">Reset password with velzon</p>
+                                        <p class="text-muted">Reset password with ApFound</p>
 
                                         <div class="mt-2 text-center">
                                             <lord-icon src="https://cdn.lordicon.com/rhvddzym.json" trigger="loop"
@@ -78,8 +78,8 @@
                                             Enter your email and instructions will be sent to you!
                                         </div>
                                         <div class="p-2">
+                                            <form method="POST" action="<?php echo e(route('password.email')); ?>">
                                             
-                                            <form method="POST" action="#">
                                                 <?php echo csrf_field(); ?>
                                                 <div class="mb-4">
                                                     <label class="form-label">Email</label>

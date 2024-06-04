@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Log;
 
 trait ResetsPasswords
 {
@@ -27,6 +28,7 @@ trait ResetsPasswords
     public function showResetForm(Request $request)
     {
         $token = $request->route()->parameter('token');
+        Log::info('showResetForm method called with token: ' . $token); // Debug statement
 
         return view('auth.passwords.reset')->with(
             ['token' => $token, 'email' => $request->email]
@@ -41,6 +43,8 @@ trait ResetsPasswords
      */
     public function reset(Request $request)
     {
+        Log::info('reset method called'); // Debug statement
+        Log::info('Request data: ', $request->all()); // Log the request data
         $request->validate($this->rules(), $this->validationErrorMessages());
 
         // Here we will attempt to reset the user's password. If it is successful we
@@ -51,6 +55,9 @@ trait ResetsPasswords
                 $this->resetPassword($user, $password);
             }
         );
+
+        Log::info('Password broker reset response: ' . $response); // Log the response
+
 
         // If the password was successfully reset, we will redirect the user back to
         // the application's home authenticated view. If there is an error we can

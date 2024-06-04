@@ -17,6 +17,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->enum('role', ['admin', 'normal_user']);
+            $table->rememberToken();
             $table->timestamps();
         });
         User::create(['name' => 'admin','email' => 'admin@gmail.com','password' => Hash::make('123456'),'role'=>'admin','created_at' => now(),]);//admin

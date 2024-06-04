@@ -5,6 +5,7 @@ namespace Illuminate\Foundation\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 trait SendsPasswordResetEmails
@@ -16,6 +17,8 @@ trait SendsPasswordResetEmails
      */
     public function showLinkRequestForm()
     {
+        Log::info('showLinkRequestForm method called'); // Debug statement
+
         return view('auth.passwords.email');
     }
 
@@ -27,6 +30,8 @@ trait SendsPasswordResetEmails
      */
     public function sendResetLinkEmail(Request $request)
     {
+        Log::info('sendResetLinkEmail method called'); // Debug statement
+        Log::info('Request data: ', $request->all()); // Log the request data
         $this->validateEmail($request);
 
         // We will send the password reset link to this user. Once we have attempted
@@ -35,6 +40,9 @@ trait SendsPasswordResetEmails
         $response = $this->broker()->sendResetLink(
             $this->credentials($request)
         );
+
+        Log::info('Password broker response: ' . $response); // Log the response
+
 
         return $response == Password::RESET_LINK_SENT
                     ? $this->sendResetLinkResponse($request, $response)
