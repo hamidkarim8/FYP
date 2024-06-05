@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    <x-custom-toast />
+    {{-- <x-custom-toast /> --}}
 
     <div class="row">
         <div class="col-xxl-3">

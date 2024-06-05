@@ -31,6 +31,7 @@
             <div class="page-content">
                 <div class="container-fluid">
                     @yield('content')
+                    <x-custom-toast />
                 </div>
                 <!-- container-fluid -->
             </div>

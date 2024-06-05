@@ -3,6 +3,9 @@
     @lang('translation.password-reset')
 @endsection
 @section('content')
+    {{-- <x-custom-toast /> --}}
+
+
     <!-- auth-page wrapper -->
     <div class="auth-page-wrapper auth-bg-cover py-5 d-flex justify-content-center align-items-center min-vh-100">
         <div class="bg-overlay"></div>
@@ -80,7 +83,7 @@
                                         </div>
                                         <div class="p-2">
                                             <form method="POST" action="{{ route('password.email') }}">
-                                            {{-- <form method="POST" action="#"> --}}
+                                                {{-- <form method="POST" action="#"> --}}
                                                 @csrf
                                                 <div class="mb-4">
                                                     <label class="form-label">Email</label>

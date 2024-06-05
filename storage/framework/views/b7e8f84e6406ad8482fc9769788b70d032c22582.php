@@ -2,6 +2,9 @@
     <?php echo app('translator')->get('translation.password-reset'); ?>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
+    
+
+
     <!-- auth-page wrapper -->
     <div class="auth-page-wrapper auth-bg-cover py-5 d-flex justify-content-center align-items-center min-vh-100">
         <div class="bg-overlay"></div>
@@ -79,7 +82,7 @@
                                         </div>
                                         <div class="p-2">
                                             <form method="POST" action="<?php echo e(route('password.email')); ?>">
-                                            
+                                                
                                                 <?php echo csrf_field(); ?>
                                                 <div class="mb-4">
                                                     <label class="form-label">Email</label>

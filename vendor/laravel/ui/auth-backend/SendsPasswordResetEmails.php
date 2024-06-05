@@ -45,8 +45,8 @@ trait SendsPasswordResetEmails
 
 
         return $response == Password::RESET_LINK_SENT
-                    ? $this->sendResetLinkResponse($request, $response)
-                    : $this->sendResetLinkFailedResponse($request, $response);
+            ? $this->sendResetLinkResponse($request, $response)
+            : $this->sendResetLinkFailedResponse($request, $response);
     }
 
     /**
@@ -80,9 +80,11 @@ trait SendsPasswordResetEmails
      */
     protected function sendResetLinkResponse(Request $request, $response)
     {
+        $customMessage = 'The reset link has been sent to your email. Please check your inbox.';
+
         return $request->wantsJson()
-                    ? new JsonResponse(['message' => trans($response)], 200)
-                    : back()->with('status', trans($response));
+            ? new JsonResponse(['message' => $customMessage], 200)
+            : back()->with('success', $customMessage);
     }
 
     /**
@@ -96,15 +98,25 @@ trait SendsPasswordResetEmails
      */
     protected function sendResetLinkFailedResponse(Request $request, $response)
     {
+        $errorMessage = '';
+
+        if ($response === Password::RESET_THROTTLED) {
+            $errorMessage = 'Too many attempts. Please try again in a few minutes.';
+        } elseif ($response === Password::INVALID_USER) {
+            $errorMessage = 'This email address is not available in the system.';
+        } else {
+            $errorMessage = 'An error occurred while trying to send the reset link.';
+        }
+
         if ($request->wantsJson()) {
             throw ValidationException::withMessages([
-                'email' => [trans($response)],
+                'email' => [$errorMessage],
             ]);
         }
 
         return back()
-                ->withInput($request->only('email'))
-                ->withErrors(['email' => trans($response)]);
+            ->withInput($request->only('email'))
+            ->with('error', $errorMessage);
     }
 
     /**

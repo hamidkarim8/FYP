@@ -10,11 +10,14 @@
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ URL::asset('assets/images/favicon.ico')}}">
         @include('layouts.head-css')
+        <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
   </head>
 
     @yield('body')
 
     @yield('content')
+    <x-custom-toast />
 
     @include('layouts.vendor-scripts')
     </body>
