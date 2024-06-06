@@ -60,6 +60,16 @@ class ProfileController extends Controller
         $profile->country = $addressParts[1] ?? '';
         $profile->postcode = $addressParts[2] ?? '';
 
+        return view('admin.profile', compact('profile'));
+    }
+    public function showUserProfile()
+    {
+        $profile = Profile::where('user_id', Auth::id())->first();
+        $addressParts = explode(', ', $profile->address ?? '');
+        $profile->city = $addressParts[0] ?? '';
+        $profile->country = $addressParts[1] ?? '';
+        $profile->postcode = $addressParts[2] ?? '';
+
         return view('profile', compact('profile'));
     }
 

@@ -1,499 +1,1563 @@
-@extends('layouts.master')
+@extends('layouts.master-without-nav')
 @section('title')
-    @lang('translation.dashboards')
+    Landing
 @endsection
 @section('css')
-    <link href="{{ URL::asset('assets/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ URL::asset('assets/libs/swiper/swiper.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
-@section('content')
-    @component('components.breadcrumb')
-        @slot('li_1')
-            Dashboards
-        @endslot
-        @slot('title')
-            Dashboard
-        @endslot
-    @endcomponent
-    <div class="row">
-        <div class="col">
+@section('body')
 
-            <div class="h-100">
-                <div class="row mb-3 pb-1">
-                    <div class="col-12">
-                        <div class="d-flex align-items-lg-center flex-lg-row flex-column">
-                            <div class="flex-grow-1">
-                                <h4 class="fs-16 mb-1">Good Morning, {{ Auth::user()->name }}!</h4>
-                                <p class="text-muted mb-0">WELCOME TO LOST AND FOUND SYSTEM.</p>
+    <body data-bs-spy="scroll" data-bs-target="#navbar-example">
+    @endsection
+    @section('content')
+        <!-- Begin page -->
+        <div class="layout-wrapper landing">
+            <nav class="navbar navbar-expand-lg navbar-landing fixed-top" id="navbar">
+                <div class="container">
+                    <a class="navbar-brand mt-1" href="{{ URL::asset('/') }}">
+                        <img src="{{ URL::asset('assets/images/logo-dark-new.png') }}" class="card-logo card-logo-dark"
+                            alt="logo dark" height="20">
+                        <img src="{{ URL::asset('assets/images/logo-light-new.png') }}" class="card-logo card-logo-light"
+                            alt="logo light" height="20">
+                    </a>
+                    <button class="navbar-toggler py-0 fs-20 text-body" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="mdi mdi-menu"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mx-auto mt-2 mt-lg-0" id="navbar-example">
+                            <li class="nav-item">
+                                <a class="nav-link fs-14 active" href="#hero">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fs-14" href="#services">Items</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fs-14" href="#features">Report</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fs-14" href="#faqs">FAQs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fs-14" href="#contact">Contact</a>
+                            </li>
+                        </ul>
+
+                        <!-- Guest/Anonymous user content -->
+                        @guest
+                            <div class="">
+                                <a href="{{ route('login') }}"
+                                    class="btn btn-link fw-medium text-decoration-none text-dark">Sign in</a>
+                                <a href="{{ route('register') }}" class="btn btn-primary">Sign Up</a>
                             </div>
-                        </div><!-- end card header -->
-                    </div>
-                    <!--end col-->
-                </div>
-                <!--end row-->
-                <div class="row">
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card card-animate">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <p class="fw-medium text-muted mb-0">Users</p>
-                                        <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value"
-                                                data-target="{{$countUser}}">0</span></h2>
-                                        <p class="mb-0 text-muted"><span class="badge bg-light text-success mb-0">
-                                                <i class="ri-arrow-up-line align-middle"></i> 16.24 %
-                                            </span> vs. previous month</p>
-                                    </div>
-                                    <div>
-                                        <div class="avatar-sm flex-shrink-0">
-                                            <span class="avatar-title bg-soft-info rounded-circle fs-2 shadow">
-                                                <i data-feather="users" class="text-info"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!-- end card body -->
-                        </div> <!-- end card-->
-                    </div> <!-- end col-->
+                        @endguest
 
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card card-animate">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <p class="fw-medium text-muted mb-0">Lost Items</p>
-                                        <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value"
-                                                data-target="{{$countLost}}">0</span></h2>
-                                        <p class="mb-0 text-muted"><span class="badge bg-light text-danger mb-0">
-                                                <i class="ri-arrow-down-line align-middle"></i> 3.96 %
-                                            </span> vs. previous month</p>
-                                    </div>
-                                    <div>
-                                        <div class="avatar-sm flex-shrink-0">
-                                            <span class="avatar-title bg-soft-info rounded-circle fs-2 shadow">
-                                                <i data-feather="activity" class="text-info"></i>
+                        <!-- Logged in normal_user content -->
+                        @auth
+                            @if (Auth::user()->hasRole('normal_user'))
+                                <div class="dropdown ms-sm-3 header-item topbar-user">
+                                    <button type="button" class="btn shadow-none" id="page-header-user-dropdown"
+                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="d-flex align-items-center">
+                                            <img class="rounded-circle header-profile-user"
+                                                src="@if (Auth::user()->profile && Auth::user()->profile->avatar != '') {{ URL::asset('images/' . Auth::user()->profile->avatar) }}
+                                    @else
+                                        {{ URL::asset('images/default-avatar.jpg') }} @endif"
+                                                alt="Header Avatar">
+                                            <span class="text-start ms-xl-2">
+                                                <span
+                                                    class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ Auth::user()->name }}</span>
+                                                <span
+                                                    class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">{{ Auth::user()->role }}</span>
                                             </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!-- end card body -->
-                        </div> <!-- end card-->
-                    </div> <!-- end col-->
-
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card card-animate">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <p class="fw-medium text-muted mb-0">Found Items</p>
-                                        <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value"
-                                                data-target="{{$countFound}}">0</span></h2>
-                                        <p class="mb-0 text-muted"><span class="badge bg-light text-danger mb-0">
-                                                <i class="ri-arrow-down-line align-middle"></i> 3.96 %
-                                            </span> vs. previous month</p>
-                                    </div>
-                                    <div>
-                                        <div class="avatar-sm flex-shrink-0">
-                                            <span class="avatar-title bg-soft-info rounded-circle fs-2 shadow">
-                                                <i data-feather="activity" class="text-info"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!-- end card body -->
-                        </div> <!-- end card-->
-                    </div> <!-- end col-->
-
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card card-animate">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <p class="fw-medium text-muted mb-0">Avg. Visit Duration</p>
-                                        <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value"
-                                                data-target="3">0</span>m <span class="counter-value"
-                                                data-target="40">0</span>sec
-                                        </h2>
-                                        <p class="mb-0 text-muted"><span class="badge bg-light text-danger mb-0">
-                                                <i class="ri-arrow-down-line align-middle"></i> 0.24 %
-                                            </span> vs. previous month</p>
-                                    </div>
-                                    <div>
-                                        <div class="avatar-sm flex-shrink-0">
-                                            <span class="avatar-title bg-soft-info rounded-circle fs-2 shadow">
-                                                <i data-feather="clock" class="text-info"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!-- end card body -->
-                        </div> <!-- end card-->
-                    </div> <!-- end col-->
-                    <div class="col-xl-6">
-                        <div class="card card-height-100">
-                            <div class="card-header border-bottom-dashed align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">Pin Item Location</h4>
-                            </div><!-- end cardheader -->
-                            <div class="card-body p-0">
-                                <div data-simplebar style="max-height: 364px;" class="p-3">
-                                    <div id="map" style="height: 400px;"></div>
-                                </div>
-                            </div><!-- end card body -->
-                        </div><!-- end card -->
-                    </div><!-- end col -->
-                    <div class="col-xl-6">
-                        <div class="card card-height-100">
-                            {{-- <div class="card-header border-bottom-dashed align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">Recent Activity</h4>
-                                <div class="flex-shrink-0">
-                                    <button type="button" class="btn btn-soft-primary btn-sm shadow-none">
-                                        View All Activity
+                                        </span>
                                     </button>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <!-- item-->
+                                        <h6 class="dropdown-header">Welcome {{ Auth::user()->name }}!</h6>
+                                        <a class="dropdown-item" href="{{ route('user.profile') }}"><i
+                                                class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
+                                                class="align-middle">Profile</span></a>
+                                        <a class="dropdown-item " href="javascript:void();"
+                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
+                                                class="bx bx-power-off font-size-16 align-middle me-1"></i> <span
+                                                key="t-logout">@lang('translation.logout')</span></a>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                            style="display: none;">
+                                            @csrf
+                                        </form>
+                                    </div>
                                 </div>
-                            </div><!-- end cardheader --> --}}
-                            <div class="card-body p-0">
-                                <div data-simplebar style="max-height: 364px;" class="p-3">
-                                    do something here
-                                    {{-- <div class="acitivity-timeline acitivity-main">
-                                        <div class="acitivity-item d-flex">
-                                            <div class="flex-shrink-0 avatar-xs acitivity-avatar">
-                                                <div class="avatar-title bg-soft-success text-success rounded-circle shadow">
-                                                    <i class="ri-shopping-cart-2-line"></i>
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1 ms-3">
-                                                <h6 class="mb-1">Purchase by James Price</h6>
-                                                <p class="text-muted mb-1">Product noise evolve smartwatch
-                                                </p>
-                                                <small class="mb-0 text-muted">02:14 PM Today</small>
+                            @endif
+                        @endauth
+
+
+                    </div>
+
+                </div>
+            </nav>
+            <!-- end navbar -->
+
+            <!-- start hero section -->
+            <section class="section pb-0 hero-section" id="hero">
+                <div class="bg-overlay bg-overlay-pattern"></div>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8 col-sm-10">
+                            <div class="text-center mt-lg-5 pt-5">
+                                <h1 class="display-6 fw-semibold mb-3 lh-base">The Best Way to Manage Your Lost and Found
+                                    Items with <span class="text-success">ApFound</span></h1>
+                                <p class="lead text-muted lh-base">Effortlessly Track and Recover Your Belongings</p>
+
+                                <div class="d-flex gap-2 justify-content-center mt-4">
+                                    <a href="{{ URL::asset('/auth-signup-basic') }}" class="btn btn-primary">Get Started <i
+                                            class="ri-arrow-right-line align-middle ms-1"></i></a>
+                                    <a href="{{ URL::asset('/pages-pricing') }}" class="btn btn-danger">View Plans <i
+                                            class="ri-eye-line align-middle ms-1"></i></a>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 mt-sm-5 pt-sm-5 mb-sm-n5 demo-carousel">
+                                <div class="demo-img-patten-top d-none d-sm-block">
+                                    <img src="{{ URL::asset('assets/images/landing/img-pattern.png') }}"
+                                        class="d-block img-fluid" alt="...">
+                                </div>
+                                <div class="demo-img-patten-bottom d-none d-sm-block">
+                                    <img src="{{ URL::asset('assets/images/landing/img-pattern.png') }}"
+                                        class="d-block img-fluid" alt="...">
+                                </div>
+                                <div class="carousel slide carousel-fade" data-bs-ride="carousel">
+                                    <div class="carousel-inner shadow-lg p-2 bg-white rounded">
+                                        <div class="carousel-item active" data-bs-interval="2000">
+                                            <img src="{{ URL::asset('assets/images/demos/default.png') }}"
+                                                class="d-block w-100" alt="...">
+                                        </div>
+                                        <div class="carousel-item" data-bs-interval="2000">
+                                            <img src="{{ URL::asset('assets/images/demos/saas.png') }}"
+                                                class="d-block w-100" alt="...">
+                                        </div>
+                                        <div class="carousel-item" data-bs-interval="2000">
+                                            <img src="{{ URL::asset('assets/images/demos/material.png') }}"
+                                                class="d-block w-100" alt="...">
+                                        </div>
+                                        <div class="carousel-item" data-bs-interval="2000">
+                                            <img src="{{ URL::asset('assets/images/demos/minimal.png') }}"
+                                                class="d-block w-100" alt="...">
+                                        </div>
+                                        <div class="carousel-item" data-bs-interval="2000">
+                                            <img src="{{ URL::asset('assets/images/demos/creative.png') }}"
+                                                class="d-block w-100" alt="...">
+                                        </div>
+                                        <div class="carousel-item" data-bs-interval="2000">
+                                            <img src="{{ URL::asset('assets/images/demos/modern.png') }}"
+                                                class="d-block w-100" alt="...">
+                                        </div>
+                                        <div class="carousel-item" data-bs-interval="2000">
+                                            <img src="{{ URL::asset('assets/images/demos/interactive.png') }}"
+                                                class="d-block w-100" alt="...">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- end container -->
+                <div class="position-absolute start-0 end-0 bottom-0 hero-shape-svg">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
+                        viewBox="0 0 1440 120">
+                        <g mask="url(&quot;#SvgjsMask1003&quot;)" fill="none">
+                            <path d="M 0,118 C 288,98.6 1152,40.4 1440,21L1440 140L0 140z">
+                            </path>
+                        </g>
+                    </svg>
+                </div>
+                <!-- end shape -->
+            </section>
+            <!-- end hero section -->
+
+            <!-- start client section -->
+            <div class="pt-5 mt-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="text-center mt-5">
+                                <h5 class="fs-20">Trusted <span class="text-primary text-decoration-underline">by</span>
+                                    the world's best</h5>
+
+                                <!-- Swiper -->
+                                <div class="swiper trusted-client-slider mt-sm-5 mt-4 mb-sm-5 mb-4" dir="ltr">
+                                    <div class="swiper-wrapper">
+                                        <div class="swiper-slide">
+                                            <div class="client-images">
+                                                <img src="{{ URL::asset('assets/images/clients/amazon.svg') }}"
+                                                    alt="client-img" class="mx-auto img-fluid d-block">
                                             </div>
                                         </div>
-                                        <div class="acitivity-item py-3 d-flex">
-                                            <div class="flex-shrink-0 avatar-xs acitivity-avatar">
-                                                <div class="avatar-title bg-soft-primary text-primary rounded-circle shadow">
-                                                    <i class="ri-stack-fill"></i>
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1 ms-3">
-                                                <h6 class="mb-1">Added new <span class="fw-semibold">style
-                                                        collection</span></h6>
-                                                <p class="text-muted mb-1">By Nesta Technologies</p>
-                                                <div class="d-inline-flex gap-2 border border-dashed p-2 mb-2 w-75">
-                                                    <a href="{{URL::asset('/apps-ecommerce-product-details')}}" class="bg-light rounded p-1">
-                                                        <img src="{{ URL::asset('assets/images/products/img-8.png') }}" alt=""
-                                                            class="img-fluid d-block" />
-                                                    </a>
-                                                    <a href="{{URL::asset('/apps-ecommerce-product-details')}}" class="bg-light rounded p-1">
-                                                        <img src="{{ URL::asset('assets/images/products/img-2.png') }}" alt=""
-                                                            class="img-fluid d-block" />
-                                                    </a>
-                                                    <a href="{{URL::asset('/apps-ecommerce-product-details')}}" class="bg-light rounded p-1">
-                                                        <img src="{{ URL::asset('assets/images/products/img-10.png') }}" alt=""
-                                                            class="img-fluid d-block" />
-                                                    </a>
-                                                </div>
-                                                <p class="mb-0 text-muted"><small>9:47 PM Yesterday</small>
-                                                </p>
+                                        <div class="swiper-slide">
+                                            <div class="client-images">
+                                                <img src="{{ URL::asset('assets/images/clients/walmart.svg') }}"
+                                                    alt="client-img" class="mx-auto img-fluid d-block">
                                             </div>
                                         </div>
-                                        <div class="acitivity-item py-3 d-flex">
-                                            <div class="flex-shrink-0">
-                                                <img src="{{ URL::asset('assets/images/users/avatar-2.jpg') }}" alt=""
-                                                    class="avatar-xs rounded-circle acitivity-avatar shadow">
-                                            </div>
-                                            <div class="flex-grow-1 ms-3">
-                                                <h6 class="mb-1">Natasha Carey have liked the products</h6>
-                                                <p class="text-muted mb-1">Allow users to like products in
-                                                    your WooCommerce store.</p>
-                                                <small class="mb-0 text-muted">25 Dec, 2021</small>
+                                        <div class="swiper-slide">
+                                            <div class="client-images">
+                                                <img src="{{ URL::asset('assets/images/clients/lenovo.svg') }}"
+                                                    alt="client-img" class="mx-auto img-fluid d-block">
                                             </div>
                                         </div>
-                                        <div class="acitivity-item py-3 d-flex">
-                                            <div class="flex-shrink-0">
-                                                <div class="avatar-xs acitivity-avatar">
-                                                    <div class="avatar-title rounded-circle bg-secondary shadow">
-                                                        <i class="mdi mdi-sale fs-14"></i>
+                                        <div class="swiper-slide">
+                                            <div class="client-images">
+                                                <img src="{{ URL::asset('assets/images/clients/paypal.svg') }}"
+                                                    alt="client-img" class="mx-auto img-fluid d-block">
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="client-images">
+                                                <img src="{{ URL::asset('assets/images/clients/shopify.svg') }}"
+                                                    alt="client-img" class="mx-auto img-fluid d-block">
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="client-images">
+                                                <img src="{{ URL::asset('assets/images/clients/verizon.svg') }}"
+                                                    alt="client-img" class="mx-auto img-fluid d-block">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- end container -->
+            </div>
+            <!-- end client section -->
+
+            <!-- start services -->
+            <section class="section" id="services">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="text-center mb-5">
+                                <h1 class="mb-3 ff-secondary fw-semibold lh-base">A Digital web design studio creating
+                                    modern & engaging online</h1>
+                                <p class="text-muted">To achieve this, it would be necessary to have uniform grammar,
+                                    pronunciation and more common words. If several languages coalesce the grammar</p>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+
+                    <div class="row g-3">
+                        <div class="col-lg-4">
+                            <div class="d-flex p-3">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm icon-effect">
+                                        <div class="avatar-title bg-transparent text-success rounded-circle">
+                                            <i class="ri-pencil-ruler-2-line fs-36"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="fs-18">Creative Design</h5>
+                                    <p class="text-muted my-3 ff-secondary">The creative design includes designs that are
+                                        unique, effective and memorable.</p>
+                                    <div>
+                                        <a href="#" class="fs-13 fw-medium">Learn More <i
+                                                class="ri-arrow-right-s-line align-bottom"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                        <div class="col-lg-4">
+                            <div class="d-flex p-3">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm icon-effect">
+                                        <div class="avatar-title bg-transparent text-success rounded-circle">
+                                            <i class="ri-palette-line fs-36"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="fs-18">Unlimited Colors</h5>
+                                    <p class="text-muted my-3 ff-secondary">The collection of rules and guidelines which
+                                        designers use to communicate with users through appealing.</p>
+                                    <div>
+                                        <a href="#" class="fs-13 fw-medium">Learn More <i
+                                                class="ri-arrow-right-s-line align-bottom"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                        <div class="col-lg-4">
+                            <div class="d-flex p-3">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm icon-effect">
+                                        <div class="avatar-title bg-transparent text-success rounded-circle">
+                                            <i class="ri-lightbulb-flash-line fs-36"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="fs-18">Strategy Solutions</h5>
+                                    <p class="text-muted my-3 ff-secondary">Business development firm that provides
+                                        strategic planning, market research services and project.</p>
+                                    <div>
+                                        <a href="#" class="fs-13 fw-medium">Learn More <i
+                                                class="ri-arrow-right-s-line align-bottom"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                        <div class="col-lg-4">
+                            <div class="d-flex p-3">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm icon-effect">
+                                        <div class="avatar-title bg-transparent text-success rounded-circle">
+                                            <i class="ri-customer-service-line fs-36"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="fs-18">Awesome Support</h5>
+                                    <p class="text-muted my-3 ff-secondary">Awesome Support is the most versatile and
+                                        feature-rich support plugin for all version.</p>
+                                    <div>
+                                        <a href="#" class="fs-13 fw-medium">Learn More <i
+                                                class="ri-arrow-right-s-line align-bottom"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                        <div class="col-lg-4">
+                            <div class="d-flex p-3">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm icon-effect">
+                                        <div class="avatar-title bg-transparent text-success rounded-circle">
+                                            <i class="ri-stack-line fs-36"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="fs-18">Truly Multipurpose</h5>
+                                    <p class="text-muted my-3 ff-secondary">You usually get a broad range of options to
+                                        play with. This enables you to use a single theme across multiple.</p>
+                                    <div>
+                                        <a href="#" class="fs-13 fw-medium">Learn More <i
+                                                class="ri-arrow-right-s-line align-bottom"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                        <div class="col-lg-4">
+                            <div class="d-flex p-3">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm icon-effect">
+                                        <div class="avatar-title bg-transparent text-success rounded-circle">
+                                            <i class="ri-settings-2-line fs-36"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="fs-18">Easy to customize</h5>
+                                    <p class="text-muted my-3 ff-secondary">Personalise your own website, no matter what
+                                        theme and what customization options.</p>
+                                    <div>
+                                        <a href="#" class="fs-13 fw-medium">Learn More <i
+                                                class="ri-arrow-right-s-line align-bottom"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+
+                        <div class="col-lg-4">
+                            <div class="d-flex p-3">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm icon-effect">
+                                        <div class="avatar-title bg-transparent text-success rounded-circle">
+                                            <i class="ri-slideshow-line fs-36"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="fs-18">Responsive & Clean Design</h5>
+                                    <p class="text-muted my-3 ff-secondary">Responsive design is a graphic user interface
+                                        (GUI) design approach used to create content.</p>
+                                    <div>
+                                        <a href="#" class="fs-13 fw-medium">Learn More <i
+                                                class="ri-arrow-right-s-line align-bottom"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                        <div class="col-lg-4">
+                            <div class="d-flex p-3">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm icon-effect">
+                                        <div class="avatar-title bg-transparent text-success rounded-circle">
+                                            <i class="ri-google-fill fs-36"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="fs-18">Google Font Collection</h5>
+                                    <p class="text-muted my-3 ff-secondary">Google Fonts is a collection of 915 fonts, all
+                                        available to use for free on your website.</p>
+                                    <div>
+                                        <a href="#" class="fs-13 fw-medium">Learn More <i
+                                                class="ri-arrow-right-s-line align-bottom"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                        <div class="col-lg-4">
+                            <div class="d-flex p-3">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm icon-effect">
+                                        <div class="avatar-title bg-transparent text-success rounded-circle">
+                                            <i class="ri-briefcase-5-line fs-36"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="fs-18">Top Industry Specialists</h5>
+                                    <p class="text-muted my-3 ff-secondary">An industrial specialist works with industrial
+                                        operations to ensure that manufacturing facilities work.</p>
+                                    <div>
+                                        <a href="#" class="fs-13 fw-medium">Learn More <i
+                                                class="ri-arrow-right-s-line align-bottom"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- end container -->
+            </section>
+            <!-- end services -->
+
+            <!-- start features -->
+            <section class="section bg-light py-5" id="features">
+                <div class="container">
+                    <div class="row align-items-center gy-4">
+                        <div class="col-lg-6 col-sm-7 mx-auto">
+                            <div>
+                                <img src="{{ URL::asset('assets/images/landing/features/img-1.png') }}" alt=""
+                                    class="img-fluid mx-auto">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="text-muted">
+                                <div class="avatar-sm icon-effect mb-4">
+                                    <div class="avatar-title bg-transparent rounded-circle text-success h1">
+                                        <i class="ri-collage-line fs-36"></i>
+                                    </div>
+                                </div>
+                                <h3 class="mb-3 fs-20">Huge collection of widgets</h3>
+                                <p class="mb-4 ff-secondary fs-16">Collection widgets specialize in displaying many
+                                    elements of the same type, such as a collection of pictures from a collection of
+                                    articles from a news app or a collection of messages from a communication app.</p>
+
+                                <div class="row pt-3">
+                                    <div class="col-3">
+                                        <div class="text-center">
+                                            <h4>5</h4>
+                                            <p>Dashboards</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="text-center">
+                                            <h4>150+</h4>
+                                            <p>Pages</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="text-center">
+                                            <h4>7+</h4>
+                                            <p>Functional Apps</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- end container -->
+            </section>
+            <!-- end features -->
+
+            <!-- start cta -->
+            <section class="py-5 bg-primary position-relative">
+                <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
+                <div class="container">
+                    <div class="row align-items-center gy-4">
+                        <div class="col-sm">
+                            <div>
+                                <h4 class="text-white mb-0 fw-semibold">Build your web App/SaaS with Velzon dashboard</h4>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                        <div class="col-sm-auto">
+                            <div>
+                                <a href="https://1.envato.market/velzon-admin" target="_blank"
+                                    class="btn bg-gradient btn-danger"><i
+                                        class="ri-shopping-cart-2-line align-middle me-1"></i> Buy Now</a>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- end container -->
+            </section>
+            <!-- end cta -->
+
+            <!-- start features -->
+            <section class="section">
+                <div class="container">
+                    <div class="row align-items-center gy-4">
+                        <div class="col-lg-6 order-2 order-lg-1">
+                            <div class="text-muted">
+                                <h5 class="fs-12 text-uppercase text-success">Design</h5>
+                                <h4 class="mb-3">Well Designed Dashboards</h4>
+                                <p class="mb-4 ff-secondary">Quality Dashboards (QD) is a condition-specific, actionable
+                                    web-based application for quality reporting and population
+                                    management that is integrated into the Electronic Health Record (EHR).</p>
+
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <div class="vstack gap-2">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 me-2">
+                                                    <div class="avatar-xs icon-effect">
+                                                        <div
+                                                            class="avatar-title bg-transparent text-success rounded-circle h2">
+                                                            <i class="ri-check-fill"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h5 class="fs-14 mb-0">Ecommerce</h5>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 me-2">
+                                                    <div class="avatar-xs icon-effect">
+                                                        <div
+                                                            class="avatar-title bg-transparent text-success rounded-circle h2">
+                                                            <i class="ri-check-fill"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h5 class="fs-14 mb-0">Analytics</h5>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 me-2">
+                                                    <div class="avatar-xs icon-effect">
+                                                        <div
+                                                            class="avatar-title bg-transparent text-success rounded-circle h2">
+                                                            <i class="ri-check-fill"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h5 class="fs-14 mb-0">CRM</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="vstack gap-2">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 me-2">
+                                                    <div class="avatar-xs icon-effect">
+                                                        <div
+                                                            class="avatar-title bg-transparent text-success rounded-circle h2">
+                                                            <i class="ri-check-fill"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h5 class="fs-14 mb-0">Crypto</h5>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 me-2">
+                                                    <div class="avatar-xs icon-effect">
+                                                        <div
+                                                            class="avatar-title bg-transparent text-success rounded-circle h2">
+                                                            <i class="ri-check-fill"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h5 class="fs-14 mb-0">Projects</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    <a href="{{ URL::asset('/index') }}" class="btn btn-primary">Learn More <i
+                                            class="ri-arrow-right-line align-middle ms-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                        <div class="col-lg-6 col-sm-7 col-10 ms-auto order-1 order-lg-2">
+                            <div>
+                                <img src="{{ URL::asset('assets/images/landing/features/img-2.png') }}" alt=""
+                                    class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+
+                    <div class="row align-items-center mt-5 pt-lg-5 gy-4">
+                        <div class="col-lg-6 col-sm-7 col-10 mx-auto">
+                            <div>
+                                <img src="{{ URL::asset('assets/images/landing/features/img-3.png') }}" alt=""
+                                    class="img-fluid">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="text-muted ps-lg-5">
+                                <h5 class="fs-12 text-uppercase text-success">structure</h5>
+                                <h4 class="mb-3">Well Documented</h4>
+                                <p class="mb-4">used to describe something that is known about or known to be true
+                                    because there are many documents that describe it,
+                                    prove it, etc.</p>
+
+                                <div class="vstack gap-2">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0 me-2">
+                                            <div class="avatar-xs icon-effect">
+                                                <div class="avatar-title bg-transparent text-success rounded-circle h2">
+                                                    <i class="ri-check-fill"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <p class="mb-0">Dynamic Conetnt</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0 me-2">
+                                            <div class="avatar-xs icon-effect">
+                                                <div class="avatar-title bg-transparent text-success rounded-circle h2">
+                                                    <i class="ri-check-fill"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <p class="mb-0">Setup plugin's information.</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0 me-2">
+                                            <div class="avatar-xs icon-effect">
+                                                <div class="avatar-title bg-transparent text-success rounded-circle h2">
+                                                    <i class="ri-check-fill"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <p class="mb-0">Themes customization information</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- end container -->
+            </section>
+            <!-- end features -->
+
+            <!-- start faqs -->
+            <section class="section bg-light" id="faqs">
+                <div class="bg-overlay bg-overlay-pattern"></div>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="text-center mb-5">
+                                <h3 class="mb-3 fw-semibold">Frequently Asked Questions</h3>
+                                <p class="text-muted mb-4 ff-secondary">If you can not find answer to your question in our
+                                    FAQ, you can
+                                    always contact us or email us. We will answer you shortly!</p>
+
+                                <div class="">
+                                    <button type="button" class="btn btn-primary btn-label rounded-pill"><i
+                                            class="ri-mail-line label-icon align-middle rounded-pill fs-16 me-2"></i> Email
+                                        Us</button>
+                                    <button type="button" class="btn btn-info btn-label rounded-pill"><i
+                                            class="ri-twitter-line label-icon align-middle rounded-pill fs-16 me-2"></i>
+                                        Send Us Tweet</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+
+                    <div class="row g-lg-5 g-4">
+                        <div class="col-lg-6">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="flex-shrink-0 me-1">
+                                    <i class="ri-question-line fs-24 align-middle text-success me-1"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="mb-0 fw-semibold">General Questions</h5>
+                                </div>
+                            </div>
+                            <div class="accordion custom-accordionwithicon custom-accordion-border accordion-border-box"
+                                id="genques-accordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="genques-headingOne">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#genques-collapseOne"
+                                            aria-expanded="false" aria-controls="genques-collapseOne">
+                                            What is the purpose of using themes ?
+                                        </button>
+                                    </h2>
+                                    <div id="genques-collapseOne" class="accordion-collapse collapse"
+                                        aria-labelledby="genques-headingOne" data-bs-parent="#genques-accordion">
+                                        <div class="accordion-body ff-secondary">
+                                            A theme is a set of colors, fonts, effects, and more that can be applied to your
+                                            entire presentation to give it a
+                                            consistent, professional look. You've already been using a theme, even if you
+                                            didn't know it: the default Office theme,
+                                            which consists.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="genques-headingTwo">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#genques-collapseTwo"
+                                            aria-expanded="false" aria-controls="genques-collapseTwo">
+                                            Can a theme have more than one theme?
+                                        </button>
+                                    </h2>
+                                    <div id="genques-collapseTwo" class="accordion-collapse collapse"
+                                        aria-labelledby="genques-headingTwo" data-bs-parent="#genques-accordion">
+                                        <div class="accordion-body ff-secondary">
+                                            A story can have as many themes as the reader can identify based on recurring
+                                            patterns and parallels within the story
+                                            itself. In looking at ways to separate themes into a hierarchy, we might find it
+                                            useful to follow the example of a
+                                            single book.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="genques-headingThree">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#genques-collapseThree"
+                                            aria-expanded="false" aria-controls="genques-collapseThree">
+                                            What are theme features?
+                                        </button>
+                                    </h2>
+                                    <div id="genques-collapseThree" class="accordion-collapse collapse"
+                                        aria-labelledby="genques-headingThree" data-bs-parent="#genques-accordion">
+                                        <div class="accordion-body ff-secondary">
+                                            Theme features is a set of specific functionality that may be enabled by theme
+                                            authors. Themes must register each
+                                            individual Theme Feature that the author wishes to support. Theme support
+                                            functions should be called in the theme's
+                                            functions.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="genques-headingFour">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#genques-collapseFour"
+                                            aria-expanded="false" aria-controls="genques-collapseFour">
+                                            What is simple theme?
+                                        </button>
+                                    </h2>
+                                    <div id="genques-collapseFour" class="accordion-collapse collapse"
+                                        aria-labelledby="genques-headingFour" data-bs-parent="#genques-accordion">
+                                        <div class="accordion-body ff-secondary">
+                                            Simple is a free WordPress theme, by Themify, built exactly what it is named
+                                            for: simplicity. Immediately upgrade the
+                                            quality of your WordPress site with the simple theme To use the built-in Chrome
+                                            theme editor.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end accordion-->
+
+                        </div>
+                        <!-- end col -->
+                        <div class="col-lg-6">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="flex-shrink-0 me-1">
+                                    <i class="ri-shield-keyhole-line fs-24 align-middle text-success me-1"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="mb-0 fw-semibold">Privacy &amp; Security</h5>
+                                </div>
+                            </div>
+
+                            <div class="accordion custom-accordionwithicon custom-accordion-border accordion-border-box"
+                                id="privacy-accordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="privacy-headingOne">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#privacy-collapseOne"
+                                            aria-expanded="false" aria-controls="privacy-collapseOne">
+                                            Does Word have night mode?
+                                        </button>
+                                    </h2>
+                                    <div id="privacy-collapseOne" class="accordion-collapse collapse"
+                                        aria-labelledby="privacy-headingOne" data-bs-parent="#privacy-accordion">
+                                        <div class="accordion-body ff-secondary">
+                                            You can run Microsoft Word in dark mode, which uses a dark color palette to help
+                                            reduce eye strain in low light
+                                            settings. You can choose to make the document white or black using the Switch
+                                            Modes button in the ribbon's View tab.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="privacy-headingTwo">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#privacy-collapseTwo"
+                                            aria-expanded="false" aria-controls="privacy-collapseTwo">
+                                            Is theme an opinion?
+                                        </button>
+                                    </h2>
+                                    <div id="privacy-collapseTwo" class="accordion-collapse collapse"
+                                        aria-labelledby="privacy-headingTwo" data-bs-parent="#privacy-accordion">
+                                        <div class="accordion-body ff-secondary">
+                                            A theme is an opinion the author expresses on the subject, for instance, the
+                                            author's dissatisfaction with the narrow
+                                            confines of French bourgeois marriage during that period theme is an idea that a
+                                            writer repeats.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="privacy-headingThree">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#privacy-collapseThree"
+                                            aria-expanded="false" aria-controls="privacy-collapseThree">
+                                            How do you develop a theme?
+                                        </button>
+                                    </h2>
+                                    <div id="privacy-collapseThree" class="accordion-collapse collapse"
+                                        aria-labelledby="privacy-headingThree" data-bs-parent="#privacy-accordion">
+                                        <div class="accordion-body ff-secondary">
+                                            A short story, novella, or novel presents a narrative to its reader. Perhaps
+                                            that narrative involves mystery, terror,
+                                            romance, comedy, or all of the above. These works of fiction may also contain
+                                            memorable characters, vivid
+                                            world-building, literary devices.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="privacy-headingFour">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#privacy-collapseFour"
+                                            aria-expanded="false" aria-controls="privacy-collapseFour">
+                                            Do stories need themes?
+                                        </button>
+                                    </h2>
+                                    <div id="privacy-collapseFour" class="accordion-collapse collapse"
+                                        aria-labelledby="privacy-headingFour" data-bs-parent="#privacy-accordion">
+                                        <div class="accordion-body ff-secondary">
+                                            A story can have as many themes as the reader can identify based on recurring
+                                            patterns and parallels within the story
+                                            itself. In looking at ways to separate themes into a hierarchy, we might find it
+                                            useful to follow the example of a
+                                            single book.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end accordion-->
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- end container -->
+            </section>
+            <!-- end faqs -->
+
+            <!-- start review -->
+            <section class="section bg-primary" id="reviews">
+                <div class="bg-overlay bg-overlay-pattern"></div>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-10">
+                            <div class="text-center">
+                                <div>
+                                    <i class="ri-double-quotes-l text-success display-3"></i>
+                                </div>
+                                <h4 class="text-white mb-5"><span class="text-success">19k</span>+ Satisfied clients</h4>
+
+                                <!-- Swiper -->
+                                <div class="swiper client-review-swiper rounded" dir="ltr">
+                                    <div class="swiper-wrapper">
+                                        <div class="swiper-slide">
+                                            <div class="row justify-content-center">
+                                                <div class="col-10">
+                                                    <div class="text-white-50">
+                                                        <p class="fs-20 ff-secondary mb-4">" I am givng 5 stars. Theme is
+                                                            great and everyone one stuff everything in theme. Future request
+                                                            should not affect current
+                                                            state of theme. "</p>
+
+                                                        <div>
+                                                            <h5 class="text-white">gregoriusus</h5>
+                                                            <p>- Skote User</p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="flex-grow-1 ms-3">
-                                                <h6 class="mb-1">Today offers by <a
-                                                        href="{{URL::asset('/apps-ecommerce-seller-details')}}"
-                                                        class="link-secondary">Digitech Galaxy</a></h6>
-                                                <p class="text-muted mb-2">Offer is valid on orders of
-                                                    Rs.500 Or above for selected products only.</p>
-                                                <small class="mb-0 text-muted">12 Dec, 2021</small>
-                                            </div>
                                         </div>
-                                        <div class="acitivity-item py-3 d-flex">
-                                            <div class="flex-shrink-0">
-                                                <div class="avatar-xs acitivity-avatar">
-                                                    <div class="avatar-title rounded-circle bg-soft-danger text-danger shadow">
-                                                        <i class="ri-bookmark-fill"></i>
+                                        <!-- end slide -->
+                                        <div class="swiper-slide">
+                                            <div class="row justify-content-center">
+                                                <div class="col-10">
+                                                    <div class="text-white-50">
+                                                        <p class="fs-20 ff-secondary mb-4">" Awesome support. Had few
+                                                            issues while setting up because of my device, the support team
+                                                            helped me fix them up in a day.
+                                                            Everything looks clean and good. Highly recommended! "</p>
+
+                                                        <div>
+                                                            <h5 class="text-white">GeekyGreenOwl</h5>
+                                                            <p>- Skote User</p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="flex-grow-1 ms-3">
-                                                <h6 class="mb-1">Favoried Product</h6>
-                                                <p class="text-muted mb-2">Esther James have favorited
-                                                    product.</p>
-                                                <small class="mb-0 text-muted">25 Nov, 2021</small>
-                                            </div>
                                         </div>
-                                        <div class="acitivity-item py-3 d-flex">
-                                            <div class="flex-shrink-0">
-                                                <div class="avatar-xs acitivity-avatar">
-                                                    <div class="avatar-title rounded-circle bg-secondary shadow">
-                                                        <i class="mdi mdi-sale fs-14"></i>
+                                        <!-- end slide -->
+                                        <div class="swiper-slide">
+                                            <div class="row justify-content-center">
+                                                <div class="col-10">
+                                                    <div class="text-white-50">
+                                                        <p class="fs-20 ff-secondary mb-4">" Amazing template, Redux store
+                                                            and components is nicely designed.
+                                                            It's a great start point for an admin based project. Clean Code
+                                                            and good documentation. Template is
+                                                            completely in React and absolutely no usage of jQuery "</p>
+
+                                                        <div>
+                                                            <h5 class="text-white">sreeks456</h5>
+                                                            <p>- Veltrix User</p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="flex-grow-1 ms-3">
-                                                <h6 class="mb-1">Flash sale starting <span
-                                                        class="text-primary">Tomorrow.</span></h6>
-                                                <p class="text-muted mb-0">Flash sale by <a href="javascript:void(0);"
-                                                        class="link-secondary fw-medium">Zoetic Fashion</a>
-                                                </p>
-                                                <small class="mb-0 text-muted">22 Oct, 2021</small>
+                                        </div>
+                                        <!-- end slide -->
+                                    </div>
+                                    <div class="swiper-button-next bg-white rounded-circle"></div>
+                                    <div class="swiper-button-prev bg-white rounded-circle"></div>
+                                    <div class="swiper-pagination position-relative mt-2"></div>
+                                </div>
+                                <!-- end slider -->
+                            </div>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- end container -->
+            </section>
+            <!-- end review -->
+
+            <!-- start counter -->
+            <section class="py-5 position-relative bg-light">
+                <div class="container">
+                    <div class="row text-center gy-4">
+                        <div class="col-lg-3 col-6">
+                            <div>
+                                <h2 class="mb-2"><span class="counter-value" data-target="100">0</span>+</h2>
+                                <div class="text-muted">Projects Completed</div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+
+                        <div class="col-lg-3 col-6">
+                            <div>
+                                <h2 class="mb-2"><span class="counter-value" data-target="24">0</span></h2>
+                                <div class="text-muted">Win Awards</div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+
+                        <div class="col-lg-3 col-6">
+                            <div>
+                                <h2 class="mb-2"><span class="counter-value" data-target="20.3">0</span>k</h2>
+                                <div class="text-muted">Satisfied Clients</div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                        <div class="col-lg-3 col-6">
+                            <div>
+                                <h2 class="mb-2"><span class="counter-value" data-target="50">0</span></h2>
+                                <div class="text-muted">Employees</div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- end container -->
+            </section>
+            <!-- end counter -->
+
+            <!-- start Work Process -->
+            <section class="section">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="text-center mb-5">
+                                <h3 class="mb-3 fw-semibold">Our Work Process</h3>
+                                <p class="text-muted mb-4 ff-secondary">In an ideal world this website wouldn’t exist, a
+                                    client would
+                                    acknowledge the importance of having web copy before the Proin vitae ipsum vel ex
+                                    finibus semper design starts.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+
+                    <div class="row text-center">
+                        <div class="col-lg-4">
+                            <div class="process-card mt-4">
+                                <div class="process-arrow-img d-none d-lg-block">
+                                    <img src="{{ URL::asset('assets/images/landing/process-arrow-img.png') }}"
+                                        alt="" class="img-fluid">
+                                </div>
+                                <div class="avatar-sm icon-effect mx-auto mb-4">
+                                    <div class="avatar-title bg-transparent text-success rounded-circle h1">
+                                        <i class="ri-quill-pen-line"></i>
+                                    </div>
+                                </div>
+
+                                <h5>Tell us what you need</h5>
+                                <p class="text-muted ff-secondary">The profession and the employer and your desire to make
+                                    your mark.</p>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                        <div class="col-lg-4">
+                            <div class="process-card mt-4">
+                                <div class="process-arrow-img d-none d-lg-block">
+                                    <img src="{{ URL::asset('assets/images/landing/process-arrow-img.png') }}"
+                                        alt="" class="img-fluid">
+                                </div>
+                                <div class="avatar-sm icon-effect mx-auto mb-4">
+                                    <div class="avatar-title bg-transparent text-success rounded-circle h1">
+                                        <i class="ri-user-follow-line"></i>
+                                    </div>
+                                </div>
+
+                                <h5>Get free quotes</h5>
+                                <p class="text-muted ff-secondary">The most important aspect of beauty was, therefore, an
+                                    inherent part.</p>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                        <div class="col-lg-4">
+                            <div class="process-card mt-4">
+                                <div class="avatar-sm icon-effect mx-auto mb-4">
+                                    <div class="avatar-title bg-transparent text-success rounded-circle h1">
+                                        <i class="ri-book-mark-line"></i>
+                                    </div>
+                                </div>
+
+                                <h5>Deliver high quality product</h5>
+                                <p class="text-muted ff-secondary">We quickly learn to fear and thus automatically avoid
+                                    potentially.</p>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- end container -->
+            </section>
+            <!-- end Work Process -->
+
+            <!-- start team -->
+            <section class="section bg-light" id="team">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="text-center mb-5">
+                                <h3 class="mb-3 fw-semibold">Our <span class="text-danger">Team</span></h3>
+                                <p class="text-muted mb-4 ff-secondary">To achieve this, it would be necessary to have
+                                    uniform grammar,
+                                    pronunciation and more common words. If several languages coalesce the grammar.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="card">
+                                <div class="card-body text-center p-4">
+                                    <div class="avatar-xl mx-auto mb-4 position-relative">
+                                        <img src="{{ URL::asset('assets/images/users/avatar-2.jpg') }}" alt=""
+                                            class="img-fluid rounded-circle">
+                                        <a href="{{ URL::asset('/apps-mailbox') }}"
+                                            class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
+                                            <div class="avatar-title bg-transparent">
+                                                <i class="ri-mail-fill align-bottom"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <!-- end card body -->
+                                    <h5 class="mb-1"><a href="{{ URL::asset('/pages-profile') }}"
+                                            class="text-body">Nancy Martino</a></h5>
+                                    <p class="text-muted mb-0 ff-secondary">Team Leader</p>
+                                </div>
+                            </div>
+                            <!-- end card -->
+                        </div>
+                        <!-- end col -->
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="card">
+                                <div class="card-body text-center p-4">
+                                    <div class="avatar-xl mx-auto mb-4 position-relative">
+                                        <img src="{{ URL::asset('assets/images/users/avatar-10.jpg') }}" alt=""
+                                            class="img-fluid rounded-circle">
+                                        <a href="{{ URL::asset('/apps-mailbox') }}"
+                                            class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
+                                            <div class="avatar-title bg-transparent">
+                                                <i class="ri-mail-fill align-bottom"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <!-- end card body -->
+                                    <h5 class="mb-1"><a href="{{ URL::asset('/pages-profile') }}"
+                                            class="text-body">Henry Baird</a></h5>
+                                    <p class="text-muted mb-0 ff-secondary">Full Stack Developer</p>
+                                </div>
+                            </div>
+                            <!-- end card -->
+                        </div>
+                        <!-- end col -->
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="card">
+                                <div class="card-body text-center p-4">
+                                    <div class="avatar-xl mx-auto mb-4 position-relative">
+                                        <img src="{{ URL::asset('assets/images/users/avatar-3.jpg') }}" alt=""
+                                            class="img-fluid rounded-circle">
+                                        <a href="{{ URL::asset('/apps-mailbox') }}"
+                                            class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
+                                            <div class="avatar-title bg-transparent">
+                                                <i class="ri-mail-fill align-bottom"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <!-- end card body -->
+                                    <h5 class="mb-1"><a href="{{ URL::asset('/pages-profile') }}"
+                                            class="text-body">Frank Hook</a></h5>
+                                    <p class="text-muted mb-0 ff-secondary">Project Manager</p>
+                                </div>
+                            </div>
+                            <!-- end card -->
+                        </div>
+                        <!-- end col -->
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="card">
+                                <div class="card-body text-center p-4">
+                                    <div class="avatar-xl mx-auto mb-4 position-relative">
+                                        <img src="{{ URL::asset('assets/images/users/avatar-8.jpg') }}" alt=""
+                                            class="img-fluid rounded-circle">
+                                        <a href="{{ URL::asset('/apps-mailbox') }}"
+                                            class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
+                                            <div class="avatar-title bg-transparent">
+                                                <i class="ri-mail-fill align-bottom"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <!-- end card body -->
+                                    <h5 class="mb-1"><a href="{{ URL::asset('/pages-profile') }}"
+                                            class="text-body">Donald Palmer</a></h5>
+                                    <p class="text-muted mb-0 ff-secondary">UI/UX Designer</p>
+                                </div>
+                            </div>
+                            <!-- end card -->
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="card">
+                                <div class="card-body text-center p-4">
+                                    <div class="avatar-xl mx-auto mb-4 position-relative">
+                                        <img src="{{ URL::asset('assets/images/users/avatar-5.jpg') }}" alt=""
+                                            class="img-fluid rounded-circle">
+                                        <a href="{{ URL::asset('/apps-mailbox') }}"
+                                            class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
+                                            <div class="avatar-title bg-transparent">
+                                                <i class="ri-mail-fill align-bottom"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <!-- end card body -->
+                                    <h5 class="mb-1"><a href="{{ URL::asset('/pages-profile') }}"
+                                            class="text-body">Erica Kernan</a></h5>
+                                    <p class="text-muted mb-0 ff-secondary">Web Designer</p>
+                                </div>
+                            </div>
+                            <!-- end card -->
+                        </div>
+                        <!-- end col -->
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="card">
+                                <div class="card-body text-center p-4">
+                                    <div class="avatar-xl mx-auto mb-4 position-relative">
+                                        <img src="{{ URL::asset('assets/images/users/avatar-4.jpg') }}" alt=""
+                                            class="img-fluid rounded-circle">
+                                        <a href="{{ URL::asset('/apps-mailbox') }}"
+                                            class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
+                                            <div class="avatar-title bg-transparent">
+                                                <i class="ri-mail-fill align-bottom"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <!-- end card body -->
+                                    <h5 class="mb-1"><a href="{{ URL::asset('/pages-profile') }}"
+                                            class="text-body">Alexis Clarke</a></h5>
+                                    <p class="text-muted mb-0 ff-secondary">Backend Developer</p>
+                                </div>
+                            </div>
+                            <!-- end card -->
+                        </div>
+                        <!-- end col -->
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="card">
+                                <div class="card-body text-center p-4">
+                                    <div class="avatar-xl mx-auto mb-4 position-relative">
+                                        <img src="{{ URL::asset('assets/images/users/avatar-6.jpg') }}" alt=""
+                                            class="img-fluid rounded-circle">
+                                        <a href="{{ URL::asset('/apps-mailbox') }}"
+                                            class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
+                                            <div class="avatar-title bg-transparent">
+                                                <i class="ri-mail-fill align-bottom"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <!-- end card body -->
+                                    <h5 class="mb-1"><a href="{{ URL::asset('/pages-profile') }}"
+                                            class="text-body">Marie Ward</a></h5>
+                                    <p class="text-muted mb-0 ff-secondary">Full Stack Developer</p>
+                                </div>
+                            </div>
+                            <!-- end card -->
+                        </div>
+                        <!-- end col -->
+
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="card">
+                                <div class="card-body text-center p-4">
+                                    <div class="avatar-xl mx-auto mb-4 position-relative">
+                                        <img src="{{ URL::asset('assets/images/users/avatar-7.jpg') }}" alt=""
+                                            class="img-fluid rounded-circle">
+                                        <a href="{{ URL::asset('/apps-mailbox') }}"
+                                            class="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
+                                            <div class="avatar-title bg-transparent">
+                                                <i class="ri-mail-fill align-bottom"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <!-- end card body -->
+                                    <h5 class="mb-1"><a href="{{ URL::asset('/pages-profile') }}"
+                                            class="text-body">Jack Gough</a></h5>
+                                    <p class="text-muted mb-0 ff-secondary">React Js Developer</p>
+                                </div>
+                            </div>
+                            <!-- end card -->
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="text-center mt-2">
+                                <a href="{{ URL::asset('/pages-team') }}" class="btn btn-primary">View All Members <i
+                                        class="ri-arrow-right-line ms-1 align-bottom"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- end container -->
+            </section>
+            <!-- end team -->
+
+            <!-- start contact -->
+            <section class="section" id="contact">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="text-center mb-5">
+                                <h3 class="mb-3 fw-semibold">Get In Touch</h3>
+                                <p class="text-muted mb-4 ff-secondary">We thrive when coming up with innovative ideas but
+                                    also
+                                    understand that a smart concept should be supported with faucibus sapien odio measurable
+                                    results.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+
+                    <div class="row gy-4">
+                        <div class="col-lg-4">
+                            <div>
+                                <div class="mt-4">
+                                    <h5 class="fs-13 text-muted text-uppercase">Office Address 1:</h5>
+                                    <div class="ff-secondary fw-semibold">4461 Cedar Street Moro, <br />AR 72368</div>
+                                </div>
+                                <div class="mt-4">
+                                    <h5 class="fs-13 text-muted text-uppercase">Office Address 2:</h5>
+                                    <div class="ff-secondary fw-semibold">2467 Swick Hill Street <br />New Orleans, LA
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <h5 class="fs-13 text-muted text-uppercase">Working Hours:</h5>
+                                    <div class="ff-secondary fw-semibold">9:00am to 6:00pm</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                        <div class="col-lg-8">
+                            <div>
+                                <form>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-4">
+                                                <label for="name" class="form-label fs-13">Name</label>
+                                                <input name="name" id="name" type="text"
+                                                    class="form-control bg-light border-light" placeholder="Your name*">
                                             </div>
                                         </div>
-                                        <div class="acitivity-item py-3 d-flex">
-                                            <div class="flex-shrink-0">
-                                                <div class="avatar-xs acitivity-avatar">
-                                                    <div class="avatar-title rounded-circle bg-soft-info text-info shadow">
-                                                        <i class="ri-line-chart-line"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1 ms-3">
-                                                <h6 class="mb-1">Monthly sales report</h6>
-                                                <p class="text-muted mb-2"><span class="text-danger">2 days
-                                                        left</span> notification to submit the monthly sales
-                                                    report. <a href="javascript:void(0);"
-                                                        class="link-warning text-decoration-underline">Reports
-                                                        Builder</a></p>
-                                                <small class="mb-0 text-muted">15 Oct</small>
+                                        <div class="col-lg-6">
+                                            <div class="mb-4">
+                                                <label for="email" class="form-label fs-13">Email</label>
+                                                <input name="email" id="email" type="email"
+                                                    class="form-control bg-light border-light" placeholder="Your email*">
                                             </div>
                                         </div>
-                                        <div class="acitivity-item d-flex">
-                                            <div class="flex-shrink-0">
-                                                <img src="{{ URL::asset('assets/images/users/avatar-3.jpg') }}" alt=""
-                                                    class="avatar-xs rounded-circle acitivity-avatar shadow" />
-                                            </div>
-                                            <div class="flex-grow-1 ms-3">
-                                                <h6 class="mb-1">Frank Hook Commented</h6>
-                                                <p class="text-muted mb-2 fst-italic">" A product that has
-                                                    reviews is more likable to be sold than a product. "</p>
-                                                <small class="mb-0 text-muted">26 Aug, 2021</small>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="mb-4">
+                                                <label for="subject" class="form-label fs-13">Subject</label>
+                                                <input type="text" class="form-control bg-light border-light"
+                                                    id="subject" name="subject" placeholder="Your Subject.." />
                                             </div>
                                         </div>
-                                    </div> --}}
-                                </div>
-                            </div><!-- end card body -->
-                        </div><!-- end card -->
-                    </div><!-- end col -->
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="mb-3">
+                                                <label for="comments" class="form-label fs-13">Message</label>
+                                                <textarea name="comments" id="comments" rows="3" class="form-control bg-light border-light"
+                                                    placeholder="Your message..."></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12 text-end">
+                                            <input type="submit" id="submit" name="send"
+                                                class="submitBnt btn btn-primary" value="Send Message">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- end container -->
+            </section>
+            <!-- end contact -->
 
-                </div> <!-- end row-->
-                {{-- <div class="row">
-                    <div class="col-xl-3 col-md-6">
-                        <!-- card -->
-                        <div class="card card-animate">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-grow-1 overflow-hidden">
-                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
-                                            Total Earnings</p>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <h5 class="text-success fs-14 mb-0">
-                                            <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
-                                            +16.24 %
-                                        </h5>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-end justify-content-between mt-4">
-                                    <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">$<span class="counter-value"
-                                                data-target="559.25">0</span>k
-                                        </h4>
-                                        <a href="" class="text-decoration-underline">View net
-                                            earnings</a>
-                                    </div>
-                                    <div class="avatar-sm flex-shrink-0">
-                                        <span class="avatar-title bg-success rounded fs-3">
-                                            <i class="bx bx-dollar-circle"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div><!-- end card body -->
-                        </div><!-- end card -->
-                    </div><!-- end col -->
+            <!-- start cta -->
+            <section class="py-5 bg-primary position-relative">
+                <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
+                <div class="container">
+                    <div class="row align-items-center gy-4">
+                        <div class="col-sm">
+                            <div>
+                                <h4 class="text-white mb-0 fw-semibold">Build your web App/SaaS with Velzon dashboard</h4>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                        <div class="col-sm-auto">
+                            <div>
+                                <a href="https://1.envato.market/velzon-admin" target="_blank"
+                                    class="btn bg-gradient btn-danger"><i
+                                        class="ri-shopping-cart-2-line align-middle me-1"></i> Buy Now</a>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- end container -->
+            </section>
+            <!-- end cta -->
 
-                    <div class="col-xl-3 col-md-6">
-                        <!-- card -->
-                        <div class="card card-animate">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-grow-1 overflow-hidden">
-                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
-                                            Orders</p>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <h5 class="text-danger fs-14 mb-0">
-                                            <i class="ri-arrow-right-down-line fs-13 align-middle"></i>
-                                            -3.57 %
-                                        </h5>
-                                    </div>
+            <!-- Start footer -->
+            <footer class="custom-footer bg-dark py-5 position-relative">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4 mt-4">
+                            <div>
+                                <div>
+                                    <img src="{{ URL::asset('assets/images/logo-light.png') }}" alt="logo light"
+                                        height="17">
                                 </div>
-                                <div class="d-flex align-items-end justify-content-between mt-4">
-                                    <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
-                                                data-target="36894">0</span></h4>
-                                        <a href="" class="text-decoration-underline">View all orders</a>
-                                    </div>
-                                    <div class="avatar-sm flex-shrink-0">
-                                        <span class="avatar-title bg-info rounded fs-3">
-                                            <i class="bx bx-shopping-bag"></i>
-                                        </span>
-                                    </div>
+                                <div class=mt-4 fs-13">
+                                    <p>Premium Multipurpose Admin & Dashboard Template</p>
+                                    <p class="ff-secondary">You can build any type of web application like eCommerce, CRM,
+                                        CMS, Project
+                                        management apps, Admin Panels, etc using Velzon.</p>
                                 </div>
-                            </div><!-- end card body -->
-                        </div><!-- end card -->
-                    </div><!-- end col -->
+                            </div>
+                        </div>
 
-                    <div class="col-xl-3 col-md-6">
-                        <!-- card -->
-                        <div class="card card-animate">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-grow-1 overflow-hidden">
-                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
-                                            Customers</p>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <h5 class="text-success fs-14 mb-0">
-                                            <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
-                                            +29.08 %
-                                        </h5>
+                        <div class="col-lg-7 ms-lg-auto">
+                            <div class="row">
+                                <div class="col-sm-4 mt-4">
+                                    <h5 class="text-white mb-0">Company</h5>
+                                    <div class="text-muted mt-3">
+                                        <ul class="list-unstyled ff-secondary footer-list fs-14">
+                                            <li><a href="{{ URL::asset('/pages-profile') }}">About Us</a></li>
+                                            <li><a href="{{ URL::asset('/pages-gallery') }}">Gallery</a></li>
+                                            <li><a href="{{ URL::asset('/apps-projects-overview') }}">Projects</a></li>
+                                            <li><a href="{{ URL::asset('/pages-timeline') }}">Timeline</a></li>
+                                        </ul>
                                     </div>
                                 </div>
-                                <div class="d-flex align-items-end justify-content-between mt-4">
-                                    <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
-                                                data-target="183.35">0</span>M
-                                        </h4>
-                                        <a href="" class="text-decoration-underline">See details</a>
-                                    </div>
-                                    <div class="avatar-sm flex-shrink-0">
-                                        <span class="avatar-title bg-warning rounded fs-3">
-                                            <i class="bx bx-user-circle"></i>
-                                        </span>
+                                <div class="col-sm-4 mt-4">
+                                    <h5 class="text-white mb-0">Apps Pages</h5>
+                                    <div class="text-muted mt-3">
+                                        <ul class="list-unstyled ff-secondary footer-list fs-14">
+                                            <li><a href="{{ URL::asset('/pages-pricing') }}">Calendar</a></li>
+                                            <li><a href="{{ URL::asset('/apps-mailbox') }}">Mailbox</a></li>
+                                            <li><a href="{{ URL::asset('/apps-chat') }}">Chat</a></li>
+                                            <li><a href="{{ URL::asset('/apps-crm-deals') }}">Deals</a></li>
+                                            <li><a href="{{ URL::asset('/apps-tasks-kanban') }}">Kanban Board</a></li>
+                                        </ul>
                                     </div>
                                 </div>
-                            </div><!-- end card body -->
-                        </div><!-- end card -->
-                    </div><!-- end col -->
+                                <div class="col-sm-4 mt-4">
+                                    <h5 class="text-white mb-0">Support</h5>
+                                    <div class="text-muted mt-3">
+                                        <ul class="list-unstyled ff-secondary footer-list fs-14">
+                                            <li><a href="{{ URL::asset('/pages-faqs') }}">FAQ</a></li>
+                                            <li><a href="{{ URL::asset('/pages-faqs') }}">Contact</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div class="col-xl-3 col-md-6">
-                        <!-- card -->
-                        <div class="card card-animate">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-grow-1 overflow-hidden">
-                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
-                                            My Balance</p>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <h5 class="text-muted fs-14 mb-0">
-                                            +0.00 %
-                                        </h5>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-end justify-content-between mt-4">
-                                    <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">$<span class="counter-value"
-                                                data-target="165.89">0</span>k
-                                        </h4>
-                                        <a href="" class="text-decoration-underline">Withdraw money</a>
-                                    </div>
-                                    <div class="avatar-sm flex-shrink-0">
-                                        <span class="avatar-title bg-danger rounded fs-3">
-                                            <i class="bx bx-wallet"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div><!-- end card body -->
-                        </div><!-- end card -->
-                    </div><!-- end col -->
-                </div> <!-- end row--> --}}
+                    </div>
 
-            </div> <!-- end col -->
+                    <div class="row text-center text-sm-start align-items-center mt-5">
+                        <div class="col-sm-6">
+
+                            <div>
+                                <p class="copy-rights mb-0">
+                                    <script>
+                                        document.write(new Date().getFullYear())
+                                    </script> © Velzon - Themesbrand
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-sm-end mt-3 mt-sm-0">
+                                <ul class="list-inline mb-0 footer-social-link">
+                                    <li class="list-inline-item">
+                                        <a href="javascript: void(0);" class="avatar-xs d-block">
+                                            <div class="avatar-title rounded-circle">
+                                                <i class="ri-facebook-fill"></i>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a href="javascript: void(0);" class="avatar-xs d-block">
+                                            <div class="avatar-title rounded-circle">
+                                                <i class="ri-github-fill"></i>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a href="javascript: void(0);" class="avatar-xs d-block">
+                                            <div class="avatar-title rounded-circle">
+                                                <i class="ri-linkedin-fill"></i>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a href="javascript: void(0);" class="avatar-xs d-block">
+                                            <div class="avatar-title rounded-circle">
+                                                <i class="ri-google-fill"></i>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a href="javascript: void(0);" class="avatar-xs d-block">
+                                            <div class="avatar-title rounded-circle">
+                                                <i class="ri-dribbble-line"></i>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- end footer -->
+
         </div>
-    </div>
-    </div>
-@endsection
-@section('script')
-    <!-- apexcharts -->
-    <script src="{{ URL::asset('/assets/libs/apexcharts/apexcharts.min.js') }}"></script>
-    <script src="{{ URL::asset('/assets/libs/jsvectormap/jsvectormap.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/libs/swiper/swiper.min.js') }}"></script>
-    <!-- dashboard init -->
-    <script src="{{ URL::asset('/assets/js/pages/dashboard-ecommerce.init.js') }}"></script>
-    <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        // Initialize the map
-        var map = L.map('map').setView([3.05603, 101.70022], 17);
-
-        // Add a tile layer
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        // Function to add markers
-        function addMarker(lat, lng, description) {
-            var marker = L.marker([lat, lng]).addTo(map);
-            if (description) {
-                marker.bindPopup(description); // Show description on marker click
-            }
-        }
-
-        // Example markers
-        addMarker(51.5, -0.09, "Description 1");
-        addMarker(51.51, -0.1, "Description 2");
-        // Add more markers as needed
-
-        // You can also allow users to add markers by clicking on the map and capturing the click event
-        map.on('click', function(e) {
-            var description = prompt("Enter description for this location:");
-            addMarker(e.latlng.lat, e.latlng.lng, description);
-        });
-
-        // Function to handle image upload and description retrieval
-        document.getElementById('uploadButton').addEventListener('click', function() {
-            var fileInput = document.getElementById('imageUpload');
-            var file = fileInput.files[0]; // Get the file
-            var formData = new FormData();
-            formData.append('providers', 'amazon, api4ai');
-            formData.append('file', file);
-            formData.append('fallback_providers', '');
-
-            axios.post('https://api.edenai.run/v2/image/object_detection', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYTk5YzVhOTctYmY2My00YmRkLWIxYTMtMzZlYzk5NmQ1ZjQwIiwidHlwZSI6ImFwaV90b2tlbiJ9.ZEHn-AZeHgReKaBg2UN452S1B8pBiwqrCPy6C5b_KEg'
-                    }
-                })
-                .then(function(response) {
-                    console.log(response.data);
-                    // Display image description on the webpage
-                    var label = response.data['eden-ai'].items[0].label;
-                    document.getElementById('imageDescription').innerHTML = "<p>" + label + "</p>";
-                })
-                .catch(function(error) {
-                    console.error(error);
-                });
-        });
-    </script>
-@endsection
+        <!-- end layout wrapper -->
+    @endsection
+    @section('script')
+        <script src="{{ URL::asset('/assets/libs/swiper/swiper.min.js') }}"></script>
+        <script src="{{ URL::asset('/assets/js/pages/landing.init.js') }}"></script>
+    @endsection

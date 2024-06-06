@@ -4,16 +4,16 @@
             <div class="d-flex">
                 <!-- LOGO -->
                 <div class="navbar-brand-box horizontal-logo">
-                    <a href="index" class="logo logo-dark">
+                    <a href="<?php echo e(route('admin.index')); ?>" class="logo logo-dark">
                         <span class="logo-sm">
                             <img src="<?php echo e(URL::asset('assets/images/logo-sm.png')); ?>" alt="" height="22">
                         </span>
                         <span class="logo-lg">
-                            <img src="<?php echo e(URL::asset('assets/images/logo-dark.png')); ?>" alt="" height="17">
+                            <img src="<?php echo e(URL::asset('assets/images/logo-dark-new.png')); ?>" alt="" height="17">
                         </span>
                     </a>
 
-                    <a href="index" class="logo logo-light">
+                    <a href="<?php echo e(route('admin.index')); ?>" class="logo logo-light">
                         <span class="logo-sm">
                             <img src="<?php echo e(URL::asset('assets/images/logo-sm.png')); ?>" alt="" height="22">
                         </span>
@@ -381,7 +381,7 @@
                     <div class="dropdown-menu dropdown-menu-end">
                         <!-- item-->
                         <h6 class="dropdown-header">Welcome <?php echo e(Auth::user()->name); ?>!</h6>
-                        <a class="dropdown-item" href="profile"><i
+                        <a class="dropdown-item" href="<?php echo e(route('profile')); ?>"><i
                                 class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Profile</span></a>
                         <a class="dropdown-item " href="javascript:void();"

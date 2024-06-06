@@ -15,10 +15,10 @@
    <div class="layout-wrapper landing">
     <nav class="navbar navbar-expand-lg navbar-landing fixed-top" id="navbar">
         <div class="container">
-            <a class="navbar-brand" href="{{URL::asset('/index')}}">
-                <img src="{{ URL::asset('assets/images/logo-dark.png') }}" class="card-logo card-logo-dark" alt="logo dark" height="17">
-                <img src="{{ URL::asset('assets/images/logo-light.png') }}" class="card-logo card-logo-light" alt="logo light"
-                    height="17">
+            <a class="navbar-brand mt-1" href="{{URL::asset('/')}}">
+                <img src="{{ URL::asset('assets/images/logo-dark-new.png') }}" class="card-logo card-logo-dark" alt="logo dark" height="20">
+                <img src="{{ URL::asset('assets/images/logo-light-new.png') }}" class="card-logo card-logo-light" alt="logo light"
+                    height="20">
             </a>
             <button class="navbar-toggler py-0 fs-20 text-body" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -32,19 +32,13 @@
                         <a class="nav-link fs-14 active" href="#hero">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-14" href="#services">Services</a>
+                        <a class="nav-link fs-14" href="#services">Items</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-14" href="#features">Features</a>
+                        <a class="nav-link fs-14" href="#features">Report</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-14" href="#plans">Plans</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fs-14" href="#reviews">Reviews</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fs-14" href="#team">Team</a>
+                        <a class="nav-link fs-14" href="#faqs">FAQs</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link fs-14" href="#contact">Contact</a>
@@ -52,11 +46,13 @@
                 </ul>
 
                 <div class="">
-                    <a href="{{URL::asset('/auth-signin-basic')}}" class="btn btn-link fw-medium text-decoration-none text-dark">Sign
+                    <a href="{{ route('login') }}" class="btn btn-link fw-medium text-decoration-none text-dark">Sign
                         in</a>
-                    <a href="{{URL::asset('/auth-signup-basic')}}" class="btn btn-primary">Sign Up</a>
+                    <a href="{{ route('register') }}" class="btn btn-primary">Sign Up</a>
                 </div>
-                <div class="dropdown ms-sm-3 header-item topbar-user">
+
+                {{-- only when user is logged in and role = normal_user --}}
+                {{-- <div class="dropdown ms-sm-3 header-item topbar-user">
                     <button type="button" class="btn shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         <span class="d-flex align-items-center">
@@ -82,7 +78,9 @@
                             @csrf
                         </form>
                     </div>
-                </div>
+                </div> --}}
+
+
             </div>
 
         </div>
@@ -646,355 +644,9 @@
     </section>
     <!-- end features -->
 
-    <!-- start plan -->
-    <section class="section bg-light" id="plans">
-        <div class="bg-overlay bg-overlay-pattern"></div>
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="text-center mb-5">
-                        <h3 class="mb-3 fw-semibold">Choose the plan that's right for you</h3>
-                        <p class="text-muted mb-4">Simple pricing. No hidden fees. Advanced features for you
-                            business.</p>
-
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div>
-                                <h5 class="fs-14 mb-0">Month</h5>
-                            </div>
-                            <div class="form-check form-switch fs-20 ms-3 " onclick="check()">
-                                <input class="form-check-input" type="checkbox" id="plan-switch">
-                                <label class="form-check-label" for="plan-switch"></label>
-                            </div>
-                            <div>
-                                <h5 class="fs-14 mb-0">Annual <span class="badge badge-soft-success">Save 20%</span></h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- end col -->
-            </div>
-            <!-- end row -->
-
-            <div class="row gy-4">
-                <div class="col-lg-4">
-                    <div class="card plan-box mb-0">
-                        <div class="card-body p-4 m-2">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-grow-1">
-                                    <h5 class="mb-1 fw-semibold">Basic Plan</h5>
-                                    <p class="text-muted mb-0">For Startup</p>
-                                </div>
-                                <div class="avatar-sm">
-                                    <div class="avatar-title bg-light rounded-circle text-primary">
-                                        <i class="ri-book-mark-line fs-20"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="py-4 text-center">
-                                <h1 class="month"><sup><small>$</small></sup><span class="ff-secondary fw-bold">19</span> <span
-                                        class="fs-13 text-muted">/Month</span></h1>
-                                <h1 class="annual"><sup><small>$</small></sup><span class="ff-secondary fw-bold">171</span> <span
-                                        class="fs-13 text-muted">/Year</span></h1>
-                            </div>
-
-                            <div>
-                                <ul class="list-unstyled text-muted vstack gap-3 ff-secondary">
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                Upto <b>3</b> Projects
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                Upto <b>299</b> Customers
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                Scalable Bandwidth
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>5</b> FTP Login
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-danger me-1">
-                                                <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>24/7</b> Support
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-danger me-1">
-                                                <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>Unlimited</b> Storage
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-danger me-1">
-                                                <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                Domain
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="mt-4">
-                                    <a href="javascript:void(0);" class="btn btn-soft-success w-100">Get
-                                        Started</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--end col-->
-                <div class="col-lg-4">
-                    <div class="card plan-box mb-0 ribbon-box right">
-                        <div class="card-body p-4 m-2">
-                            <div class="ribbon-two ribbon-two-danger"><span>Popular</span></div>
-                            <div class="d-flex align-items-center">
-                                <div class="flex-grow-1">
-                                    <h5 class="mb-1 fw-semibold">Pro Business</h5>
-                                    <p class="text-muted mb-0">Professional plans</p>
-                                </div>
-                                <div class="avatar-sm">
-                                    <div class="avatar-title bg-light rounded-circle text-primary">
-                                        <i class="ri-medal-fill fs-20"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="py-4 text-center">
-                                <h1 class="month"><sup><small>$</small></sup><span class="ff-secondary fw-bold">29</span> <span
-                                        class="fs-13 text-muted">/Month</span></h1>
-                                <h1 class="annual"><sup><small>$</small></sup><span class="ff-secondary fw-bold">261</span> <span
-                                        class="fs-13 text-muted">/Year</span></h1>
-                            </div>
-
-                            <div>
-                                <ul class="list-unstyled text-muted vstack gap-3 ff-secondary">
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                Upto <b>15</b> Projects
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>Unlimited</b> Customers
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                Scalable Bandwidth
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>12</b> FTP Login
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>24/7</b> Support
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-danger me-1">
-                                                <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>Unlimited</b> Storage
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-danger me-1">
-                                                <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                Domain
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="mt-4">
-                                    <a href="javascript:void(0);" class="btn btn-soft-success w-100">Get
-                                        Started</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--end col-->
-                <div class="col-lg-4">
-                    <div class="card plan-box mb-0">
-                        <div class="card-body p-4 m-2">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-grow-1">
-                                    <h5 class="mb-1 fw-semibold">Platinum Plan</h5>
-                                    <p class="text-muted mb-0">Enterprise Businesses</p>
-                                </div>
-                                <div class="avatar-sm">
-                                    <div class="avatar-title bg-light rounded-circle text-primary">
-                                        <i class="ri-stack-fill fs-20"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="py-4 text-center">
-                                <h1 class="month"><sup><small>$</small></sup><span class="ff-secondary fw-bold">39</span> <span
-                                        class="fs-13 text-muted">/Month</span></h1>
-                                <h1 class="annual"><sup><small>$</small></sup><span class="ff-secondary fw-bold">351</span> <span
-                                        class="fs-13 text-muted">/Year</span></h1>
-                            </div>
-
-                            <div>
-                                <ul class="list-unstyled text-muted vstack gap-3 ff-secondary">
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>Unlimited</b> Projects
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>Unlimited</b> Customers
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                Scalable Bandwidth
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>Unlimited</b> FTP Login
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>24/7</b> Support
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>Unlimited</b> Storage
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                Domain
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="mt-4">
-                                    <a href="javascript:void(0);" class="btn btn-soft-success w-100">Get
-                                        Started</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--end col-->
-            </div>
-            <!--end row-->
-        </div>
-        <!-- end container -->
-    </section>
-    <!-- end plan -->
-
     <!-- start faqs -->
-    <section class="section">
+    <section class="section bg-light" id="faqs">
+        <div class="bg-overlay bg-overlay-pattern"></div>
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
@@ -1026,13 +678,13 @@
                         id="genques-accordion">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="genques-headingOne">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#genques-collapseOne" aria-expanded="true"
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#genques-collapseOne" aria-expanded="false"
                                     aria-controls="genques-collapseOne">
                                     What is the purpose of using themes ?
                                 </button>
                             </h2>
-                            <div id="genques-collapseOne" class="accordion-collapse collapse show"
+                            <div id="genques-collapseOne" class="accordion-collapse collapse"
                                 aria-labelledby="genques-headingOne" data-bs-parent="#genques-accordion">
                                 <div class="accordion-body ff-secondary">
                                     A theme is a set of colors, fonts, effects, and more that can be applied to your entire presentation to give it a
@@ -1126,13 +778,13 @@
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="privacy-headingTwo">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#privacy-collapseTwo" aria-expanded="true"
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#privacy-collapseTwo" aria-expanded="false"
                                     aria-controls="privacy-collapseTwo">
                                     Is theme an opinion?
                                 </button>
                             </h2>
-                            <div id="privacy-collapseTwo" class="accordion-collapse collapse show"
+                            <div id="privacy-collapseTwo" class="accordion-collapse collapse"
                                 aria-labelledby="privacy-headingTwo" data-bs-parent="#privacy-accordion">
                                 <div class="accordion-body ff-secondary">
                                     A theme is an opinion the author expresses on the subject, for instance, the author's dissatisfaction with the narrow

@@ -18,10 +18,10 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
     /**
      * Show the application dashboard.
@@ -38,12 +38,9 @@ class HomeController extends Controller
 
     public function root()
     {
-        $countUser = User::count();
-        $countFound = Item::where('type', 'found')->count();
-        $countLost = Item::where('type', 'lost')->count();
-
-        return view('index', compact('countUser', 'countFound', 'countLost'));
+        return view('index');
     }
+
 
     public function timeline(Request $request)
     {

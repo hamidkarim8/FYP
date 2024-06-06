@@ -20,7 +20,7 @@
                                             <div class="position-relative h-100 d-flex flex-column">
                                                 <div class="mb-4">
                                                     <a href="index" class="d-block">
-                                                        <img src="{{ URL::asset('assets/images/logo-light.png') }}" alt="" height="18">
+                                                        <img src="{{ URL::asset('assets/images/logo-light-new.png') }}" alt="" height="18">
                                                     </a>
                                                 </div>
                                                 <div class="mt-auto">
@@ -67,10 +67,13 @@
 
                                             <div class="mt-4 pt-2">
                                                 <h5>You are Logged Out</h5>
-                                                <p class="text-muted">Thank you for using <span class="fw-semibold">velzon</span> admin template</p>
+                                                <p class="text-muted">Thank you for using <span class="fw-semibold">ApFound</span></p>
                                                 <div class="mt-4">
-                                                    <a href="auth-signin-basic" class="btn btn-success w-100">Sign In</a>
+                                                    <a href="{{ route("root")}}" class="btn btn-primary w-100">Back to homepage</a>
                                                 </div>
+                                                {{-- <div class="mt-4">
+                                                    <a href="{{ route("login")}}" class="btn btn-success w-100">login</a>
+                                                </div> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -90,7 +93,7 @@
             <!-- end auth page content -->
 
             <!-- footer -->
-            <footer class="footer">
+            {{-- <footer class="footer">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
@@ -100,7 +103,7 @@
                         </div>
                     </div>
                 </div>
-            </footer>
+            </footer> --}}
             <!-- end Footer -->
         </div>
         <!-- end auth-page-wrapper -->

@@ -161,7 +161,7 @@
 
                         <div class="mt-4 text-center">
                             <p class="mb-0">Already have an account ? <a href="login"
-                                    class="fw-semibold text-primary text-decoration-underline"> Signin </a> </p>
+                                    class="fw-semibold text-primary text-decoration-underline"> Sign in </a> </p>
                         </div>
 
                     </div>

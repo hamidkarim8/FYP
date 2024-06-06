@@ -3,16 +3,16 @@
     <!-- LOGO -->
     <div class="navbar-brand-box">
         <!-- Dark Logo-->
-        <a href="index" class="logo logo-dark">
+        <a href="{{ route('admin.index') }}" class="logo logo-dark">
             <span class="logo-sm">
                 <img src="{{ URL::asset('assets/images/logo-sm.png') }}" alt="" height="22">
             </span>
             <span class="logo-lg">
-                <img src="{{ URL::asset('assets/images/logo-dark.png') }}" alt="" height="17">
+                <img src="{{ URL::asset('assets/images/logo-dark-new.png') }}" alt="" height="17">
             </span>
         </a>
         <!-- Light Logo-->
-        <a href="index" class="logo logo-light">
+        <a href="{{ route('admin.index') }}" class="logo logo-light">
             <span class="logo-sm">
                 <img src="{{ URL::asset('assets/images/logo-sm.png') }}" alt="" height="22">
             </span>
@@ -34,7 +34,7 @@
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"><span>@lang('translation.menu')</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/">
+                    <a class="nav-link menu-link" href="{{ route('admin.index') }}">
                         <i class="mdi mdi-speedometer"></i> <span>@lang('translation.dashboards')</span>
                     </a>
                 </li>
@@ -60,7 +60,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="profile">
+                    <a class="nav-link menu-link" href="{{ route('profile') }}">
                         <i class="mdi mdi-account-circle-outline"></i> <span>Profile</span>
                     </a>
                 </li>
