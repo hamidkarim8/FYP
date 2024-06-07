@@ -3,6 +3,9 @@
     Landing
 @endsection
 @section('css')
+    <link href="{{ URL::asset('assets/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
     <link href="{{ URL::asset('assets/libs/swiper/swiper.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 @section('body')
@@ -32,10 +35,10 @@
                                 <a class="nav-link fs-14 active" href="#hero">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link fs-14" href="#services">Items</a>
+                                <a class="nav-link fs-14" href="#reports">Report</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link fs-14" href="#features">Report</a>
+                                <a class="nav-link fs-14" href="#items">Items</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link fs-14" href="#faqs">FAQs</a>
@@ -112,9 +115,9 @@
                                 <p class="lead text-muted lh-base">Effortlessly Track and Recover Your Belongings</p>
 
                                 <div class="d-flex gap-2 justify-content-center mt-4">
-                                    <a href="{{ URL::asset('/auth-signup-basic') }}" class="btn btn-primary">Get Started <i
+                                    <a href="#reports" class="btn btn-primary">Make report <i
                                             class="ri-arrow-right-line align-middle ms-1"></i></a>
-                                    <a href="{{ URL::asset('/pages-pricing') }}" class="btn btn-danger">View Plans <i
+                                    <a href="#items" class="btn btn-danger">See Items <i
                                             class="ri-eye-line align-middle ms-1"></i></a>
                                 </div>
                             </div>
@@ -179,15 +182,14 @@
             </section>
             <!-- end hero section -->
 
-            <!-- start client section -->
+            <!-- start collaboration section -->
             <div class="pt-5 mt-5">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
 
                             <div class="text-center mt-5">
-                                <h5 class="fs-20">Trusted <span class="text-primary text-decoration-underline">by</span>
-                                    the world's best</h5>
+                                <h5 class="fs-20">Final Year Project Collaboration</h5>
 
                                 <!-- Swiper -->
                                 <div class="swiper trusted-client-slider mt-sm-5 mt-4 mb-sm-5 mb-4" dir="ltr">
@@ -195,37 +197,19 @@
                                         <div class="swiper-slide">
                                             <div class="client-images">
                                                 <img src="{{ URL::asset('assets/images/clients/amazon.svg') }}"
-                                                    alt="client-img" class="mx-auto img-fluid d-block">
+                                                    alt="" class="mx-auto img-fluid d-block">
                                             </div>
                                         </div>
                                         <div class="swiper-slide">
                                             <div class="client-images">
                                                 <img src="{{ URL::asset('assets/images/clients/walmart.svg') }}"
-                                                    alt="client-img" class="mx-auto img-fluid d-block">
+                                                    alt="" class="mx-auto img-fluid d-block">
                                             </div>
                                         </div>
                                         <div class="swiper-slide">
                                             <div class="client-images">
                                                 <img src="{{ URL::asset('assets/images/clients/lenovo.svg') }}"
-                                                    alt="client-img" class="mx-auto img-fluid d-block">
-                                            </div>
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <div class="client-images">
-                                                <img src="{{ URL::asset('assets/images/clients/paypal.svg') }}"
-                                                    alt="client-img" class="mx-auto img-fluid d-block">
-                                            </div>
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <div class="client-images">
-                                                <img src="{{ URL::asset('assets/images/clients/shopify.svg') }}"
-                                                    alt="client-img" class="mx-auto img-fluid d-block">
-                                            </div>
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <div class="client-images">
-                                                <img src="{{ URL::asset('assets/images/clients/verizon.svg') }}"
-                                                    alt="client-img" class="mx-auto img-fluid d-block">
+                                                    alt="" class="mx-auto img-fluid d-block">
                                             </div>
                                         </div>
                                     </div>
@@ -238,273 +222,400 @@
                 </div>
                 <!-- end container -->
             </div>
-            <!-- end client section -->
+            <!-- end collaboration section -->
 
-            <!-- start services -->
-            <section class="section" id="services">
+
+            {{-- <div class="pt-5 mt-5"> --}}
+            <!-- start reports -->
+            <section class="section py-5  bg-light" id="reports">
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
                             <div class="text-center mb-5">
-                                <h1 class="mb-3 ff-secondary fw-semibold lh-base">A Digital web design studio creating
-                                    modern & engaging online</h1>
-                                <p class="text-muted">To achieve this, it would be necessary to have uniform grammar,
-                                    pronunciation and more common words. If several languages coalesce the grammar</p>
+                                <h2 class="mb-3 fw-semibold lh-base">Report a Lost and Found Item</h2>
+                                <p class="text-muted mb-4">[need short description]</p>
                             </div>
-                        </div>
-                        <!-- end col -->
-                    </div>
-                    <!-- end row -->
+                        </div><!-- end col -->
+                    </div><!-- end row -->
 
-                    <div class="row g-3">
-                        <div class="col-lg-4">
-                            <div class="d-flex p-3">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar-sm icon-effect">
-                                        <div class="avatar-title bg-transparent text-success rounded-circle">
-                                            <i class="ri-pencil-ruler-2-line fs-36"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="fs-18">Creative Design</h5>
-                                    <p class="text-muted my-3 ff-secondary">The creative design includes designs that are
-                                        unique, effective and memorable.</p>
-                                    <div>
-                                        <a href="#" class="fs-13 fw-medium">Learn More <i
-                                                class="ri-arrow-right-s-line align-bottom"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
-                        <div class="col-lg-4">
-                            <div class="d-flex p-3">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar-sm icon-effect">
-                                        <div class="avatar-title bg-transparent text-success rounded-circle">
-                                            <i class="ri-palette-line fs-36"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="fs-18">Unlimited Colors</h5>
-                                    <p class="text-muted my-3 ff-secondary">The collection of rules and guidelines which
-                                        designers use to communicate with users through appealing.</p>
-                                    <div>
-                                        <a href="#" class="fs-13 fw-medium">Learn More <i
-                                                class="ri-arrow-right-s-line align-bottom"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
-                        <div class="col-lg-4">
-                            <div class="d-flex p-3">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar-sm icon-effect">
-                                        <div class="avatar-title bg-transparent text-success rounded-circle">
-                                            <i class="ri-lightbulb-flash-line fs-36"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="fs-18">Strategy Solutions</h5>
-                                    <p class="text-muted my-3 ff-secondary">Business development firm that provides
-                                        strategic planning, market research services and project.</p>
-                                    <div>
-                                        <a href="#" class="fs-13 fw-medium">Learn More <i
-                                                class="ri-arrow-right-s-line align-bottom"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
-                        <div class="col-lg-4">
-                            <div class="d-flex p-3">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar-sm icon-effect">
-                                        <div class="avatar-title bg-transparent text-success rounded-circle">
-                                            <i class="ri-customer-service-line fs-36"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="fs-18">Awesome Support</h5>
-                                    <p class="text-muted my-3 ff-secondary">Awesome Support is the most versatile and
-                                        feature-rich support plugin for all version.</p>
-                                    <div>
-                                        <a href="#" class="fs-13 fw-medium">Learn More <i
-                                                class="ri-arrow-right-s-line align-bottom"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
-                        <div class="col-lg-4">
-                            <div class="d-flex p-3">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar-sm icon-effect">
-                                        <div class="avatar-title bg-transparent text-success rounded-circle">
-                                            <i class="ri-stack-line fs-36"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="fs-18">Truly Multipurpose</h5>
-                                    <p class="text-muted my-3 ff-secondary">You usually get a broad range of options to
-                                        play with. This enables you to use a single theme across multiple.</p>
-                                    <div>
-                                        <a href="#" class="fs-13 fw-medium">Learn More <i
-                                                class="ri-arrow-right-s-line align-bottom"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
-                        <div class="col-lg-4">
-                            <div class="d-flex p-3">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar-sm icon-effect">
-                                        <div class="avatar-title bg-transparent text-success rounded-circle">
-                                            <i class="ri-settings-2-line fs-36"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="fs-18">Easy to customize</h5>
-                                    <p class="text-muted my-3 ff-secondary">Personalise your own website, no matter what
-                                        theme and what customization options.</p>
-                                    <div>
-                                        <a href="#" class="fs-13 fw-medium">Learn More <i
-                                                class="ri-arrow-right-s-line align-bottom"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
 
-                        <div class="col-lg-4">
-                            <div class="d-flex p-3">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar-sm icon-effect">
-                                        <div class="avatar-title bg-transparent text-success rounded-circle">
-                                            <i class="ri-slideshow-line fs-36"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="fs-18">Responsive & Clean Design</h5>
-                                    <p class="text-muted my-3 ff-secondary">Responsive design is a graphic user interface
-                                        (GUI) design approach used to create content.</p>
-                                    <div>
-                                        <a href="#" class="fs-13 fw-medium">Learn More <i
-                                                class="ri-arrow-right-s-line align-bottom"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
-                        <div class="col-lg-4">
-                            <div class="d-flex p-3">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar-sm icon-effect">
-                                        <div class="avatar-title bg-transparent text-success rounded-circle">
-                                            <i class="ri-google-fill fs-36"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="fs-18">Google Font Collection</h5>
-                                    <p class="text-muted my-3 ff-secondary">Google Fonts is a collection of 915 fonts, all
-                                        available to use for free on your website.</p>
-                                    <div>
-                                        <a href="#" class="fs-13 fw-medium">Learn More <i
-                                                class="ri-arrow-right-s-line align-bottom"></i></a>
-                                    </div>
+                    <!-- Accordions Bordered -->
+                    <div class="accordion custom-accordionwithicon custom-accordion-border accordion-border-box accordion-secondary"
+                        id="accordionBordered">
+                        <div class="accordion-item shadow">
+                            <h2 class="accordion-header" id="accordionborderedExample1">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#accor_borderedExamplecollapse1" aria-expanded="true"
+                                    aria-controls="accor_borderedExamplecollapse1">
+                                    Simple Report?
+                                </button>
+                            </h2>
+                            <div id="accor_borderedExamplecollapse1" class="accordion-collapse collapse show"
+                                aria-labelledby="accordionborderedExample1" data-bs-parent="#accordionBordered">
+                                <div class="accordion-body">
+                                        <div class="card card-height-100">
+                                            <div class="card-header">
+                                                <h4 class="card-title mb-0">Report Through Map Location</h4>
+                                            </div><!-- end card header -->
+                                            <div class="card-body">
+                                                <div data-simplebar style="max-height: 800px;" class="p-2">
+                                                    <div id="map" style="height: 400px;"></div>
+                                                </div>
+                                            </div><!-- end card body -->
+                                        </div><!-- end card -->
                                 </div>
                             </div>
                         </div>
-                        <!-- end col -->
-                        <div class="col-lg-4">
-                            <div class="d-flex p-3">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar-sm icon-effect">
-                                        <div class="avatar-title bg-transparent text-success rounded-circle">
-                                            <i class="ri-briefcase-5-line fs-36"></i>
+                        <div class="accordion-item shadow">
+                            <h2 class="accordion-header" id="accordionborderedExample2">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#accor_borderedExamplecollapse2" aria-expanded="true"
+                                    aria-controls="accor_borderedExamplecollapse2">
+                                    Detailed Report?
+                                </button>
+                            </h2>
+                            <div id="accor_borderedExamplecollapse2" class="accordion-collapse collapse show"
+                                aria-labelledby="accordionborderedExample2" data-bs-parent="#accordionBordered">
+                                <div class="accordion-body">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4 class="card-title mb-0">Report Form</h4>
+                                            </div><!-- end card header -->
+                                            <div class="card-body form-steps">
+                                                <form action="#">
+                                                    <div class="text-center pt-3 pb-4 mb-1">
+                                                        <img src="{{ URL::asset('assets/images/logo-dark-new.png') }}" alt="" height="17">
+                                                    </div>
+                                                    <div class="step-arrow-nav mb-4">
+                            
+                                                        <ul class="nav nav-pills custom-nav nav-justified" role="tablist">
+                                                            <li class="nav-item" role="presentation">
+                                                                <button class="nav-link active" id="steparrow-gen-info-tab" data-bs-toggle="pill" data-bs-target="#steparrow-gen-info" type="button" role="tab" aria-controls="steparrow-gen-info" aria-selected="true">General</button>
+                                                            </li>
+                                                            <li class="nav-item" role="presentation">
+                                                                <button class="nav-link" id="steparrow-description-info-tab" data-bs-toggle="pill" data-bs-target="#steparrow-description-info" type="button" role="tab" aria-controls="steparrow-description-info" aria-selected="false">Description</button>
+                                                            </li>
+                                                            <li class="nav-item" role="presentation">
+                                                                <button class="nav-link" id="pills-experience-tab" data-bs-toggle="pill" data-bs-target="#pills-experience" type="button" role="tab" aria-controls="pills-experience" aria-selected="false">Finish</button>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                            
+                                                    <div class="tab-content">
+                                                        <div class="tab-pane fade show active" id="steparrow-gen-info" role="tabpanel" aria-labelledby="steparrow-gen-info-tab">
+                                                            <div>
+                                                                <div class="row">
+                                                                    <div class="col-lg-6">
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label" for="steparrow-gen-info-username-input">Username</label>
+                                                                            <input type="text" class="form-control" id="steparrow-gen-info-username-input" placeholder="Enter User Name">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-6">
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label" for="steparrow-gen-info-email-input">Email</label>
+                                                                            <input type="text" class="form-control" id="steparrow-gen-info-email-input" placeholder="Enter Email">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label" for="steparrow-gen-info-password-input">Password</label>
+                                                                    <input type="password" class="form-control" id="steparrow-gen-info-password-input" placeholder="Enter Password">
+                                                                </div>
+                                                                <div>
+                                                                    <label class="form-label" for="steparrow-gen-info-confirm-password-input">Confirm Password</label>
+                                                                    <input type="password" class="form-control" id="steparrow-gen-info-confirm-password-input" placeholder="Enter Confirm Password">
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex align-items-start gap-3 mt-4">
+                                                                <button type="button" class="btn btn-success btn-label right ms-auto nexttab
+                            nexttab" data-nexttab="steparrow-description-info-tab"><i class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Go to more info</button>
+                                                            </div>
+                                                        </div>
+                                                        <!-- end tab pane -->
+                            
+                                                        <div class="tab-pane fade" id="steparrow-description-info" role="tabpanel" aria-labelledby="steparrow-description-info-tab">
+                                                            <div>
+                                                                <div class="mb-3">
+                                                                    <label for="formFile" class="form-label">Upload Image</label>
+                                                                    <input class="form-control" type="file" id="formFile">
+                                                                </div>
+                                                                <div>
+                                                                    <label class="form-label" for="des-info-description-input">Description</label>
+                                                                    <textarea class="form-control" placeholder="Enter Description" id="des-info-description-input" rows="3"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex align-items-start gap-3 mt-4">
+                                                                <button type="button" class="btn btn-light btn-label previestab" data-previous="steparrow-gen-info-tab"><i class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i> Back to General</button>
+                                                                <button type="button" class="btn btn-success btn-label right ms-auto nexttab
+                            nexttab" data-nexttab="pills-experience-tab"><i class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Submit</button>
+                                                            </div>
+                                                        </div>
+                                                        <!-- end tab pane -->
+                            
+                                                        <div class="tab-pane fade" id="pills-experience" role="tabpanel">
+                                                            <div class="text-center">
+                            
+                                                                <div class="avatar-md mt-5 mb-4 mx-auto">
+                                                                    <div class="avatar-title bg-light text-success display-4 rounded-circle">
+                                                                        <i class="ri-checkbox-circle-fill"></i>
+                                                                    </div>
+                                                                </div>
+                                                                <h5>Well Done !</h5>
+                                                                <p class="text-muted">You have Successfully Reported an Item!</p>
+                                                            </div>
+                                                        </div>
+                                                        <!-- end tab pane -->
+                                                    </div>
+                                                    <!-- end tab content -->
+                                                </form>
+                                            </div>
+                                            <!-- end card body -->
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="fs-18">Top Industry Specialists</h5>
-                                    <p class="text-muted my-3 ff-secondary">An industrial specialist works with industrial
-                                        operations to ensure that manufacturing facilities work.</p>
-                                    <div>
-                                        <a href="#" class="fs-13 fw-medium">Learn More <i
-                                                class="ri-arrow-right-s-line align-bottom"></i></a>
-                                    </div>
+                                        <!-- end card -->
                                 </div>
                             </div>
                         </div>
-                        <!-- end col -->
                     </div>
-                    <!-- end row -->
                 </div>
                 <!-- end container -->
             </section>
-            <!-- end services -->
+            <!-- end reports -->
+            {{-- </div> --}}
 
-            <!-- start features -->
-            <section class="section bg-light py-5" id="features">
+
+
+            <!-- start items -->
+            <section class="section" id="items">
                 <div class="container">
-                    <div class="row align-items-center gy-4">
-                        <div class="col-lg-6 col-sm-7 mx-auto">
-                            <div>
-                                <img src="{{ URL::asset('assets/images/landing/features/img-1.png') }}" alt=""
-                                    class="img-fluid mx-auto">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="text-center mb-5">
+                                <h2 class="mb-3 fw-semibold lh-base">Explore Lost and Found Items</h2>
+                                <p class="text-muted mb-4">[need short description]</p>
+                                <ul class="nav nav-pills filter-btns justify-content-center" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link fw-medium active" type="button" data-filter="all">All
+                                            Items</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link fw-medium" type="button"
+                                            data-filter="lost">Lost</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link fw-medium" type="button"
+                                            data-filter="found">Found</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link fw-medium" type="button"
+                                            data-filter="auto">Auto-matching</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link fw-medium" type="button"
+                                            data-filter="filter">Filters</button>
+                                    </li>
+                                </ul>
                             </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="text-muted">
-                                <div class="avatar-sm icon-effect mb-4">
-                                    <div class="avatar-title bg-transparent rounded-circle text-success h1">
-                                        <i class="ri-collage-line fs-36"></i>
+                        </div><!-- end col -->
+                    </div><!-- end row -->
+                    <div class="row">
+                        <div class="col-lg-4 product-item artwork crypto-card 3d-style">
+                            <div class="card explore-box card-animate">
+                                <div class="bookmark-icon position-absolute top-0 end-0 p-2">
+                                    <button type="button" class="btn btn-icon active" data-bs-toggle="button"
+                                        aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
+                                </div>
+                                <div class="explore-place-bid-img">
+                                    <img src="{{ URL::asset('assets/images/nft/img-03.jpg') }}" alt=""
+                                        class="card-img-top explore-img" />
+                                    <div class="bg-overlay"></div>
+                                    <div class="place-bid-btn">
+                                        <a href="#!" class="btn btn-success"><i
+                                                class="ri-auction-fill align-bottom me-1"></i> Place Bid</a>
                                     </div>
                                 </div>
-                                <h3 class="mb-3 fs-20">Huge collection of widgets</h3>
-                                <p class="mb-4 ff-secondary fs-16">Collection widgets specialize in displaying many
-                                    elements of the same type, such as a collection of pictures from a collection of
-                                    articles from a news app or a collection of messages from a communication app.</p>
-
-                                <div class="row pt-3">
-                                    <div class="col-3">
-                                        <div class="text-center">
-                                            <h4>5</h4>
-                                            <p>Dashboards</p>
+                                <div class="card-body">
+                                    <p class="fw-medium mb-0 float-end"><i
+                                            class="mdi mdi-heart text-danger align-middle"></i> 19.29k </p>
+                                    <h5 class="mb-1"><a href="apps-nft-item-details">Creative Filtered Portrait</a>
+                                    </h5>
+                                    <p class="text-muted mb-0">Photography</p>
+                                </div>
+                                <div class="card-footer border-top border-top-dashed">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1 fs-14">
+                                            <i class="ri-price-tag-3-fill text-warning align-bottom me-1"></i> Highest:
+                                            <span class="fw-medium">75.3ETH</span>
                                         </div>
-                                    </div>
-                                    <div class="col-3">
-                                        <div class="text-center">
-                                            <h4>150+</h4>
-                                            <p>Pages</p>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="text-center">
-                                            <h4>7+</h4>
-                                            <p>Functional Apps</p>
-                                        </div>
+                                        <h5 class="flex-shrink-0 fs-14 text-primary mb-0">67.36 ETH</h5>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- end col -->
+                        <div class="col-lg-4 product-item music crypto-card games">
+                            <div class="card explore-box card-animate">
+                                <div class="bookmark-icon position-absolute top-0 end-0 p-2">
+                                    <button type="button" class="btn btn-icon active" data-bs-toggle="button"
+                                        aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
+                                </div>
+                                <div class="explore-place-bid-img">
+                                    <img src="{{ URL::asset('assets/images/nft/img-02.jpg') }}" alt=""
+                                        class="card-img-top explore-img" />
+                                    <div class="bg-overlay"></div>
+                                    <div class="place-bid-btn">
+                                        <a href="#!" class="btn btn-success"><i
+                                                class="ri-auction-fill align-bottom me-1"></i> Place Bid</a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p class="fw-medium mb-0 float-end"><i
+                                            class="mdi mdi-heart text-danger align-middle"></i> 23.63k </p>
+                                    <h5 class="mb-1"><a href="apps-nft-item-details">The Chirstoper</a></h5>
+                                    <p class="text-muted mb-0">Music</p>
+                                </div>
+                                <div class="card-footer border-top border-top-dashed">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1 fs-14">
+                                            <i class="ri-price-tag-3-fill text-warning align-bottom me-1"></i> Highest:
+                                            <span class="fw-medium">412.30ETH</span>
+                                        </div>
+                                        <h5 class="flex-shrink-0 fs-14 text-primary mb-0">394.7 ETH</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 product-item artwork music games">
+                            <div class="card explore-box card-animate">
+                                <div class="bookmark-icon position-absolute top-0 end-0 p-2">
+                                    <button type="button" class="btn btn-icon active" data-bs-toggle="button"
+                                        aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
+                                </div>
+                                <div class="explore-place-bid-img">
+                                    <img src="{{ URL::asset('assets/images/nft/gif/img-4.gif') }}" alt=""
+                                        class="card-img-top explore-img" />
+                                    <div class="bg-overlay"></div>
+                                    <div class="place-bid-btn">
+                                        <a href="#!" class="btn btn-success"><i
+                                                class="ri-auction-fill align-bottom me-1"></i> Place Bid</a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p class="fw-medium mb-0 float-end"><i
+                                            class="mdi mdi-heart text-danger align-middle"></i> 15.93k </p>
+                                    <h5 class="mb-1"><a href="apps-nft-item-details">Evolved Reality</a></h5>
+                                    <p class="text-muted mb-0">Video</p>
+                                </div>
+                                <div class="card-footer border-top border-top-dashed">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1 fs-14">
+                                            <i class="ri-price-tag-3-fill text-warning align-bottom me-1"></i> Highest:
+                                            <span class="fw-medium">2.75ETH</span>
+                                        </div>
+                                        <h5 class="flex-shrink-0 fs-14 text-primary mb-0">3.167 ETH</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 product-item crypto-card 3d-style">
+                            <div class="card explore-box card-animate">
+                                <div class="bookmark-icon position-absolute top-0 end-0 p-2">
+                                    <button type="button" class="btn btn-icon active" data-bs-toggle="button"
+                                        aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
+                                </div>
+                                <div class="explore-place-bid-img">
+                                    <img src="{{ URL::asset('assets/images/nft/img-01.jpg') }}" alt=""
+                                        class="card-img-top explore-img" />
+                                    <div class="bg-overlay"></div>
+                                    <div class="place-bid-btn">
+                                        <a href="#!" class="btn btn-success"><i
+                                                class="ri-auction-fill align-bottom me-1"></i> Place Bid</a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p class="fw-medium mb-0 float-end"><i
+                                            class="mdi mdi-heart text-danger align-middle"></i> 14.85k </p>
+                                    <h5 class="mb-1"><a href="apps-nft-item-details">Abstract Face Painting</a></h5>
+                                    <p class="text-muted mb-0">Collectibles</p>
+                                </div>
+                                <div class="card-footer border-top border-top-dashed">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1 fs-14">
+                                            <i class="ri-price-tag-3-fill text-warning align-bottom me-1"></i> Highest:
+                                            <span class="fw-medium">122.34ETH</span>
+                                        </div>
+                                        <h5 class="flex-shrink-0 fs-14 text-primary mb-0">97.8 ETH</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 product-item games music 3d-style">
+                            <div class="card explore-box card-animate">
+                                <div class="bookmark-icon position-absolute top-0 end-0 p-2">
+                                    <button type="button" class="btn btn-icon active" data-bs-toggle="button"
+                                        aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
+                                </div>
+                                <div class="explore-place-bid-img">
+                                    <img src="{{ URL::asset('assets/images/nft/img-05.jpg') }}" alt=""
+                                        class="card-img-top explore-img" />
+                                    <div class="bg-overlay"></div>
+                                    <div class="place-bid-btn">
+                                        <a href="#!" class="btn btn-success"><i
+                                                class="ri-auction-fill align-bottom me-1"></i> Place Bid</a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p class="fw-medium mb-0 float-end"><i
+                                            class="mdi mdi-heart text-danger align-middle"></i> 64.10k </p>
+                                    <h5 class="mb-1"><a href="apps-nft-item-details">Long-tailed Macaque</a></h5>
+                                    <p class="text-muted mb-0">Artwork</p>
+                                </div>
+                                <div class="card-footer border-top border-top-dashed">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1 fs-14">
+                                            <i class="ri-price-tag-3-fill text-warning align-bottom me-1"></i> Highest:
+                                            <span class="fw-medium">874.01ETH</span>
+                                        </div>
+                                        <h5 class="flex-shrink-0 fs-14 text-primary mb-0">745.14 ETH</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 product-item artwork music crypto-card">
+                            <div class="card explore-box card-animate">
+                                <div class="bookmark-icon position-absolute top-0 end-0 p-2">
+                                    <button type="button" class="btn btn-icon active" data-bs-toggle="button"
+                                        aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
+                                </div>
+                                <div class="explore-place-bid-img">
+                                    <img src="{{ URL::asset('assets/images/nft/img-06.jpg') }}" alt=""
+                                        class="card-img-top explore-img" />
+                                    <div class="bg-overlay"></div>
+                                    <div class="place-bid-btn">
+                                        <a href="#!" class="btn btn-success"><i
+                                                class="ri-auction-fill align-bottom me-1"></i> Place Bid</a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p class="fw-medium mb-0 float-end"><i
+                                            class="mdi mdi-heart text-danger align-middle"></i> 36.42k </p>
+                                    <h5 class="mb-1"><a href="apps-nft-item-details">Robotic Body Art</a></h5>
+                                    <p class="text-muted mb-0">Artwork</p>
+                                </div>
+                                <div class="card-footer border-top border-top-dashed">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1 fs-14">
+                                            <i class="ri-price-tag-3-fill text-warning align-bottom me-1"></i> Highest:
+                                            <span class="fw-medium">41.658 ETH</span>
+                                        </div>
+                                        <h5 class="flex-shrink-0 fs-14 text-primary mb-0">34.81 ETH</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <!-- end row -->
-                </div>
-                <!-- end container -->
+                </div><!-- end container -->
             </section>
-            <!-- end features -->
+            <!-- end items -->
 
             <!-- start cta -->
             <section class="py-5 bg-primary position-relative">
@@ -513,15 +624,15 @@
                     <div class="row align-items-center gy-4">
                         <div class="col-sm">
                             <div>
-                                <h4 class="text-white mb-0 fw-semibold">Build your web App/SaaS with Velzon dashboard</h4>
+                                <h4 class="text-white mb-0 fw-semibold">Register and become one of us the life peacer</h4>
                             </div>
                         </div>
                         <!-- end col -->
                         <div class="col-sm-auto">
                             <div>
-                                <a href="https://1.envato.market/velzon-admin" target="_blank"
-                                    class="btn bg-gradient btn-danger"><i
-                                        class="ri-shopping-cart-2-line align-middle me-1"></i> Buy Now</a>
+                                <a href="{{ route('register') }}"
+                                    class="btn bg-gradient btn-success"><i
+                                        class="ri-user-add-fill align-middle me-1"></i> Register</a>
                             </div>
                         </div>
                         <!-- end col -->
@@ -533,7 +644,7 @@
             <!-- end cta -->
 
             <!-- start features -->
-            <section class="section">
+            {{-- <section class="section">
                 <div class="container">
                     <div class="row align-items-center gy-4">
                         <div class="col-lg-6 order-2 order-lg-1">
@@ -696,7 +807,7 @@
                     <!-- end row -->
                 </div>
                 <!-- end container -->
-            </section>
+            </section> --}}
             <!-- end features -->
 
             <!-- start faqs -->
@@ -707,13 +818,16 @@
                         <div class="col-lg-8">
                             <div class="text-center mb-5">
                                 <h3 class="mb-3 fw-semibold">Frequently Asked Questions</h3>
-                                <p class="text-muted mb-4 ff-secondary">If you can't find the answer to your question in our FAQ, you can always contact us or email us. We will answer you shortly!</p>
+                                <p class="text-muted mb-4 ff-secondary">If you can't find the answer to your question in
+                                    our FAQ, you can always contact us or email us. We will answer you shortly!</p>
                                 <div class="">
                                     <button type="button" class="btn btn-primary btn-label rounded-pill">
-                                        <i class="ri-mail-line label-icon align-middle rounded-pill fs-16 me-2"></i> Email Us
+                                        <i class="ri-mail-line label-icon align-middle rounded-pill fs-16 me-2"></i> Email
+                                        Us
                                     </button>
                                     <button type="button" class="btn btn-info btn-label rounded-pill">
-                                        <i class="ri-twitter-line label-icon align-middle rounded-pill fs-16 me-2"></i> Send Us Tweet
+                                        <i class="ri-twitter-line label-icon align-middle rounded-pill fs-16 me-2"></i>
+                                        Send Us Tweet
                                     </button>
                                 </div>
                             </div>
@@ -731,52 +845,72 @@
                                     <h5 class="mb-0 fw-semibold">General Questions</h5>
                                 </div>
                             </div>
-                            <div class="accordion custom-accordionwithicon custom-accordion-border accordion-border-box" id="genques-accordion">
+                            <div class="accordion custom-accordionwithicon custom-accordion-border accordion-border-box"
+                                id="genques-accordion">
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="genques-headingOne">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseOne" aria-expanded="false" aria-controls="genques-collapseOne">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#genques-collapseOne"
+                                            aria-expanded="false" aria-controls="genques-collapseOne">
                                             What is the purpose of the lost and found system?
                                         </button>
                                     </h2>
-                                    <div id="genques-collapseOne" class="accordion-collapse collapse" aria-labelledby="genques-headingOne" data-bs-parent="#genques-accordion">
+                                    <div id="genques-collapseOne" class="accordion-collapse collapse"
+                                        aria-labelledby="genques-headingOne" data-bs-parent="#genques-accordion">
                                         <div class="accordion-body ff-secondary">
-                                            The lost and found system helps users report lost items and find items that others have found. It aims to streamline the process of recovering lost belongings.
+                                            The lost and found system helps users report lost items and find items that
+                                            others have found. It aims to streamline the process of recovering lost
+                                            belongings.
                                         </div>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="genques-headingTwo">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseTwo" aria-expanded="false" aria-controls="genques-collapseTwo">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#genques-collapseTwo"
+                                            aria-expanded="false" aria-controls="genques-collapseTwo">
                                             How do I report a lost item?
                                         </button>
                                     </h2>
-                                    <div id="genques-collapseTwo" class="accordion-collapse collapse" aria-labelledby="genques-headingTwo" data-bs-parent="#genques-accordion">
+                                    <div id="genques-collapseTwo" class="accordion-collapse collapse"
+                                        aria-labelledby="genques-headingTwo" data-bs-parent="#genques-accordion">
                                         <div class="accordion-body ff-secondary">
-                                            To report a lost item, you need to fill out the "Report Lost Item" form on our website, providing detailed information about the item and the location where it was lost.
+                                            To report a lost item, you need to fill out the "Report Lost Item" form on our
+                                            website, providing detailed information about the item and the location where it
+                                            was lost.
                                         </div>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="genques-headingThree">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseThree" aria-expanded="false" aria-controls="genques-collapseThree">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#genques-collapseThree"
+                                            aria-expanded="false" aria-controls="genques-collapseThree">
                                             How do I report a found item?
                                         </button>
                                     </h2>
-                                    <div id="genques-collapseThree" class="accordion-collapse collapse" aria-labelledby="genques-headingThree" data-bs-parent="#genques-accordion">
+                                    <div id="genques-collapseThree" class="accordion-collapse collapse"
+                                        aria-labelledby="genques-headingThree" data-bs-parent="#genques-accordion">
                                         <div class="accordion-body ff-secondary">
-                                            To report a found item, you need to fill out the "Report Found Item" form on our website, providing detailed information about the item and the location where it was found.
+                                            To report a found item, you need to fill out the "Report Found Item" form on our
+                                            website, providing detailed information about the item and the location where it
+                                            was found.
                                         </div>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="genques-headingFour">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseFour" aria-expanded="false" aria-controls="genques-collapseFour">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#genques-collapseFour"
+                                            aria-expanded="false" aria-controls="genques-collapseFour">
                                             How do I search for my lost item?
                                         </button>
                                     </h2>
-                                    <div id="genques-collapseFour" class="accordion-collapse collapse" aria-labelledby="genques-headingFour" data-bs-parent="#genques-accordion">
+                                    <div id="genques-collapseFour" class="accordion-collapse collapse"
+                                        aria-labelledby="genques-headingFour" data-bs-parent="#genques-accordion">
                                         <div class="accordion-body ff-secondary">
-                                            You can search for your lost item by browsing the "Found Items" section on our website, using keywords or filtering by categories.
+                                            You can search for your lost item by browsing the "Found Items" section on our
+                                            website, using keywords or filtering by categories.
                                         </div>
                                     </div>
                                 </div>
@@ -794,52 +928,70 @@
                                 </div>
                             </div>
 
-                            <div class="accordion custom-accordionwithicon custom-accordion-border accordion-border-box" id="privacy-accordion">
+                            <div class="accordion custom-accordionwithicon custom-accordion-border accordion-border-box"
+                                id="privacy-accordion">
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="privacy-headingOne">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#privacy-collapseOne" aria-expanded="false" aria-controls="privacy-collapseOne">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#privacy-collapseOne"
+                                            aria-expanded="false" aria-controls="privacy-collapseOne">
                                             How is my personal information protected?
                                         </button>
                                     </h2>
-                                    <div id="privacy-collapseOne" class="accordion-collapse collapse" aria-labelledby="privacy-headingOne" data-bs-parent="#privacy-accordion">
+                                    <div id="privacy-collapseOne" class="accordion-collapse collapse"
+                                        aria-labelledby="privacy-headingOne" data-bs-parent="#privacy-accordion">
                                         <div class="accordion-body ff-secondary">
-                                            Your personal information is protected through encryption and secure servers. We adhere to strict privacy policies to ensure your data is safe.
+                                            Your personal information is protected through encryption and secure servers. We
+                                            adhere to strict privacy policies to ensure your data is safe.
                                         </div>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="privacy-headingTwo">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#privacy-collapseTwo" aria-expanded="false" aria-controls="privacy-collapseTwo">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#privacy-collapseTwo"
+                                            aria-expanded="false" aria-controls="privacy-collapseTwo">
                                             Who can see the details of the lost and found items?
                                         </button>
                                     </h2>
-                                    <div id="privacy-collapseTwo" class="accordion-collapse collapse" aria-labelledby="privacy-headingTwo" data-bs-parent="#privacy-accordion">
+                                    <div id="privacy-collapseTwo" class="accordion-collapse collapse"
+                                        aria-labelledby="privacy-headingTwo" data-bs-parent="#privacy-accordion">
                                         <div class="accordion-body ff-secondary">
-                                            Only registered users can see the details of the lost and found items. We ensure that the information is not accessible to unauthorized individuals.
+                                            Only registered users can see the details of the lost and found items. We ensure
+                                            that the information is not accessible to unauthorized individuals.
                                         </div>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="privacy-headingThree">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#privacy-collapseThree" aria-expanded="false" aria-controls="privacy-collapseThree">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#privacy-collapseThree"
+                                            aria-expanded="false" aria-controls="privacy-collapseThree">
                                             What should I do if I find my lost item?
                                         </button>
                                     </h2>
-                                    <div id="privacy-collapseThree" class="accordion-collapse collapse" aria-labelledby="privacy-headingThree" data-bs-parent="#privacy-accordion">
+                                    <div id="privacy-collapseThree" class="accordion-collapse collapse"
+                                        aria-labelledby="privacy-headingThree" data-bs-parent="#privacy-accordion">
                                         <div class="accordion-body ff-secondary">
-                                            If you find your lost item, please update the status on our website by marking it as found in your account settings. This will help us keep the database up-to-date.
+                                            If you find your lost item, please update the status on our website by marking
+                                            it as found in your account settings. This will help us keep the database
+                                            up-to-date.
                                         </div>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="privacy-headingFour">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#privacy-collapseFour" aria-expanded="false" aria-controls="privacy-collapseFour">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#privacy-collapseFour"
+                                            aria-expanded="false" aria-controls="privacy-collapseFour">
                                             How do I contact someone who found my item?
                                         </button>
                                     </h2>
-                                    <div id="privacy-collapseFour" class="accordion-collapse collapse" aria-labelledby="privacy-headingFour" data-bs-parent="#privacy-accordion">
+                                    <div id="privacy-collapseFour" class="accordion-collapse collapse"
+                                        aria-labelledby="privacy-headingFour" data-bs-parent="#privacy-accordion">
                                         <div class="accordion-body ff-secondary">
-                                            You can contact someone who found your item through the messaging system on our website. We do not share personal contact information to ensure privacy.
+                                            You can contact someone who found your item through the messaging system on our
+                                            website. We do not share personal contact information to ensure privacy.
                                         </div>
                                     </div>
                                 </div>
@@ -865,7 +1017,7 @@
                                 <div>
                                     <i class="ri-double-quotes-l text-success display-3"></i>
                                 </div>
-                                <h4 class="text-white mb-5"><span class="text-success">19k</span>+ Satisfied clients</h4>
+                                <h4 class="text-white mb-5">Satisfied Users</h4>
 
                                 <!-- Swiper -->
                                 <div class="swiper client-review-swiper rounded" dir="ltr">
@@ -941,46 +1093,7 @@
             </section>
             <!-- end review -->
 
-            <!-- start counter -->
-            <section class="py-5 position-relative bg-light">
-                <div class="container">
-                    <div class="row text-center gy-4">
-                        <div class="col-lg-3 col-6">
-                            <div>
-                                <h2 class="mb-2"><span class="counter-value" data-target="100">0</span>+</h2>
-                                <div class="text-muted">Projects Completed</div>
-                            </div>
-                        </div>
-                        <!-- end col -->
 
-                        <div class="col-lg-3 col-6">
-                            <div>
-                                <h2 class="mb-2"><span class="counter-value" data-target="24">0</span></h2>
-                                <div class="text-muted">Win Awards</div>
-                            </div>
-                        </div>
-                        <!-- end col -->
-
-                        <div class="col-lg-3 col-6">
-                            <div>
-                                <h2 class="mb-2"><span class="counter-value" data-target="20.3">0</span>k</h2>
-                                <div class="text-muted">Satisfied Clients</div>
-                            </div>
-                        </div>
-                        <!-- end col -->
-                        <div class="col-lg-3 col-6">
-                            <div>
-                                <h2 class="mb-2"><span class="counter-value" data-target="50">0</span></h2>
-                                <div class="text-muted">Employees</div>
-                            </div>
-                        </div>
-                        <!-- end col -->
-                    </div>
-                    <!-- end row -->
-                </div>
-                <!-- end container -->
-            </section>
-            <!-- end counter -->
 
             <!-- start Work Process -->
             <section class="section">
@@ -1057,7 +1170,7 @@
             <!-- end Work Process -->
 
             <!-- start team -->
-            <section class="section bg-light" id="team">
+            {{-- <section class="section bg-light" id="team">
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
@@ -1264,8 +1377,52 @@
                     <!-- end row -->
                 </div>
                 <!-- end container -->
-            </section>
+            </section> --}}
             <!-- end team -->
+
+
+            <!-- start counter -->
+            <section class="py-5 position-relative bg-light">
+                <div class="container">
+                    <div class="row text-center gy-4">
+                        <div class="col-lg-3 col-6">
+                            <div>
+                                <h2 class="mb-2"><span class="counter-value" data-target="100">0</span></h2>
+                                <div class="text-muted">Reports</div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+
+                        <div class="col-lg-3 col-6">
+                            <div>
+                                <h2 class="mb-2"><span class="counter-value" data-target="50">0</span></h2>
+                                <div class="text-muted">Reports Resolved</div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+
+                        <div class="col-lg-3 col-6">
+                            <div>
+                                <h2 class="mb-2"><span class="counter-value" data-target="50">0</span></h2>
+                                <div class="text-muted">Users</div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+
+                        <div class="col-lg-3 col-6">
+                            <div>
+                                <h2 class="mb-2"><span class="counter-value" data-target="40">0</span></h2>
+                                <div class="text-muted">Satisfied Users</div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- end container -->
+            </section>
+            <!-- end counter -->
+
 
             <!-- start contact -->
             <section class="section" id="contact">
@@ -1288,16 +1445,11 @@
                             <div>
                                 <div class="mt-4">
                                     <h5 class="fs-13 text-muted text-uppercase">Office Address 1:</h5>
-                                    <div class="ff-secondary fw-semibold">4461 Cedar Street Moro, <br />AR 72368</div>
-                                </div>
-                                <div class="mt-4">
-                                    <h5 class="fs-13 text-muted text-uppercase">Office Address 2:</h5>
-                                    <div class="ff-secondary fw-semibold">2467 Swick Hill Street <br />New Orleans, LA
-                                    </div>
+                                    <div class="ff-secondary fw-semibold">APU, TPM<br />Bukit Jalil, Kuala Lumpur</div>
                                 </div>
                                 <div class="mt-4">
                                     <h5 class="fs-13 text-muted text-uppercase">Working Hours:</h5>
-                                    <div class="ff-secondary fw-semibold">9:00am to 6:00pm</div>
+                                    <div class="ff-secondary fw-semibold">9:00am to 5:00pm</div>
                                 </div>
                             </div>
                         </div>
@@ -1310,14 +1462,14 @@
                                             <div class="mb-4">
                                                 <label for="name" class="form-label fs-13">Name</label>
                                                 <input name="name" id="name" type="text"
-                                                    class="form-control bg-light border-light" placeholder="Your name*">
+                                                    class="form-control bg-light border-light" placeholder="Your name" required>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="mb-4">
                                                 <label for="email" class="form-label fs-13">Email</label>
                                                 <input name="email" id="email" type="email"
-                                                    class="form-control bg-light border-light" placeholder="Your email*">
+                                                    class="form-control bg-light border-light" placeholder="Your email" required>
                                             </div>
                                         </div>
                                     </div>
@@ -1326,7 +1478,7 @@
                                             <div class="mb-4">
                                                 <label for="subject" class="form-label fs-13">Subject</label>
                                                 <input type="text" class="form-control bg-light border-light"
-                                                    id="subject" name="subject" placeholder="Your Subject.." />
+                                                    id="subject" name="subject" placeholder="Your Subject.." required>
                                             </div>
                                         </div>
                                     </div>
@@ -1335,7 +1487,7 @@
                                             <div class="mb-3">
                                                 <label for="comments" class="form-label fs-13">Message</label>
                                                 <textarea name="comments" id="comments" rows="3" class="form-control bg-light border-light"
-                                                    placeholder="Your message..."></textarea>
+                                                    placeholder="Your message..." required></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -1355,32 +1507,6 @@
             </section>
             <!-- end contact -->
 
-            <!-- start cta -->
-            <section class="py-5 bg-primary position-relative">
-                <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
-                <div class="container">
-                    <div class="row align-items-center gy-4">
-                        <div class="col-sm">
-                            <div>
-                                <h4 class="text-white mb-0 fw-semibold">Build your web App/SaaS with Velzon dashboard</h4>
-                            </div>
-                        </div>
-                        <!-- end col -->
-                        <div class="col-sm-auto">
-                            <div>
-                                <a href="https://1.envato.market/velzon-admin" target="_blank"
-                                    class="btn bg-gradient btn-danger"><i
-                                        class="ri-shopping-cart-2-line align-middle me-1"></i> Buy Now</a>
-                            </div>
-                        </div>
-                        <!-- end col -->
-                    </div>
-                    <!-- end row -->
-                </div>
-                <!-- end container -->
-            </section>
-            <!-- end cta -->
-
             <!-- Start footer -->
             <footer class="custom-footer bg-dark py-5 position-relative">
                 <div class="container">
@@ -1388,14 +1514,12 @@
                         <div class="col-lg-4 mt-4">
                             <div>
                                 <div>
-                                    <img src="{{ URL::asset('assets/images/logo-light.png') }}" alt="logo light"
-                                        height="17">
+                                    <img src="{{ URL::asset('assets/images/logo-light-new.png') }}" alt="logo light"
+                                        height="20">
                                 </div>
-                                <div class=mt-4 fs-13">
-                                    <p>Premium Multipurpose Admin & Dashboard Template</p>
-                                    <p class="ff-secondary">You can build any type of web application like eCommerce, CRM,
-                                        CMS, Project
-                                        management apps, Admin Panels, etc using Velzon.</p>
+                                <div class="mt-4 fs-13">
+                                    <p>Lost and Found System</p>
+                                    <p class="ff-secondary">A centralized platform where lost or found items can be easily resolved. No waiting times at counter, no hassle in filling up forms manually or confront admin's verification. All process could get done by connecting with person whom found or lost directly</p>
                                 </div>
                             </div>
                         </div>
@@ -1403,25 +1527,12 @@
                         <div class="col-lg-7 ms-lg-auto">
                             <div class="row">
                                 <div class="col-sm-4 mt-4">
-                                    <h5 class="text-white mb-0">Company</h5>
+                                    <h5 class="text-white mb-0">Menu</h5>
                                     <div class="text-muted mt-3">
                                         <ul class="list-unstyled ff-secondary footer-list fs-14">
-                                            <li><a href="{{ URL::asset('/pages-profile') }}">About Us</a></li>
-                                            <li><a href="{{ URL::asset('/pages-gallery') }}">Gallery</a></li>
-                                            <li><a href="{{ URL::asset('/apps-projects-overview') }}">Projects</a></li>
-                                            <li><a href="{{ URL::asset('/pages-timeline') }}">Timeline</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 mt-4">
-                                    <h5 class="text-white mb-0">Apps Pages</h5>
-                                    <div class="text-muted mt-3">
-                                        <ul class="list-unstyled ff-secondary footer-list fs-14">
-                                            <li><a href="{{ URL::asset('/pages-pricing') }}">Calendar</a></li>
-                                            <li><a href="{{ URL::asset('/apps-mailbox') }}">Mailbox</a></li>
-                                            <li><a href="{{ URL::asset('/apps-chat') }}">Chat</a></li>
-                                            <li><a href="{{ URL::asset('/apps-crm-deals') }}">Deals</a></li>
-                                            <li><a href="{{ URL::asset('/apps-tasks-kanban') }}">Kanban Board</a></li>
+                                            <li><a href="#hero">Home</a></li>
+                                            <li><a href="#reports">Reports</a></li>
+                                            <li><a href="#items">Items</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -1429,8 +1540,17 @@
                                     <h5 class="text-white mb-0">Support</h5>
                                     <div class="text-muted mt-3">
                                         <ul class="list-unstyled ff-secondary footer-list fs-14">
-                                            <li><a href="{{ URL::asset('/pages-faqs') }}">FAQ</a></li>
-                                            <li><a href="{{ URL::asset('/pages-faqs') }}">Contact</a></li>
+                                            <li><a href="#faqs">FAQ</a></li>
+                                            <li><a href="#contact">Contact</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 mt-4">
+                                    <h5 class="text-white mb-0">Access</h5>
+                                    <div class="text-muted mt-3">
+                                        <ul class="list-unstyled ff-secondary footer-list fs-14">
+                                            <li><a href="{{route('register')}}">Sign Up</a></li>
+                                            <li><a href="{{route('login')}}">Sign In</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -1446,7 +1566,7 @@
                                 <p class="copy-rights mb-0">
                                     <script>
                                         document.write(new Date().getFullYear())
-                                    </script> © Velzon - Themesbrand
+                                    </script> © ApFound - Final Year Project
                                 </p>
                             </div>
                         </div>
@@ -1481,13 +1601,6 @@
                                             </div>
                                         </a>
                                     </li>
-                                    <li class="list-inline-item">
-                                        <a href="javascript: void(0);" class="avatar-xs d-block">
-                                            <div class="avatar-title rounded-circle">
-                                                <i class="ri-dribbble-line"></i>
-                                            </div>
-                                        </a>
-                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -1502,4 +1615,37 @@
     @section('script')
         <script src="{{ URL::asset('/assets/libs/swiper/swiper.min.js') }}"></script>
         <script src="{{ URL::asset('/assets/js/pages/landing.init.js') }}"></script>
+        <script src="{{ URL::asset('/assets/libs/jsvectormap/jsvectormap.min.js') }}"></script>
+        <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
+        <script src="{{ URL::asset('assets/js/pages/form-wizard.init.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script>
+            // Initialize the map
+            var map = L.map('map').setView([3.05603, 101.70022], 17);
+
+            // Add a tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Function to add markers
+            function addMarker(lat, lng, description) {
+                var marker = L.marker([lat, lng]).addTo(map);
+                if (description) {
+                    marker.bindPopup(description); // Show description on marker click
+                }
+            }
+
+            // Example markers
+            addMarker(51.5, -0.09, "Description 1");
+            addMarker(51.51, -0.1, "Description 2");
+            // Add more markers as needed
+
+            // You can also allow users to add markers by clicking on the map and capturing the click event
+            map.on('click', function(e) {
+                var description = prompt("Enter description for this location:");
+                addMarker(e.latlng.lat, e.latlng.lng, description);
+            });
+        </script>
     @endsection

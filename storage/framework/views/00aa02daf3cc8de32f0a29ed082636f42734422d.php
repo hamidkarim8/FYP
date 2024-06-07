@@ -103,7 +103,7 @@
 
             
 
-            <section class="section pb-0 hero-section">
+            <section class="section bg-light pb-0 hero-section">
                 <div class="bg-overlay bg-overlay-pattern"></div>
                 <div class="container mt-4 pt-4">
                     <div class="row mt-4 pt-4">
