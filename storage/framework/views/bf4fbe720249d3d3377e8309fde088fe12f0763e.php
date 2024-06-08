@@ -110,7 +110,7 @@
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-8 col-sm-10">
-                            <div class="text-center mt-lg-5 pt-5">
+                            <div class="text-center pt-5">
                                 <h1 class="display-6 fw-semibold mb-3 lh-base">The Best Way to Manage Your Lost and Found
                                     Items with <span class="text-success">ApFound</span></h1>
                                 <p class="lead text-muted lh-base">Effortlessly Track and Recover Your Belongings</p>
@@ -123,7 +123,7 @@
                                 </div>
                             </div>
 
-                            <div class="mt-4 mt-sm-5 pt-sm-5 mb-sm-n5 demo-carousel">
+                            <div class="mt-2 pt-sm-5 mb-sm-n5 demo-carousel">
                                 <div class="demo-img-patten-top d-none d-sm-block">
                                     <img src="<?php echo e(URL::asset('assets/images/landing/img-pattern.png')); ?>"
                                         class="d-block img-fluid" alt="...">
@@ -132,42 +132,35 @@
                                     <img src="<?php echo e(URL::asset('assets/images/landing/img-pattern.png')); ?>"
                                         class="d-block img-fluid" alt="...">
                                 </div>
-                                <div class="carousel slide carousel-fade" data-bs-ride="carousel">
-                                    <div class="carousel-inner shadow-lg p-2 bg-white rounded">
-                                        <div class="carousel-item active" data-bs-interval="2000">
-                                            <img src="<?php echo e(URL::asset('assets/images/demos/default.png')); ?>"
-                                                class="d-block w-100" alt="...">
-                                        </div>
-                                        <div class="carousel-item" data-bs-interval="2000">
-                                            <img src="<?php echo e(URL::asset('assets/images/demos/saas.png')); ?>"
-                                                class="d-block w-100" alt="...">
-                                        </div>
-                                        <div class="carousel-item" data-bs-interval="2000">
-                                            <img src="<?php echo e(URL::asset('assets/images/demos/material.png')); ?>"
-                                                class="d-block w-100" alt="...">
-                                        </div>
-                                        <div class="carousel-item" data-bs-interval="2000">
-                                            <img src="<?php echo e(URL::asset('assets/images/demos/minimal.png')); ?>"
-                                                class="d-block w-100" alt="...">
-                                        </div>
-                                        <div class="carousel-item" data-bs-interval="2000">
-                                            <img src="<?php echo e(URL::asset('assets/images/demos/creative.png')); ?>"
-                                                class="d-block w-100" alt="...">
-                                        </div>
-                                        <div class="carousel-item" data-bs-interval="2000">
-                                            <img src="<?php echo e(URL::asset('assets/images/demos/modern.png')); ?>"
-                                                class="d-block w-100" alt="...">
-                                        </div>
-                                        <div class="carousel-item" data-bs-interval="2000">
-                                            <img src="<?php echo e(URL::asset('assets/images/demos/interactive.png')); ?>"
-                                                class="d-block w-100" alt="...">
-                                        </div>
-                                    </div>
-                                </div>
+                                <div id="displayMap" style="height: 400px;"></div>
                             </div>
                         </div>
                     </div>
                     <!-- end row -->
+                </div>
+                <!-- Report Details Modal -->
+                <div class="modal fade bs-example-modal-center" id="reportDetailsModal" tabindex="-1" role="dialog"
+                    aria-labelledby="reportDetailsModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                        <div class="modal-content">
+                            <div id="ribbonContainer"></div>
+
+                            <div class="modal-header text-center">
+                                <h5 class="modal-title w-100">Report Details</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body mt-4">
+                                <p><strong>Category:</strong> <span id="modalCategory"></span></p>
+                                <p><strong>Description:</strong> <span id="modalDescription"></span></p>
+                                <p><strong>Date:</strong> <span id="modalDate"></span></p>
+                                
+                            </div>
+                            <div class="modal-footer hstack gap-2 justify-content-center">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- end container -->
                 <div class="position-absolute start-0 end-0 bottom-0 hero-shape-svg">
@@ -268,12 +261,14 @@
                             </div>
                         </div>
                         
-                        <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="reportModal" tabindex="-1" role="dialog"
+                            aria-labelledby="reportModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered modal-md" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="reportModalLabel">Report Location</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <form id="reportForm" novalidate>
@@ -317,7 +312,8 @@ unset($__errorArgs, $__bag); ?>
                                             </div>
                                             <div class="form-group mt-3">
                                                 <label for="locationDescription">Location Description</label>
-                                                <input type="text" class="form-control" id="locationDescription" name="description" placeholder="Enter location description" required>
+                                                <input type="text" class="form-control" id="locationDescription"
+                                                    name="description" placeholder="Enter location description" required>
                                                 <?php $__errorArgs = ['description'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -331,13 +327,14 @@ unset($__errorArgs, $__bag); ?>
                                             </div>
                                             <div class="form-group mt-3">
                                                 <label for="reportDate">Date</label>
-                                                <input type="datetime-local" class="form-control" id="reportDate" name="date" required>
+                                                <input type="datetime-local" class="form-control" id="reportDate"
+                                                    name="date" required>
                                                 <?php $__errorArgs = ['date'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                                                    <span class="invalid-feedback" role="alert" ><?php echo e($message); ?></span>
+                                                    <span class="invalid-feedback" role="alert"><?php echo e($message); ?></span>
                                                 <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -346,13 +343,14 @@ unset($__errorArgs, $__bag); ?>
                                         </form>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
                                         <button type="button" class="btn btn-primary" id="submitReport">Submit</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="accordion-item shadow">
                             <h2 class="accordion-header" id="accordionborderedExample2">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -1437,68 +1435,118 @@ unset($__errorArgs, $__bag); ?>
         <script src="<?php echo e(URL::asset('/assets/js/app.min.js')); ?>"></script>
         <script src="<?php echo e(URL::asset('assets/js/pages/form-wizard.init.js')); ?>"></script>
         <script src="<?php echo e(URL::asset('assets/js/pages/apps-nft-explore.init.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('assets/js/pages/modal.init.js')); ?>"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
         <script>
-            // Initialize the map
-            var map = L.map('map').setView([3.05603, 101.70022], 17);
+            $(document).ready(function() {
 
-            // Add a tile layer
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
+                // Initialize the map
+                var displayMap = L.map('displayMap').setView([3.05603, 101.70022], 17);
 
-            // Function to add markers
-            function addMarker(lat, lng, description) {
-                var marker = L.marker([lat, lng]).addTo(map);
-                if (description) {
-                    marker.bindPopup(description); // Show description on marker click
+                // Add a tile layer
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(displayMap);
+
+                // Function to add markers
+                function addMarker(lat, lng, report) {
+                    var markerColor = report.type === 'found' ? 'blue' : 'red';
+                    var marker = L.circleMarker([lat, lng], {
+                        color: markerColor,
+                        radius: 10
+                    }).addTo(displayMap);
+
+                    marker.on('click', function() {
+                        // Populate modal with report details
+                        $('#modalType').text(report.type);
+                        $('#modalCategory').text(report.category);
+                        $('#modalDescription').text(report.location.desc);
+                        $('#modalDate').text(report.date);
+                        // $('#modalLocation').text(`Lat: ${report.location.lat}, Lng: ${report.location.lng}`);
+
+                        // Add Ribbon based on report type
+                        var ribbonHTML = '';
+                        if (report.type === 'found') {
+                            ribbonHTML =
+                                '<div style="position: absolute; top: 0; left: 0; z-index: 1000; margin: 10px;" class="ribbon-box found-ribbon"><div class="ribbon-two ribbon-two-secondary"><span>Found Item</span></div></div>';
+                        } else if (report.type === 'lost') {
+                            ribbonHTML =
+                                '<div style="position: absolute; top: 0; left: 0; z-index: 1000; margin: 10px;" class="ribbon-box lost-ribbon"><div class="ribbon-two ribbon-two-danger"><span>Lost Item</span></div></div>';
+                        }
+
+                        $('#ribbonContainer').html(ribbonHTML);
+
+                        // Show modal
+                        $('#reportDetailsModal').modal('show');
+                    });
                 }
-            }
 
-            // Function to handle map click event
-            function handleMapClick(e) {
-                // Open modal
-                $('#reportModal').modal('show');
-
-                // Populate form fields with location data
-                $('#latitude').val(e.latlng.lat);
-                $('#longitude').val(e.latlng.lng);
-            }
-
-
-            // Add click event listener to map
-            map.on('click', handleMapClick);
-            $('#submitReport').on('click', function() {
-                var formData = $('#reportForm').serialize();
-
-                // Submit form via AJAX
-                axios.post('/simple-report', formData)
+                // Fetch all reports and display on the map
+                axios.post('/simple-report-display')
                     .then(function(response) {
-                        console.log(response.data);
-                        $('#reportModal').modal('hide');
-                        $('#reportForm')[0].reset();
-                        Toastify({
-                            text: 'You have succesfully submitted a report. Thank you.',
-                            duration: 3000,
-                            backgroundColor: '#28a745',
-                            gravity: 'top',
-                            position: 'center',
-                            close: true
-                        }).showToast();
+                        var reports = response.data;
+                        reports.forEach(function(report) {
+                            addMarker(report.location.lat, report.location.lng, report);
+                        });
                     })
                     .catch(function(error) {
-                        Toastify({
-                            text: 'Something went wrong. Please try again. ',
-                            duration: 3000,
-                            backgroundColor: '#dc3545',
-                            gravity: 'top',
-                            position: 'center',
-                            close: true
-                        }).showToast();
-                        console.error(error);
+                        console.error('Error fetching reports:', error);
                     });
+
+                // Initialize the map
+                var map = L.map('map').setView([3.05603, 101.70022], 17);
+
+                // Add a tile layer
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+
+                // Function to handle map click event
+                function handleMapClick(e) {
+                    // Open modal
+                    $('#reportModal').modal('show');
+
+                    // Populate form fields with location data
+                    $('#latitude').val(e.latlng.lat);
+                    $('#longitude').val(e.latlng.lng);
+                }
+
+
+                // Add click event listener to map
+                map.on('click', handleMapClick);
+                $('#submitReport').on('click', function() {
+                    var formData = $('#reportForm').serialize();
+
+                    // Submit form via AJAX
+                    axios.post('/simple-report', formData)
+                        .then(function(response) {
+                            console.log(response.data);
+                            $('#reportModal').modal('hide');
+                            $('#reportForm')[0].reset();
+                            Toastify({
+                                text: 'You have succesfully submitted a report. Thank you.',
+                                duration: 3000,
+                                backgroundColor: '#28a745',
+                                gravity: 'top',
+                                position: 'center',
+                                close: true
+                            }).showToast();
+                        })
+                        .catch(function(error) {
+                            Toastify({
+                                text: 'Something went wrong. Please try again. ',
+                                duration: 3000,
+                                backgroundColor: '#dc3545',
+                                gravity: 'top',
+                                position: 'center',
+                                close: true
+                            }).showToast();
+                            console.error(error);
+                        });
+                });
             });
         </script>
     <?php $__env->stopSection(); ?>

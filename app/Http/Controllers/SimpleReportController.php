@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\SimpleReport;
+use Carbon\Carbon;
 
 
 class SimpleReportController extends Controller
@@ -13,7 +14,21 @@ class SimpleReportController extends Controller
     public function show()
     {
         $reports = SimpleReport::all();
-        return response()->json($reports);
+
+        $response = $reports->map(function($report) {
+            return [
+                'type' => $report->type,
+                'category' => $report->category,
+                'location' => [
+                    'lat' => $report->location['lat'],
+                    'lng' => $report->location['lng'],
+                    'desc' => $report->location['desc'],
+                ],
+                'date' => Carbon::parse($report->date)->format('d/m/Y'),
+            ];
+        });
+    
+        return response()->json($response);
     }
     public function store(Request $request)
     {
@@ -37,7 +52,7 @@ class SimpleReportController extends Controller
 
         // Create and save new report
         $report = new SimpleReport();
-        $report->id = Str::uuid(); 
+        $report->id = Str::uuid();
         $report->type = $validatedData['type'];
         $report->category = $validatedData['category'];
         $report->location = [
@@ -54,4 +69,5 @@ class SimpleReportController extends Controller
         } else {
             return redirect()->back()->with('error', 'Something went wrong!');
         }
-    }}
+    }
+}
