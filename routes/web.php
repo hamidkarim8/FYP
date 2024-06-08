@@ -10,6 +10,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\SimpleReportController;
 use Illuminate\Support\Facades\Auth;
 
 Auth::routes();
@@ -45,6 +46,11 @@ Route::post('/update-password/{id}', [ProfileController::class, 'changePassword'
 
 //Item Detail Route
 Route::get('/item-detail', [ItemController::class, 'itemDetail'])->name('user.itemDetail');
+
+//Simple Report
+Route::post('/simple-report', [SimpleReportController::class, 'store'])->name('simple-reports.store');
+Route::post('/simple-report-display', [SimpleReportController::class, 'show'])->name('simple-reports.show');
+
 
 // Fallback Route
 Route::fallback(function () {

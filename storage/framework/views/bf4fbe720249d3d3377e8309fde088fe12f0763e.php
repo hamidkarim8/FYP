@@ -248,36 +248,130 @@
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#accor_borderedExamplecollapse1" aria-expanded="true"
                                     aria-controls="accor_borderedExamplecollapse1">
-                                    Simple Report?
+                                    Simple Report
                                 </button>
                             </h2>
                             <div id="accor_borderedExamplecollapse1" class="accordion-collapse collapse show"
                                 aria-labelledby="accordionborderedExample1" data-bs-parent="#accordionBordered">
                                 <div class="accordion-body">
-                                        <div class="card card-height-100">
-                                            <div class="card-header">
-                                                <h4 class="card-title mb-0">Report Through Map Location</h4>
-                                            </div><!-- end card header -->
-                                            <div class="card-body">
-                                                <div data-simplebar style="max-height: 800px;" class="p-2">
-                                                    <div id="map" style="height: 400px;"></div>
-                                                </div>
-                                            </div><!-- end card body -->
-                                        </div><!-- end card -->
+                                    <div class="card card-height-100">
+                                        <div class="card-header">
+                                            <h4 class="card-title mb-0">Report Through Map Location</h4>
+                                        </div><!-- end card header -->
+                                        <div class="card-body">
+                                            <div data-simplebar style="max-height: 800px;" class="p-2">
+                                                <div id="map" style="height: 400px;"></div>
+                                            </div>
+                                        </div><!-- end card body -->
+                                    </div><!-- end card -->
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="reportModalLabel">Report Location</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="reportForm" novalidate>
+                                            <?php echo csrf_field(); ?>
+                                            <input type="hidden" id="latitude" name="latitude">
+                                            <input type="hidden" id="longitude" name="longitude">
+                                            <div class="form-group">
+                                                <label for="reportType">Type</label>
+                                                <select class="form-control" id="reportType" name="type">
+                                                    <option value="found">Found</option>
+                                                    <option value="lost">Lost</option>
+                                                </select>
+                                                <?php $__errorArgs = ['type'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <span class="text-danger"><?php echo e($message); ?></span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                            </div>
+                                            <div class="form-group mt-3">
+                                                <label for="reportCategory">Category</label>
+                                                <select class="form-control" id="reportCategory" name="category">
+                                                    <!-- Populate categories dynamically from backend if needed -->
+                                                    <option value="category1">Category 1</option>
+                                                    <option value="category2">Category 2</option>
+                                                </select>
+                                                <?php $__errorArgs = ['category'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <span class="text-danger"><?php echo e($message); ?></span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                            </div>
+                                            <div class="form-group mt-3">
+                                                <label for="locationDescription">Location Description</label>
+                                                <input type="text" class="form-control" id="locationDescription" name="description" placeholder="Enter location description" required>
+                                                <?php $__errorArgs = ['description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <span class="text-danger"><?php echo e($message); ?></span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                            </div>
+                                            <div class="form-group mt-3">
+                                                <label for="reportDate">Date</label>
+                                                <input type="datetime-local" class="form-control" id="reportDate" name="date" required>
+                                                <?php $__errorArgs = ['date'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <span class="invalid-feedback" role="alert" ><?php echo e($message); ?></span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" id="submitReport">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div class="accordion-item shadow">
                             <h2 class="accordion-header" id="accordionborderedExample2">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#accor_borderedExamplecollapse2" aria-expanded="true"
                                     aria-controls="accor_borderedExamplecollapse2">
-                                    Detailed Report?
+                                    Detailed Report
                                 </button>
                             </h2>
                             <div id="accor_borderedExamplecollapse2" class="accordion-collapse collapse show"
                                 aria-labelledby="accordionborderedExample2" data-bs-parent="#accordionBordered">
                                 <div class="accordion-body">
+                                    <?php if(auth()->guard()->guest()): ?>
+                                        <div class="alert alert-borderless alert-warning text-center mb-2 mx-2"
+                                            role="alert">
+                                            Please <span><a class="text-primary" href="<?php echo e(route('login')); ?>">Sign
+                                                    in</a></span> to do a detailed report.
+                                        </div>
+                                    <?php endif; ?>
+                                    <?php if(auth()->guard()->check()): ?>
                                         <div class="card">
                                             <div class="card-header">
                                                 <h4 class="card-title mb-0">Report Form</h4>
@@ -285,85 +379,130 @@
                                             <div class="card-body form-steps">
                                                 <form action="#">
                                                     <div class="text-center pt-3 pb-4 mb-1">
-                                                        <img src="<?php echo e(URL::asset('assets/images/logo-dark-new.png')); ?>" alt="" height="17">
+                                                        <img src="<?php echo e(URL::asset('assets/images/logo-dark-new.png')); ?>"
+                                                            alt="" height="17">
                                                     </div>
                                                     <div class="step-arrow-nav mb-4">
-                            
+
                                                         <ul class="nav nav-pills custom-nav nav-justified" role="tablist">
                                                             <li class="nav-item" role="presentation">
-                                                                <button class="nav-link active" id="steparrow-gen-info-tab" data-bs-toggle="pill" data-bs-target="#steparrow-gen-info" type="button" role="tab" aria-controls="steparrow-gen-info" aria-selected="true">General</button>
+                                                                <button class="nav-link active" id="steparrow-gen-info-tab"
+                                                                    data-bs-toggle="pill" data-bs-target="#steparrow-gen-info"
+                                                                    type="button" role="tab"
+                                                                    aria-controls="steparrow-gen-info"
+                                                                    aria-selected="true">General</button>
                                                             </li>
                                                             <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="steparrow-description-info-tab" data-bs-toggle="pill" data-bs-target="#steparrow-description-info" type="button" role="tab" aria-controls="steparrow-description-info" aria-selected="false">Description</button>
+                                                                <button class="nav-link" id="steparrow-description-info-tab"
+                                                                    data-bs-toggle="pill"
+                                                                    data-bs-target="#steparrow-description-info"
+                                                                    type="button" role="tab"
+                                                                    aria-controls="steparrow-description-info"
+                                                                    aria-selected="false">Description</button>
                                                             </li>
                                                             <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="pills-experience-tab" data-bs-toggle="pill" data-bs-target="#pills-experience" type="button" role="tab" aria-controls="pills-experience" aria-selected="false">Finish</button>
+                                                                <button class="nav-link" id="pills-experience-tab"
+                                                                    data-bs-toggle="pill" data-bs-target="#pills-experience"
+                                                                    type="button" role="tab"
+                                                                    aria-controls="pills-experience"
+                                                                    aria-selected="false">Finish</button>
                                                             </li>
                                                         </ul>
                                                     </div>
-                            
+
                                                     <div class="tab-content">
-                                                        <div class="tab-pane fade show active" id="steparrow-gen-info" role="tabpanel" aria-labelledby="steparrow-gen-info-tab">
+                                                        <div class="tab-pane fade show active" id="steparrow-gen-info"
+                                                            role="tabpanel" aria-labelledby="steparrow-gen-info-tab">
                                                             <div>
                                                                 <div class="row">
                                                                     <div class="col-lg-6">
                                                                         <div class="mb-3">
-                                                                            <label class="form-label" for="steparrow-gen-info-username-input">Username</label>
-                                                                            <input type="text" class="form-control" id="steparrow-gen-info-username-input" placeholder="Enter User Name">
+                                                                            <label class="form-label"
+                                                                                for="steparrow-gen-info-username-input">Username</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="steparrow-gen-info-username-input"
+                                                                                placeholder="Enter User Name">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-lg-6">
                                                                         <div class="mb-3">
-                                                                            <label class="form-label" for="steparrow-gen-info-email-input">Email</label>
-                                                                            <input type="text" class="form-control" id="steparrow-gen-info-email-input" placeholder="Enter Email">
+                                                                            <label class="form-label"
+                                                                                for="steparrow-gen-info-email-input">Email</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="steparrow-gen-info-email-input"
+                                                                                placeholder="Enter Email">
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="mb-3">
-                                                                    <label class="form-label" for="steparrow-gen-info-password-input">Password</label>
-                                                                    <input type="password" class="form-control" id="steparrow-gen-info-password-input" placeholder="Enter Password">
+                                                                    <label class="form-label"
+                                                                        for="steparrow-gen-info-password-input">Password</label>
+                                                                    <input type="password" class="form-control"
+                                                                        id="steparrow-gen-info-password-input"
+                                                                        placeholder="Enter Password">
                                                                 </div>
                                                                 <div>
-                                                                    <label class="form-label" for="steparrow-gen-info-confirm-password-input">Confirm Password</label>
-                                                                    <input type="password" class="form-control" id="steparrow-gen-info-confirm-password-input" placeholder="Enter Confirm Password">
+                                                                    <label class="form-label"
+                                                                        for="steparrow-gen-info-confirm-password-input">Confirm
+                                                                        Password</label>
+                                                                    <input type="password" class="form-control"
+                                                                        id="steparrow-gen-info-confirm-password-input"
+                                                                        placeholder="Enter Confirm Password">
                                                                 </div>
                                                             </div>
                                                             <div class="d-flex align-items-start gap-3 mt-4">
-                                                                <button type="button" class="btn btn-success btn-label right ms-auto nexttab
-                            nexttab" data-nexttab="steparrow-description-info-tab"><i class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Go to more info</button>
+                                                                <button type="button"
+                                                                    class="btn btn-success btn-label right ms-auto nexttab
+                            nexttab"
+                                                                    data-nexttab="steparrow-description-info-tab"><i
+                                                                        class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Go
+                                                                    to more info</button>
                                                             </div>
                                                         </div>
                                                         <!-- end tab pane -->
-                            
-                                                        <div class="tab-pane fade" id="steparrow-description-info" role="tabpanel" aria-labelledby="steparrow-description-info-tab">
+
+                                                        <div class="tab-pane fade" id="steparrow-description-info"
+                                                            role="tabpanel" aria-labelledby="steparrow-description-info-tab">
                                                             <div>
                                                                 <div class="mb-3">
-                                                                    <label for="formFile" class="form-label">Upload Image</label>
-                                                                    <input class="form-control" type="file" id="formFile">
+                                                                    <label for="formFile" class="form-label">Upload
+                                                                        Image</label>
+                                                                    <input class="form-control" type="file"
+                                                                        id="formFile">
                                                                 </div>
                                                                 <div>
-                                                                    <label class="form-label" for="des-info-description-input">Description</label>
+                                                                    <label class="form-label"
+                                                                        for="des-info-description-input">Description</label>
                                                                     <textarea class="form-control" placeholder="Enter Description" id="des-info-description-input" rows="3"></textarea>
                                                                 </div>
                                                             </div>
                                                             <div class="d-flex align-items-start gap-3 mt-4">
-                                                                <button type="button" class="btn btn-light btn-label previestab" data-previous="steparrow-gen-info-tab"><i class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i> Back to General</button>
-                                                                <button type="button" class="btn btn-success btn-label right ms-auto nexttab
-                            nexttab" data-nexttab="pills-experience-tab"><i class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Submit</button>
+                                                                <button type="button"
+                                                                    class="btn btn-light btn-label previestab"
+                                                                    data-previous="steparrow-gen-info-tab"><i
+                                                                        class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>
+                                                                    Back to General</button>
+                                                                <button type="button"
+                                                                    class="btn btn-success btn-label right ms-auto nexttab
+                            nexttab"
+                                                                    data-nexttab="pills-experience-tab"><i
+                                                                        class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Submit</button>
                                                             </div>
                                                         </div>
                                                         <!-- end tab pane -->
-                            
+
                                                         <div class="tab-pane fade" id="pills-experience" role="tabpanel">
                                                             <div class="text-center">
-                            
+
                                                                 <div class="avatar-md mt-5 mb-4 mx-auto">
-                                                                    <div class="avatar-title bg-light text-success display-4 rounded-circle">
+                                                                    <div
+                                                                        class="avatar-title bg-light text-success display-4 rounded-circle">
                                                                         <i class="ri-checkbox-circle-fill"></i>
                                                                     </div>
                                                                 </div>
                                                                 <h5>Well Done !</h5>
-                                                                <p class="text-muted">You have Successfully Reported an Item!</p>
+                                                                <p class="text-muted">You have Successfully Reported an Item!
+                                                                </p>
                                                             </div>
                                                         </div>
                                                         <!-- end tab pane -->
@@ -374,6 +513,7 @@
                                             <!-- end card body -->
                                         </div>
                                         <!-- end card -->
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -383,7 +523,6 @@
             </section>
             <!-- end reports -->
             
-
 
 
             <!-- start items -->
@@ -412,12 +551,56 @@
                                             data-filter="auto">Auto-matching</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link fw-medium" type="button"
-                                            data-filter="filter">Filters</button>
+                                        <button class="nav-link fw-medium" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseWithicon2" aria-expanded="false"
+                                            aria-controls="collapseWithicon2">
+                                            <i class="ri-filter-2-line"></i>
+                                        </button>
                                     </li>
                                 </ul>
                             </div>
                         </div><!-- end col -->
+                        <div class="collapse" id="collapseWithicon2">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center">
+                                            <h5 class="card-title mb-0 fw-semibold flex-grow-1">Filter Item</h5>
+                                        </div>
+                                        <div class="row row-cols-xxl-5 row-cols-lg-3 row-cols-md-2 row-cols-1 mt-3 g-3">
+                                            <div class="col">
+                                                <h6 class="text-uppercase fs-12 mb-2">Search</h6>
+                                                <input type="text" class="form-control" placeholder="Search item"
+                                                    autocomplete="off" id="searchItem">
+                                            </div>
+                                            <div class="col">
+                                                <h6 class="text-uppercase fs-12 mb-2">Select Category</h6>
+                                                <select class="form-control" data-choices name="select-category"
+                                                    data-choices-search-false id="select-category">
+                                                    <option value="">Select Category</option>
+                                                    <option value="Artwork">Artwork</option>
+                                                    <option value="3d Style">3d Style</option>
+                                                    <option value="Photography">Photography</option>
+                                                    <option value="Collectibles">Collectibles</option>
+                                                    <option value="Crypto Card">Crypto Card</option>
+                                                    <option value="Games">Games</option>
+                                                    <option value="Music">Music</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="d-flex align-items-center mb-4">
+                                    <div class="flex-grow-1">
+                                        <p class="text-muted fs-14 mb-0">Result: 8745</p>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+
                     </div><!-- end row -->
                     <div class="row">
                         <div class="col-lg-4 product-item artwork crypto-card 3d-style">
@@ -431,8 +614,8 @@
                                         class="card-img-top explore-img" />
                                     <div class="bg-overlay"></div>
                                     <div class="place-bid-btn">
-                                        <a href="#!" class="btn btn-success"><i
-                                                class="ri-auction-fill align-bottom me-1"></i> Place Bid</a>
+                                        <a href="<?php echo e(route('user.itemDetail')); ?>" class="btn btn-success"><i
+                                                class="ri-auction-fill align-bottom me-1"></i> See Detail</a>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -631,8 +814,7 @@
                         <!-- end col -->
                         <div class="col-sm-auto">
                             <div>
-                                <a href="<?php echo e(route('register')); ?>"
-                                    class="btn bg-gradient btn-success"><i
+                                <a href="<?php echo e(route('register')); ?>" class="btn bg-gradient btn-success"><i
                                         class="ri-user-add-fill align-middle me-1"></i> Register</a>
                             </div>
                         </div>
@@ -1093,14 +1275,16 @@
                                             <div class="mb-4">
                                                 <label for="name" class="form-label fs-13">Name</label>
                                                 <input name="name" id="name" type="text"
-                                                    class="form-control bg-light border-light" placeholder="Your name" required>
+                                                    class="form-control bg-light border-light" placeholder="Your name"
+                                                    required>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="mb-4">
                                                 <label for="email" class="form-label fs-13">Email</label>
                                                 <input name="email" id="email" type="email"
-                                                    class="form-control bg-light border-light" placeholder="Your email" required>
+                                                    class="form-control bg-light border-light" placeholder="Your email"
+                                                    required>
                                             </div>
                                         </div>
                                     </div>
@@ -1150,7 +1334,10 @@
                                 </div>
                                 <div class="mt-4 fs-13">
                                     <p>Lost and Found System</p>
-                                    <p class="ff-secondary">A centralized platform where lost or found items can be easily resolved. No waiting times at counter, no hassle in filling up forms manually or confront admin's verification. All process could get done by connecting with person whom found or lost directly</p>
+                                    <p class="ff-secondary">A centralized platform where lost or found items can be easily
+                                        resolved. No waiting times at counter, no hassle in filling up forms manually or
+                                        confront admin's verification. All process could get done by connecting with person
+                                        whom found or lost directly</p>
                                 </div>
                             </div>
                         </div>
@@ -1249,6 +1436,8 @@
         <script src="<?php echo e(URL::asset('/assets/libs/jsvectormap/jsvectormap.min.js')); ?>"></script>
         <script src="<?php echo e(URL::asset('/assets/js/app.min.js')); ?>"></script>
         <script src="<?php echo e(URL::asset('assets/js/pages/form-wizard.init.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('assets/js/pages/apps-nft-explore.init.js')); ?>"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
         <script>
@@ -1268,15 +1457,48 @@
                 }
             }
 
-            // Example markers
-            addMarker(51.5, -0.09, "Description 1");
-            addMarker(51.51, -0.1, "Description 2");
-            // Add more markers as needed
+            // Function to handle map click event
+            function handleMapClick(e) {
+                // Open modal
+                $('#reportModal').modal('show');
 
-            // You can also allow users to add markers by clicking on the map and capturing the click event
-            map.on('click', function(e) {
-                var description = prompt("Enter description for this location:");
-                addMarker(e.latlng.lat, e.latlng.lng, description);
+                // Populate form fields with location data
+                $('#latitude').val(e.latlng.lat);
+                $('#longitude').val(e.latlng.lng);
+            }
+
+
+            // Add click event listener to map
+            map.on('click', handleMapClick);
+            $('#submitReport').on('click', function() {
+                var formData = $('#reportForm').serialize();
+
+                // Submit form via AJAX
+                axios.post('/simple-report', formData)
+                    .then(function(response) {
+                        console.log(response.data);
+                        $('#reportModal').modal('hide');
+                        $('#reportForm')[0].reset();
+                        Toastify({
+                            text: 'You have succesfully submitted a report. Thank you.',
+                            duration: 3000,
+                            backgroundColor: '#28a745',
+                            gravity: 'top',
+                            position: 'center',
+                            close: true
+                        }).showToast();
+                    })
+                    .catch(function(error) {
+                        Toastify({
+                            text: 'Something went wrong. Please try again. ',
+                            duration: 3000,
+                            backgroundColor: '#dc3545',
+                            gravity: 'top',
+                            position: 'center',
+                            close: true
+                        }).showToast();
+                        console.error(error);
+                    });
             });
         </script>
     <?php $__env->stopSection(); ?>
