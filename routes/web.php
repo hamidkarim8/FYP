@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ItemController;
 use Illuminate\Support\Facades\Auth;
 
 Auth::routes();
@@ -41,6 +42,9 @@ Route::post('/update-profile/{id}', [ProfileController::class, 'update'])->name(
 Route::post('/update-socialmedia/{id}', [ProfileController::class, 'updateSocialMedia'])->name('updateSocialMedia');
 Route::post('/update-avatar/{id}', [ProfileController::class, 'updateAvatar'])->name('updateAvatar');
 Route::post('/update-password/{id}', [ProfileController::class, 'changePassword'])->name('changePassword');
+
+//Item Detail Route
+Route::get('/item-detail', [ItemController::class, 'itemDetail'])->name('user.itemDetail');
 
 // Fallback Route
 Route::fallback(function () {
