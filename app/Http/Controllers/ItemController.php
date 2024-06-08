@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
+
+    public function itemDetail()
+    {
+        return view('item-detail');
+    }
+
     /**
      * Display a listing of the resource.
      *
