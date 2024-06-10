@@ -10,8 +10,9 @@ class SimpleReport extends Model
     use HasFactory;
 
     protected $fillable = [
+        'title',
         'type',
-        'category',
+        'category_id',
         'location',
         'date',
     ];
@@ -25,4 +26,10 @@ class SimpleReport extends Model
         'location' => 'json',
         'date' => 'datetime',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
 }

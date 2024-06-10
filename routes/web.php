@@ -11,6 +11,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SimpleReportController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Auth;
 
 Auth::routes();
@@ -50,6 +51,7 @@ Route::get('/item-detail', [ItemController::class, 'itemDetail'])->name('user.it
 //Simple Report
 Route::post('/simple-report', [SimpleReportController::class, 'store'])->name('simple-reports.store');
 Route::post('/simple-report-display', [SimpleReportController::class, 'show'])->name('simple-reports.show');
+Route::get('/categories', [CategoryController::class, 'index']);
 
 
 // Fallback Route

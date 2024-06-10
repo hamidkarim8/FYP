@@ -15,11 +15,13 @@ return new class extends Migration
     {
         Schema::create('simple_reports', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->string('title')->nullable();
             $table->enum('type', ['found', 'lost']);
-            $table->string('category')->nullable();
+            $table->unsignedBigInteger('category_id');
             $table->json('location');
             $table->dateTime('date');
             $table->timestamps();
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 

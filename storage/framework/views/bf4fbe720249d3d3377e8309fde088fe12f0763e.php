@@ -151,10 +151,19 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body mt-4">
-                                <p><strong>Category:</strong> <span id="modalCategory"></span></p>
-                                <p><strong>Description:</strong> <span id="modalDescription"></span></p>
-                                <p><strong>Date:</strong> <span id="modalDate"></span></p>
+                                <div class="text-center mb-4">
+                                    <h4 class="text-center text-muted"><span id="modalTitle"></span> | <span
+                                            id="modalCategory"></span></h4>
+                                </div>
                                 
+                                
+                                
+                                <div class="text-left mt-4">
+                                    <div class="text-muted">Description : <span class="text-body fw-medium"><span
+                                                id="modalDescription"></span></span></div>
+                                    <div class="text-muted mt-4">Date (<span id="modalType"></span>) : <span
+                                            class="text-body fw-medium"><span id="modalDate"></span></span></div>
+                                </div>
                             </div>
                             <div class="modal-footer hstack gap-2 justify-content-center">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -190,19 +199,37 @@
                                     <div class="swiper-wrapper">
                                         <div class="swiper-slide">
                                             <div class="client-images">
-                                                <img src="<?php echo e(URL::asset('assets/images/clients/amazon.svg')); ?>"
+                                                <img src="<?php echo e(URL::asset('assets/images/collaboration/APU.png')); ?>"
+                                                    alt="Asia Pacific University" class="mx-auto img-fluid d-block">
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="client-images">
+                                                <img src="<?php echo e(URL::asset('assets/images/collaboration/DMU.png')); ?>"
+                                                    alt="De Montfort University" class="mx-auto img-fluid d-block">
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="client-images">
+                                                <img src="<?php echo e(URL::asset('assets/images/collaboration/SDG.jpg')); ?>"
+                                                    alt="Sustainable Development Goals" class="mx-auto img-fluid d-block">
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="client-images">
+                                                <img src="<?php echo e(URL::asset('assets/images/collaboration/APU.png')); ?>"
                                                     alt="" class="mx-auto img-fluid d-block">
                                             </div>
                                         </div>
                                         <div class="swiper-slide">
                                             <div class="client-images">
-                                                <img src="<?php echo e(URL::asset('assets/images/clients/walmart.svg')); ?>"
+                                                <img src="<?php echo e(URL::asset('assets/images/collaboration/DMU.png')); ?>"
                                                     alt="" class="mx-auto img-fluid d-block">
                                             </div>
                                         </div>
                                         <div class="swiper-slide">
                                             <div class="client-images">
-                                                <img src="<?php echo e(URL::asset('assets/images/clients/lenovo.svg')); ?>"
+                                                <img src="<?php echo e(URL::asset('assets/images/collaboration/SDG.jpg')); ?>"
                                                     alt="" class="mx-auto img-fluid d-block">
                                             </div>
                                         </div>
@@ -227,7 +254,9 @@
                         <div class="col-lg-8">
                             <div class="text-center mb-5">
                                 <h2 class="mb-3 fw-semibold lh-base">Report a Lost and Found Item</h2>
-                                <p class="text-muted mb-4">[need short description]</p>
+                                <p class="text-muted mb-4">Do you found any misplaced item somewhere? Or did you lost any
+                                    item somewhere? Make a report now by pinning a location using simple report, or provide
+                                    more information about the items in detailed report</p>
                             </div>
                         </div><!-- end col -->
                     </div><!-- end row -->
@@ -276,8 +305,24 @@
                                             <input type="hidden" id="latitude" name="latitude">
                                             <input type="hidden" id="longitude" name="longitude">
                                             <div class="form-group">
+                                                <label for="title">Title</label>
+                                                <input type="text" class="form-control" id="title" name="title"
+                                                    placeholder="Enter title" required>
+                                                <?php $__errorArgs = ['title'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <span class="text-danger"><?php echo e($message); ?></span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                            </div>
+                                            <div class="form-group mt-3">
                                                 <label for="reportType">Type</label>
                                                 <select class="form-control" id="reportType" name="type">
+                                                    <option value="" disabled selected>Select Type</option>
                                                     <option value="found">Found</option>
                                                     <option value="lost">Lost</option>
                                                 </select>
@@ -294,12 +339,10 @@ unset($__errorArgs, $__bag); ?>
                                             </div>
                                             <div class="form-group mt-3">
                                                 <label for="reportCategory">Category</label>
-                                                <select class="form-control" id="reportCategory" name="category">
-                                                    <!-- Populate categories dynamically from backend if needed -->
-                                                    <option value="category1">Category 1</option>
-                                                    <option value="category2">Category 2</option>
+                                                <select class="form-control" id="reportCategory" name="category_id">
+                                                    <option value="" disabled selected>Select Category</option>
                                                 </select>
-                                                <?php $__errorArgs = ['category'];
+                                                <?php $__errorArgs = ['category_id'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -530,7 +573,8 @@ unset($__errorArgs, $__bag); ?>
                         <div class="col-lg-8">
                             <div class="text-center mb-5">
                                 <h2 class="mb-3 fw-semibold lh-base">Explore Lost and Found Items</h2>
-                                <p class="text-muted mb-4">[need short description]</p>
+                                <p class="text-muted mb-4">Your lost item might be one of the list below! Do explore it and
+                                    click on the card for more details</p>
                                 <ul class="nav nav-pills filter-btns justify-content-center" role="tablist">
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link fw-medium active" type="button" data-filter="all">All
@@ -608,28 +652,29 @@ unset($__errorArgs, $__bag); ?>
                                         aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
                                 </div>
                                 <div class="explore-place-bid-img">
+                                    <div style="position: absolute; top: 0; left: 0; z-index: 1000; margin: 5px;"
+                                        class="ribbon-box found-ribbon">
+                                        <div class="ribbon-two ribbon-two-secondary"><span>Found Item</span></div>
+                                    </div>
                                     <img src="<?php echo e(URL::asset('assets/images/nft/img-03.jpg')); ?>" alt=""
                                         class="card-img-top explore-img" />
                                     <div class="bg-overlay"></div>
                                     <div class="place-bid-btn">
                                         <a href="<?php echo e(route('user.itemDetail')); ?>" class="btn btn-success"><i
-                                                class="ri-auction-fill align-bottom me-1"></i> See Detail</a>
+                                                class="ri-information-line align-bottom me-2"></i> See Detail</a>
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <p class="fw-medium mb-0 float-end"><i
-                                            class="mdi mdi-heart text-danger align-middle"></i> 19.29k </p>
-                                    <h5 class="mb-1"><a href="apps-nft-item-details">Creative Filtered Portrait</a>
+                                    <p class="fw-medium mb-0 float-end">[date]</p>
+                                    <h5 class="mb-1"><a href="apps-nft-item-details">[title]</a>
                                     </h5>
-                                    <p class="text-muted mb-0">Photography</p>
+                                    <p class="text-muted mb-0">[category]</p>
                                 </div>
                                 <div class="card-footer border-top border-top-dashed">
                                     <div class="d-flex align-items-center">
                                         <div class="flex-grow-1 fs-14">
-                                            <i class="ri-price-tag-3-fill text-warning align-bottom me-1"></i> Highest:
-                                            <span class="fw-medium">75.3ETH</span>
+                                            <i class="ri-map-pin-2-fill text-danger align-bottom me-1"></i> [Location]
                                         </div>
-                                        <h5 class="flex-shrink-0 fs-14 text-primary mb-0">67.36 ETH</h5>
                                     </div>
                                 </div>
                             </div>
@@ -641,6 +686,10 @@ unset($__errorArgs, $__bag); ?>
                                         aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
                                 </div>
                                 <div class="explore-place-bid-img">
+                                    <div style="position: absolute; top: 0; left: 0; z-index: 1000; margin: 5px;"
+                                        class="ribbon-box lost-ribbon">
+                                        <div class="ribbon-two ribbon-two-danger"><span>Lost Item</span></div>
+                                    </div>
                                     <img src="<?php echo e(URL::asset('assets/images/nft/img-02.jpg')); ?>" alt=""
                                         class="card-img-top explore-img" />
                                     <div class="bg-overlay"></div>
@@ -1256,7 +1305,8 @@ unset($__errorArgs, $__bag); ?>
                             <div>
                                 <div class="mt-4">
                                     <h5 class="fs-13 text-muted text-uppercase">Office Address 1:</h5>
-                                    <div class="ff-secondary fw-semibold">APU, TPM<br />Bukit Jalil, Kuala Lumpur</div>
+                                    <div class="ff-secondary fw-semibold">Asia Pacific University, <br />Technology Park
+                                        Malaysia, <br />Bukit Jalil, Kuala Lumpur</div>
                                 </div>
                                 <div class="mt-4">
                                     <h5 class="fs-13 text-muted text-uppercase">Working Hours:</h5>
@@ -1441,6 +1491,18 @@ unset($__errorArgs, $__bag); ?>
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
         <script>
             $(document).ready(function() {
+                // Fetch categories and populate the dropdown
+                axios.get('/categories')
+                    .then(function(response) {
+                        var categories = response.data;
+                        var categorySelect = $('#reportCategory');
+                        categories.forEach(function(category) {
+                            categorySelect.append(new Option(category.name, category.id));
+                        });
+                    })
+                    .catch(function(error) {
+                        console.error('Error fetching categories:', error);
+                    });
 
                 // Initialize the map
                 var displayMap = L.map('displayMap').setView([3.05603, 101.70022], 17);
@@ -1460,20 +1522,20 @@ unset($__errorArgs, $__bag); ?>
 
                     marker.on('click', function() {
                         // Populate modal with report details
+                        $('#modalTitle').text(report.title);
                         $('#modalType').text(report.type);
                         $('#modalCategory').text(report.category);
                         $('#modalDescription').text(report.location.desc);
                         $('#modalDate').text(report.date);
-                        // $('#modalLocation').text(`Lat: ${report.location.lat}, Lng: ${report.location.lng}`);
 
                         // Add Ribbon based on report type
                         var ribbonHTML = '';
                         if (report.type === 'found') {
                             ribbonHTML =
-                                '<div style="position: absolute; top: 0; left: 0; z-index: 1000; margin: 10px;" class="ribbon-box found-ribbon"><div class="ribbon-two ribbon-two-secondary"><span>Found Item</span></div></div>';
+                                '<div style="position: absolute; top: 0; left: 0; z-index: 1000;" class="ribbon-box found-ribbon"><div class="ribbon-two ribbon-two-secondary"><span>Found Item</span></div></div>';
                         } else if (report.type === 'lost') {
                             ribbonHTML =
-                                '<div style="position: absolute; top: 0; left: 0; z-index: 1000; margin: 10px;" class="ribbon-box lost-ribbon"><div class="ribbon-two ribbon-two-danger"><span>Lost Item</span></div></div>';
+                                '<div style="position: absolute; top: 0; left: 0; z-index: 1000;" class="ribbon-box lost-ribbon"><div class="ribbon-two ribbon-two-danger"><span>Lost Item</span></div></div>';
                         }
 
                         $('#ribbonContainer').html(ribbonHTML);
@@ -1503,7 +1565,6 @@ unset($__errorArgs, $__bag); ?>
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(map);
 
-
                 // Function to handle map click event
                 function handleMapClick(e) {
                     // Open modal
@@ -1514,20 +1575,18 @@ unset($__errorArgs, $__bag); ?>
                     $('#longitude').val(e.latlng.lng);
                 }
 
-
                 // Add click event listener to map
                 map.on('click', handleMapClick);
                 $('#submitReport').on('click', function() {
                     var formData = $('#reportForm').serialize();
 
-                    // Submit form via AJAX
                     axios.post('/simple-report', formData)
                         .then(function(response) {
                             console.log(response.data);
                             $('#reportModal').modal('hide');
                             $('#reportForm')[0].reset();
                             Toastify({
-                                text: 'You have succesfully submitted a report. Thank you.',
+                                text: 'You have successfully submitted a report. Thank you.',
                                 duration: 3000,
                                 backgroundColor: '#28a745',
                                 gravity: 'top',
@@ -1536,14 +1595,34 @@ unset($__errorArgs, $__bag); ?>
                             }).showToast();
                         })
                         .catch(function(error) {
-                            Toastify({
-                                text: 'Something went wrong. Please try again. ',
-                                duration: 3000,
-                                backgroundColor: '#dc3545',
-                                gravity: 'top',
-                                position: 'center',
-                                close: true
-                            }).showToast();
+                            if (error.response && error.response.data.errors) {
+                                // Extract validation errors
+                                var errors = error.response.data.errors;
+                                var errorMessages = [];
+                                for (var key in errors) {
+                                    if (errors.hasOwnProperty(key)) {
+                                        errorMessages.push(errors[key][0]);
+                                    }
+                                }
+
+                                Toastify({
+                                    text: errorMessages.join(' '),
+                                    duration: 5000,
+                                    backgroundColor: '#dc3545',
+                                    gravity: 'top',
+                                    position: 'center',
+                                    close: true
+                                }).showToast();
+                            } else {
+                                Toastify({
+                                    text: 'Something went wrong. Please try again.',
+                                    duration: 3000,
+                                    backgroundColor: '#dc3545',
+                                    gravity: 'top',
+                                    position: 'center',
+                                    close: true
+                                }).showToast();
+                            }
                             console.error(error);
                         });
                 });
