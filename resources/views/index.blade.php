@@ -5,8 +5,8 @@
 @section('css')
     <link href="{{ URL::asset('assets/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
     <link href="{{ URL::asset('assets/libs/swiper/swiper.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ URL::asset('assets/libs/dropzone/dropzone.min.css') }}" rel="stylesheet">
 @endsection
 @section('body')
 
@@ -433,40 +433,86 @@
                                                         <div class="tab-pane fade show active" id="steparrow-gen-info"
                                                             role="tabpanel" aria-labelledby="steparrow-gen-info-tab">
                                                             <div>
-                                                                <div class="row">
-                                                                    <div class="col-lg-6">
-                                                                        <div class="mb-3">
-                                                                            <label class="form-label"
-                                                                                for="steparrow-gen-info-username-input">Username</label>
-                                                                            <input type="text" class="form-control"
-                                                                                id="steparrow-gen-info-username-input"
-                                                                                placeholder="Enter User Name">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-lg-6">
-                                                                        <div class="mb-3">
-                                                                            <label class="form-label"
-                                                                                for="steparrow-gen-info-email-input">Email</label>
-                                                                            <input type="text" class="form-control"
-                                                                                id="steparrow-gen-info-email-input"
-                                                                                placeholder="Enter Email">
-                                                                        </div>
-                                                                    </div>
+                                                                @php
+                                                                    $socialMedia = json_decode(
+                                                                        Auth::user()->profile->social_media,
+                                                                        true,
+                                                                    );
+                                                                @endphp
+                                                                <div class="mb-3">
+                                                                    <label class="form-label"
+                                                                        for="steparrow-gen-info-fullname-input">Full
+                                                                        Name</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="steparrow-gen-info-fullname-input"
+                                                                        placeholder="Enter Full Name"
+                                                                        value="@if (Auth::user()->profile && Auth::user()->profile->fullname != '') {{ Auth::user()->profile->fullname }} @endif">
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label class="form-label"
-                                                                        for="steparrow-gen-info-password-input">Password</label>
-                                                                    <input type="password" class="form-control"
-                                                                        id="steparrow-gen-info-password-input"
-                                                                        placeholder="Enter Password">
+                                                                        for="steparrow-gen-info-email-input">Email</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="steparrow-gen-info-email-input"
+                                                                        placeholder="Enter Email"
+                                                                        value="@if (Auth::user() && Auth::user()->email != '') {{ Auth::user()->email }} @endif">
                                                                 </div>
-                                                                <div>
+                                                                <div class="mb-3">
                                                                     <label class="form-label"
-                                                                        for="steparrow-gen-info-confirm-password-input">Confirm
-                                                                        Password</label>
-                                                                    <input type="password" class="form-control"
-                                                                        id="steparrow-gen-info-confirm-password-input"
-                                                                        placeholder="Enter Confirm Password">
+                                                                        for="steparrow-gen-info-phone-input">Phone
+                                                                        Number</label>
+                                                                    <input type="number" class="form-control"
+                                                                        id="steparrow-gen-info-phone-input"
+                                                                        placeholder="Enter Phone Number"
+                                                                        value="@if (Auth::user()->profile && Auth::user()->profile->phone_number != '') {{ Auth::user()->profile->phone_number }} @endif">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label"
+                                                                        for="steparrow-gen-info-socialmedia-input">Social
+                                                                        Media</label>
+                                                                    <div class="mb-3 d-flex">
+                                                                        <div class="avatar-xs d-block flex-shrink-0 me-3">
+                                                                            <span
+                                                                                class="avatar-title rounded-circle fs-16 text-light shadow">
+                                                                                <i class="ri-instagram-fill"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="input-group">
+                                                                            <div class="input-group-text">@</div>
+                                                                            <input type="text" class="form-control"
+                                                                                id="steparrow-gen-info-ig-input"
+                                                                                name="ig_username" placeholder="Username"
+                                                                                value="{{ $socialMedia['ig_username'] ?? '' }}">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="mb-3 d-flex">
+                                                                        <div class="avatar-xs d-block flex-shrink-0 me-3">
+                                                                            <span
+                                                                                class="avatar-title rounded-circle fs-16 shadow">
+                                                                                <i class="ri-twitter-fill"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="input-group">
+                                                                            <div class="input-group-text">@</div>
+                                                                            <input type="text" class="form-control"
+                                                                                id="steparrow-gen-info-twt-input"
+                                                                                name="twitter_username" placeholder="Username"
+                                                                                value="{{ $socialMedia['twitter_username'] ?? '' }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mb-3 d-flex">
+                                                                    <div class="avatar-xs d-block flex-shrink-0 me-3">
+                                                                        <span class="avatar-title rounded-circle fs-16 shadow">
+                                                                            <i class="bx bxl-tiktok"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="input-group">
+                                                                        <div class="input-group-text">@</div>
+                                                                        <input type="text" class="form-control"
+                                                                            id="steparrow-gen-info-tt-input"
+                                                                            name="tiktok_username" placeholder="Username"
+                                                                            value="{{ $socialMedia['tiktok_username'] ?? '' }}">
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <div class="d-flex align-items-start gap-3 mt-4">
@@ -483,31 +529,125 @@
                                                         <div class="tab-pane fade" id="steparrow-description-info"
                                                             role="tabpanel" aria-labelledby="steparrow-description-info-tab">
                                                             <div>
+                                                                <input type="hidden" id="latitude2" name="latitude2">
+                                                                <input type="hidden" id="longitude2" name="longitude2">
+                                                                <div class="mb-3">
+                                                                    <label class="form-label"
+                                                                        for="description-title-input">Title</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="description-title-input"
+                                                                        placeholder="Enter Title">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label" for="reportType2">Type</label>
+                                                                    <select class="form-control" id="reportType2"
+                                                                        name="type2">
+                                                                        <option value="" selected disabled>Select Type
+                                                                        </option>
+                                                                        <option value="found">Found</option>
+                                                                        <option value="lost">Lost</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label"
+                                                                        for="reportCategory2">Category</label>
+                                                                    <select class="form-control" id="reportCategory2"
+                                                                        name="category_id_detailed">
+                                                                        <option value="" disabled selected>Select
+                                                                            Category</option>
+                                                                    </select>
+                                                                </div>
                                                                 <div class="mb-3">
                                                                     <label for="formFile" class="form-label">Upload
-                                                                        Image</label>
-                                                                    <input class="form-control" type="file"
-                                                                        id="formFile">
+                                                                        Images</label>
+                                                                    <div class="dropzone">
+                                                                        <div class="fallback">
+                                                                            <input name="file" type="file"
+                                                                                id="formFile" multiple="multiple">
+                                                                        </div>
+                                                                        <div class="dz-message needsclick">
+                                                                            <div class="mb-3">
+                                                                                <i
+                                                                                    class="display-4 text-muted ri-upload-cloud-2-fill"></i>
+                                                                            </div>
+
+                                                                            <h4>Drop files here or click to upload.</h4>
+                                                                        </div>
+                                                                    </div>
+                                                                    <ul class="list-unstyled mb-0" id="dropzone-preview">
+                                                                        <li class="mt-2" id="dropzone-preview-list">
+                                                                            <div class="border rounded">
+                                                                                <div class="d-flex p-2">
+                                                                                    <div class="flex-shrink-0 me-3">
+                                                                                        <div
+                                                                                            class="avatar-sm bg-light rounded">
+                                                                                            <img data-dz-thumbnail
+                                                                                                class="img-fluid rounded d-block"
+                                                                                                src="#"
+                                                                                                alt="Dropzone-Image" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="flex-grow-1">
+                                                                                        <div class="pt-1">
+                                                                                            <h5 class="fs-14 mb-1"
+                                                                                                data-dz-name>&nbsp;</h5>
+                                                                                            <p class="fs-13 text-muted mb-0"
+                                                                                                data-dz-size></p>
+                                                                                            <strong class="error text-danger"
+                                                                                                data-dz-errormessage></strong>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="flex-shrink-0 ms-3">
+                                                                                        <button data-dz-remove
+                                                                                            class="btn btn-sm btn-danger">Delete</button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
                                                                 </div>
-                                                                <div>
+                                                                <div class="mb-3">
                                                                     <label class="form-label"
-                                                                        for="des-info-description-input">Description</label>
-                                                                    <textarea class="form-control" placeholder="Enter Description" id="des-info-description-input" rows="3"></textarea>
+                                                                        for="description-textarea">Description</label>
+                                                                    <textarea class="form-control" id="description-textarea" placeholder="Enter Description" rows="3"></textarea>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label"
+                                                                        for="detailedReportMap">Location</label>
+                                                                    <div id="detailedReportMap" style="height: 300px;">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label"
+                                                                        for="location-description-input">Location
+                                                                        Description</label>
+                                                                    <textarea class="form-control" id="location-description-input" placeholder="Enter Location Description"
+                                                                        rows="3"></textarea>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label" for="date-time-input">Date and
+                                                                        Time</label>
+                                                                    <input type="datetime-local" class="form-control"
+                                                                        id="date-time-input">
                                                                 </div>
                                                             </div>
                                                             <div class="d-flex align-items-start gap-3 mt-4">
                                                                 <button type="button"
                                                                     class="btn btn-light btn-label previestab"
-                                                                    data-previous="steparrow-gen-info-tab"><i
-                                                                        class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>
-                                                                    Back to General</button>
+                                                                    data-previous="steparrow-gen-info-tab">
+                                                                    <i
+                                                                        class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Back
+                                                                    to General
+                                                                </button>
                                                                 <button type="button"
-                                                                    class="btn btn-success btn-label right ms-auto nexttab
-                            nexttab"
-                                                                    data-nexttab="pills-experience-tab"><i
-                                                                        class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Submit</button>
+                                                                    class="btn btn-success btn-label right ms-auto nexttab"
+                                                                    data-nexttab="pills-experience-tab">
+                                                                    <i
+                                                                        class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Submit
+                                                                </button>
                                                             </div>
                                                         </div>
+
                                                         <!-- end tab pane -->
 
                                                         <div class="tab-pane fade" id="pills-experience" role="tabpanel">
@@ -1701,7 +1841,8 @@
                                             <div class="mb-4">
                                                 <label for="subject" class="form-label fs-13">Subject</label>
                                                 <input type="text" class="form-control bg-light border-light"
-                                                    id="subject" name="subject" placeholder="Your Subject.." required>
+                                                    id="subject" name="subject" placeholder="Your Subject.."
+                                                    required>
                                             </div>
                                         </div>
                                     </div>
@@ -1839,9 +1980,11 @@
         <!-- end layout wrapper -->
     @endsection
     @section('script')
+        <script src="{{ URL::asset('assets/libs/dropzone/dropzone.min.js') }}"></script>
         <script src="{{ URL::asset('/assets/libs/swiper/swiper.min.js') }}"></script>
         <script src="{{ URL::asset('/assets/js/pages/landing.init.js') }}"></script>
         <script src="{{ URL::asset('/assets/libs/jsvectormap/jsvectormap.min.js') }}"></script>
+        <script src="{{ URL::asset('assets/js/pages/form-file-upload.init.js') }}"></script>
         <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
         <script src="{{ URL::asset('assets/js/pages/form-wizard.init.js') }}"></script>
         <script src="{{ URL::asset('assets/js/pages/apps-nft-explore.init.js') }}"></script>
@@ -1851,18 +1994,9 @@
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
         <script>
             $(document).ready(function() {
-                // Fetch categories and populate the dropdown
-                axios.get('/categories')
-                    .then(function(response) {
-                        var categories = response.data;
-                        var categorySelect = $('#reportCategory');
-                        categories.forEach(function(category) {
-                            categorySelect.append(new Option(category.name, category.id));
-                        });
-                    })
-                    .catch(function(error) {
-                        console.error('Error fetching categories:', error);
-                    });
+
+                //finish tab disabled first, later after settle the detailed report backend and validation, only then add code to turn it on back
+                $('#pills-experience-tab').prop('disabled', true);
 
                 // Initialize the map
                 var displayMap = L.map('displayMap').setView([3.05603, 101.70022], 17);
@@ -1871,6 +2005,70 @@
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(displayMap);
+
+
+                // Initialize the map
+                var map = L.map('map').setView([3.05603, 101.70022], 17);
+
+                // Add a tile layer
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+                // Function to handle map click event
+                function handleMapClick(e) {
+                    // Open modal
+                    $('#reportModal').modal('show');
+
+                    // Populate form fields with location data
+                    $('#latitude').val(e.latlng.lat);
+                    $('#longitude').val(e.latlng.lng);
+                }
+
+
+                // Initialize the map
+                var detailedReportMap;
+
+                function initializeMap() {
+                    detailedReportMap = L.map('detailedReportMap').setView([3.05603, 101.70022], 17);
+
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(detailedReportMap);
+                }
+
+                $('button[data-bs-toggle="pill"]').on('shown.bs.tab', function(e) {
+                    var target = $(e.target).attr("data-bs-target");
+                    if (target == '#steparrow-description-info') {
+                        if (!detailedReportMap) {
+                            setTimeout(function() {
+                                initializeMap();
+                            }, 100);
+                        } else {
+                            setTimeout(function() {
+                                detailedReportMap.invalidateSize();
+                            }, 100);
+                        }
+                    }
+                });
+
+                // Fetch categories and populate the dropdown
+                axios.get('/categories')
+                    .then(function(response) {
+                        var categories = response.data;
+                        var categorySelect = $('#reportCategory');
+                        categories.forEach(function(category) {
+                            categorySelect.append(new Option(category.name, category.id));
+                        });
+                        var categorySelect2 = $('#reportCategory2');
+                        categories.forEach(function(category) {
+                            categorySelect2.append(new Option(category.name, category.id));
+                        });
+                    })
+                    .catch(function(error) {
+                        console.error('Error fetching categories:', error);
+                    });
+
 
                 // Function to add markers
                 function addMarker(lat, lng, report) {
@@ -1917,23 +2115,7 @@
                         console.error('Error fetching reports:', error);
                     });
 
-                // Initialize the map
-                var map = L.map('map').setView([3.05603, 101.70022], 17);
 
-                // Add a tile layer
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(map);
-
-                // Function to handle map click event
-                function handleMapClick(e) {
-                    // Open modal
-                    $('#reportModal').modal('show');
-
-                    // Populate form fields with location data
-                    $('#latitude').val(e.latlng.lat);
-                    $('#longitude').val(e.latlng.lng);
-                }
 
                 // Add click event listener to map
                 map.on('click', handleMapClick);
