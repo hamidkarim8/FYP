@@ -13,6 +13,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SimpleReportController;
 use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\DetailedReportController;
 
 Auth::routes();
 
@@ -53,6 +54,9 @@ Route::post('/simple-report', [SimpleReportController::class, 'store'])->name('s
 Route::post('/simple-report-display', [SimpleReportController::class, 'show'])->name('simple-reports.show');
 Route::get('/categories', [CategoryController::class, 'index']);
 
+//Detailed Report
+Route::post('/uploads', [DetailedReportController::class, 'process'])->name('uploads.process');
+Route::post('/detailed-report', [DetailedReportController::class, 'submitDetailedReport'])->name('submit.detailed.report');
 
 // Fallback Route
 Route::fallback(function () {

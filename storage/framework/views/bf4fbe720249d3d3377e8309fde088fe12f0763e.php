@@ -6,7 +6,10 @@
     <link href="<?php echo e(URL::asset('assets/libs/jsvectormap/jsvectormap.min.css')); ?>" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link href="<?php echo e(URL::asset('assets/libs/swiper/swiper.min.css')); ?>" rel="stylesheet" type="text/css" />
-    <link href="<?php echo e(URL::asset('assets/libs/dropzone/dropzone.min.css')); ?>" rel="stylesheet">
+    
+    <link rel="stylesheet" href="<?php echo e(URL::asset('assets/libs/filepond/filepond.min.css')); ?>" type="text/css" />
+    <link rel="stylesheet"
+        href="<?php echo e(URL::asset('assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css')); ?>">
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('body'); ?>
 
@@ -418,7 +421,10 @@ unset($__errorArgs, $__bag); ?>
                                                 <h4 class="card-title mb-0">Report Form</h4>
                                             </div><!-- end card header -->
                                             <div class="card-body form-steps">
-                                                <form action="#">
+                                                <form action="<?php echo e(route('submit.detailed.report')); ?>"
+                                                    method="POST" enctype="multipart/form-data">
+                                                    <?php echo csrf_field(); ?>
+                                                    <?php echo method_field('POST'); ?>
                                                     <div class="text-center pt-3 pb-4 mb-1">
                                                         <img src="<?php echo e(URL::asset('assets/images/logo-dark-new.png')); ?>"
                                                             alt="" height="17">
@@ -467,7 +473,7 @@ unset($__errorArgs, $__bag); ?>
                                                                         Name</label>
                                                                     <input type="text" class="form-control"
                                                                         id="steparrow-gen-info-fullname-input"
-                                                                        placeholder="Enter Full Name"
+                                                                        placeholder="Enter Full Name" name="detailed-fullname"
                                                                         value="<?php if(Auth::user()->profile && Auth::user()->profile->fullname != ''): ?> <?php echo e(Auth::user()->profile->fullname); ?> <?php endif; ?>">
                                                                 </div>
                                                                 <div class="mb-3">
@@ -475,7 +481,7 @@ unset($__errorArgs, $__bag); ?>
                                                                         for="steparrow-gen-info-email-input">Email</label>
                                                                     <input type="text" class="form-control"
                                                                         id="steparrow-gen-info-email-input"
-                                                                        placeholder="Enter Email"
+                                                                        placeholder="Enter Email" name="detailed-email"
                                                                         value="<?php if(Auth::user() && Auth::user()->email != ''): ?> <?php echo e(Auth::user()->email); ?> <?php endif; ?>">
                                                                 </div>
                                                                 <div class="mb-3">
@@ -484,8 +490,8 @@ unset($__errorArgs, $__bag); ?>
                                                                         Number</label>
                                                                     <input type="number" class="form-control"
                                                                         id="steparrow-gen-info-phone-input"
-                                                                        placeholder="Enter Phone Number"
-                                                                        value="<?php if(Auth::user()->profile && Auth::user()->profile->phone_number != ''): ?> <?php echo e(Auth::user()->profile->phone_number); ?> <?php endif; ?>">
+                                                                        placeholder="Enter Phone Number" name="detailed-phone"
+                                                                        value="<?php echo e(Auth::user()->profile->phone_number); ?>">
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label class="form-label"
@@ -546,24 +552,22 @@ unset($__errorArgs, $__bag); ?>
                                                                     to more info</button>
                                                             </div>
                                                         </div>
-                                                        <!-- end tab pane -->
+                                                        <!-- end tab pane s -->
 
                                                         <div class="tab-pane fade" id="steparrow-description-info"
                                                             role="tabpanel" aria-labelledby="steparrow-description-info-tab">
                                                             <div>
-                                                                <input type="hidden" id="latitude2" name="latitude2">
-                                                                <input type="hidden" id="longitude2" name="longitude2">
                                                                 <div class="mb-3">
                                                                     <label class="form-label"
                                                                         for="description-title-input">Title</label>
                                                                     <input type="text" class="form-control"
-                                                                        id="description-title-input"
+                                                                        id="description-title-input" name="detailed-title"
                                                                         placeholder="Enter Title">
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label class="form-label" for="reportType2">Type</label>
                                                                     <select class="form-control" id="reportType2"
-                                                                        name="type2">
+                                                                        name="detailed-type">
                                                                         <option value="" selected disabled>Select Type
                                                                         </option>
                                                                         <option value="found">Found</option>
@@ -574,83 +578,46 @@ unset($__errorArgs, $__bag); ?>
                                                                     <label class="form-label"
                                                                         for="reportCategory2">Category</label>
                                                                     <select class="form-control" id="reportCategory2"
-                                                                        name="category_id_detailed">
+                                                                        name="detailed-category">
                                                                         <option value="" disabled selected>Select
                                                                             Category</option>
                                                                     </select>
                                                                 </div>
-                                                                <div class="mb-3">
-                                                                    <label for="formFile" class="form-label">Upload
-                                                                        Images</label>
-                                                                    <div class="dropzone">
-                                                                        <div class="fallback">
-                                                                            <input name="file" type="file"
-                                                                                id="formFile" multiple="multiple">
-                                                                        </div>
-                                                                        <div class="dz-message needsclick">
-                                                                            <div class="mb-3">
-                                                                                <i
-                                                                                    class="display-4 text-muted ri-upload-cloud-2-fill"></i>
-                                                                            </div>
 
-                                                                            <h4>Drop files here or click to upload.</h4>
-                                                                        </div>
-                                                                    </div>
-                                                                    <ul class="list-unstyled mb-0" id="dropzone-preview">
-                                                                        <li class="mt-2" id="dropzone-preview-list">
-                                                                            <div class="border rounded">
-                                                                                <div class="d-flex p-2">
-                                                                                    <div class="flex-shrink-0 me-3">
-                                                                                        <div
-                                                                                            class="avatar-sm bg-light rounded">
-                                                                                            <img data-dz-thumbnail
-                                                                                                class="img-fluid rounded d-block"
-                                                                                                src="#"
-                                                                                                alt="Dropzone-Image" />
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="flex-grow-1">
-                                                                                        <div class="pt-1">
-                                                                                            <h5 class="fs-14 mb-1"
-                                                                                                data-dz-name>&nbsp;</h5>
-                                                                                            <p class="fs-13 text-muted mb-0"
-                                                                                                data-dz-size></p>
-                                                                                            <strong class="error text-danger"
-                                                                                                data-dz-errormessage></strong>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="flex-shrink-0 ms-3">
-                                                                                        <button data-dz-remove
-                                                                                            class="btn btn-sm btn-danger">Delete</button>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
                                                                 <div class="mb-3">
                                                                     <label class="form-label"
                                                                         for="description-textarea">Description</label>
-                                                                    <textarea class="form-control" id="description-textarea" placeholder="Enter Description" rows="3"></textarea>
+                                                                    <textarea class="form-control" id="description-textarea" placeholder="Enter Description" rows="3"
+                                                                        name="detailed-description"></textarea>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="formFile" class="form-label">Upload
+                                                                        Images</label>
+                                                                        <input type="file" class="filepond filepond-input-multiple" multiple name="detailed-images[]" data-allow-reorder="true" data-max-file-size="3MB" data-max-files="3">
+                                                                        <p><span class="text-danger">*</span> Please upload only: jpeg, png, jpg, gif, Maximum number of files: 3</p>
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label class="form-label"
                                                                         for="detailedReportMap">Location</label>
                                                                     <div id="detailedReportMap" style="height: 300px;">
                                                                     </div>
+                                                                    <input type="hidden" id="latitude2"
+                                                                        name="detailed-latitude">
+                                                                    <input type="hidden" id="longitude2"
+                                                                        name="detailed-longitude">
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label class="form-label"
                                                                         for="location-description-input">Location
                                                                         Description</label>
                                                                     <textarea class="form-control" id="location-description-input" placeholder="Enter Location Description"
-                                                                        rows="3"></textarea>
+                                                                        name="detailed-loc-desc" rows="3"></textarea>
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label class="form-label" for="date-time-input">Date and
                                                                         Time</label>
                                                                     <input type="datetime-local" class="form-control"
-                                                                        id="date-time-input">
+                                                                        id="date-time-input" name="detailed-date">
                                                                 </div>
                                                             </div>
                                                             <div class="d-flex align-items-start gap-3 mt-4">
@@ -661,7 +628,7 @@ unset($__errorArgs, $__bag); ?>
                                                                         class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Back
                                                                     to General
                                                                 </button>
-                                                                <button type="button"
+                                                                <button type="submit"
                                                                     class="btn btn-success btn-label right ms-auto nexttab"
                                                                     data-nexttab="pills-experience-tab">
                                                                     <i
@@ -1620,10 +1587,19 @@ unset($__errorArgs, $__bag); ?>
         <!-- end layout wrapper -->
     <?php $__env->stopSection(); ?>
     <?php $__env->startSection('script'); ?>
-        <script src="<?php echo e(URL::asset('assets/libs/dropzone/dropzone.min.js')); ?>"></script>
         <script src="<?php echo e(URL::asset('/assets/libs/swiper/swiper.min.js')); ?>"></script>
         <script src="<?php echo e(URL::asset('/assets/js/pages/landing.init.js')); ?>"></script>
         <script src="<?php echo e(URL::asset('/assets/libs/jsvectormap/jsvectormap.min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('assets/libs/filepond/filepond.min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.js')); ?>">
+        </script>
+        <script
+            src="<?php echo e(URL::asset('assets/libs/filepond-plugin-file-validate-size/filepond-plugin-file-validate-size.min.js')); ?>">
+        </script>
+        <script
+            src="<?php echo e(URL::asset('assets/libs/filepond-plugin-image-exif-orientation/filepond-plugin-image-exif-orientation.min.js')); ?>">
+        </script>
+        <script src="<?php echo e(URL::asset('assets/libs/filepond-plugin-file-encode/filepond-plugin-file-encode.min.js')); ?>"></script>
         <script src="<?php echo e(URL::asset('assets/js/pages/form-file-upload.init.js')); ?>"></script>
         <script src="<?php echo e(URL::asset('/assets/js/app.min.js')); ?>"></script>
         <script src="<?php echo e(URL::asset('assets/js/pages/form-wizard.init.js')); ?>"></script>
@@ -1633,10 +1609,20 @@ unset($__errorArgs, $__bag); ?>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
         <script>
+
+            // Initialize the map
+            var detailedReportMap;
+
+            function initializeMap() {
+                detailedReportMap = L.map('detailedReportMap').setView([3.05603, 101.70022], 17);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(detailedReportMap);
+            }
+
             $(document).ready(function() {
 
-                //finish tab disabled first, later after settle the detailed report backend and validation, only then add code to turn it on back
-                $('#pills-experience-tab').prop('disabled', true);
 
                 // Initialize the map
                 var displayMap = L.map('displayMap').setView([3.05603, 101.70022], 17);
@@ -1666,23 +1652,32 @@ unset($__errorArgs, $__bag); ?>
                 }
 
 
-                // Initialize the map
-                var detailedReportMap;
-
-                function initializeMap() {
-                    detailedReportMap = L.map('detailedReportMap').setView([3.05603, 101.70022], 17);
-
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    }).addTo(detailedReportMap);
-                }
-
                 $('button[data-bs-toggle="pill"]').on('shown.bs.tab', function(e) {
                     var target = $(e.target).attr("data-bs-target");
                     if (target == '#steparrow-description-info') {
                         if (!detailedReportMap) {
                             setTimeout(function() {
                                 initializeMap();
+                                // Function to handle map click event
+                                var marker;
+                                detailedReportMap.on('click', function(e) {
+                                    if (marker) {
+                                        detailedReportMap.removeLayer(marker);
+                                    }
+
+                                    // Populate form fields with location data
+                                    $('#latitude2').val(e.latlng.lat);
+                                    $('#longitude2').val(e.latlng.lng);
+
+                                    // Add new marker for the clicked location
+                                    marker = L.circleMarker([e.latlng.lat, e.latlng.lng], {
+                                        color: 'red',
+                                        radius: 10
+                                    }).addTo(detailedReportMap);
+                                    console.log([e.latlng.lat, e.latlng.lng]);
+                                });
+
+
                             }, 100);
                         } else {
                             setTimeout(function() {
@@ -1691,6 +1686,7 @@ unset($__errorArgs, $__bag); ?>
                         }
                     }
                 });
+
 
                 // Fetch categories and populate the dropdown
                 axios.get('/categories')
@@ -1743,7 +1739,7 @@ unset($__errorArgs, $__bag); ?>
                     });
                 }
 
-                // Fetch all reports and display on the map
+                //Display simple report
                 axios.post('/simple-report-display')
                     .then(function(response) {
                         var reports = response.data;
@@ -1756,7 +1752,7 @@ unset($__errorArgs, $__bag); ?>
                     });
 
 
-
+                //Simple report form
                 // Add click event listener to map
                 map.on('click', handleMapClick);
                 $('#submitReport').on('click', function() {
