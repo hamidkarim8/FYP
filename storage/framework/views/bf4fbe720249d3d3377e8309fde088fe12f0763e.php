@@ -786,17 +786,17 @@ unset($__errorArgs, $__bag); ?>
                                                 class="card-img-top explore-img" />
                                         <?php endif; ?>
                                         <div class="bg-overlay"></div>
-                                        <div class="place-bid-btn">
-                                            <a href="<?php echo e(route('user.itemDetail', $report->id)); ?>"
-                                                class="btn btn-success"><i
-                                                    class="ri-information-line align-bottom me-2"></i> See Detail</a>
-                                        </div>
+                                        <?php if(auth()->guard()->check()): ?>
+                                            <div class="place-bid-btn">
+                                                <a href="<?php echo e(route('user.itemDetail', $report->id)); ?>"
+                                                    class="btn btn-success"><i
+                                                        class="ri-information-line align-bottom me-2"></i> See Detail</a>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                     <div class="card-body">
                                         <p class="fw-medium mb-0 float-end"><?php echo e($report->created_at->format('d-m-Y')); ?></p>
-                                        <h5 class="mb-1"><a
-                                                href="<?php echo e(route('user.itemDetail', $report->id)); ?>"><?php echo e($report->title); ?></a>
-                                        </h5>
+                                        <h5 class="mb-1"><?php echo e($report->title); ?></h5>
                                         <p class="text-muted mb-0"><?php echo e($report->category->name); ?></p>
                                     </div>
                                     <div class="card-footer border-top border-top-dashed">

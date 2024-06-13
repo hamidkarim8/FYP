@@ -776,17 +776,17 @@
                                                 class="card-img-top explore-img" />
                                         @endif
                                         <div class="bg-overlay"></div>
-                                        <div class="place-bid-btn">
-                                            <a href="{{ route('user.itemDetail', $report->id) }}"
-                                                class="btn btn-success"><i
-                                                    class="ri-information-line align-bottom me-2"></i> See Detail</a>
-                                        </div>
+                                        @auth
+                                            <div class="place-bid-btn">
+                                                <a href="{{ route('user.itemDetail', $report->id) }}"
+                                                    class="btn btn-success"><i
+                                                        class="ri-information-line align-bottom me-2"></i> See Detail</a>
+                                            </div>
+                                        @endauth
                                     </div>
                                     <div class="card-body">
                                         <p class="fw-medium mb-0 float-end">{{ $report->created_at->format('d-m-Y') }}</p>
-                                        <h5 class="mb-1"><a
-                                                href="{{ route('user.itemDetail', $report->id) }}">{{ $report->title }}</a>
-                                        </h5>
+                                        <h5 class="mb-1">{{ $report->title }}</h5>
                                         <p class="text-muted mb-0">{{ $report->category->name }}</p>
                                     </div>
                                     <div class="card-footer border-top border-top-dashed">

@@ -4,8 +4,7 @@
             <div class="col-lg-4 mt-4">
                 <div>
                     <div>
-                        <img src="<?php echo e(URL::asset('assets/images/logo-light-new.png')); ?>" alt="logo light"
-                            height="20">
+                        <img src="<?php echo e(URL::asset('assets/images/logo-light-new.png')); ?>" alt="logo light" height="20">
                     </div>
                     <div class="mt-4 fs-13">
                         <p>Lost and Found System</p>
@@ -16,16 +15,22 @@
                     </div>
                 </div>
             </div>
-
+            <?php
+                $homeUrl = url('/home#hero');
+                $reportUrl = url('/home#reports');
+                $itemsUrl = url('/home#items');
+                $faqsUrl = url('/home#faqs');
+                $contactUrl = url('/home#contact');
+            ?>
             <div class="col-lg-7 ms-lg-auto">
                 <div class="row">
                     <div class="col-sm-4 mt-4">
                         <h5 class="text-white mb-0">Menu</h5>
                         <div class="text-muted mt-3">
                             <ul class="list-unstyled ff-secondary footer-list fs-14">
-                                <li><a href="home#hero">Home</a></li>
-                                <li><a href="home#reports">Reports</a></li>
-                                <li><a href="home#items">Items</a></li>
+                                <li><a href="<?php echo e($homeUrl); ?>">Home</a></li>
+                                <li><a href="<?php echo e($reportUrl); ?>">Reports</a></li>
+                                <li><a href="<?php echo e($itemsUrl); ?>">Items</a></li>
                             </ul>
                         </div>
                     </div>
@@ -33,8 +38,8 @@
                         <h5 class="text-white mb-0">Support</h5>
                         <div class="text-muted mt-3">
                             <ul class="list-unstyled ff-secondary footer-list fs-14">
-                                <li><a href="home#faqs">FAQ</a></li>
-                                <li><a href="home#contact">Contact</a></li>
+                                <li><a href="<?php echo e($faqsUrl); ?>">FAQ</a></li>
+                                <li><a href="<?php echo e($contactUrl); ?>">Contact</a></li>
                             </ul>
                         </div>
                     </div>
@@ -99,4 +104,5 @@
             </div>
         </div>
     </div>
-</footer><?php /**PATH C:\xampp\htdocs\FYP-TESTING\resources\views/layouts-user/footer.blade.php ENDPATH**/ ?>
+</footer>
+<?php /**PATH C:\xampp\htdocs\FYP-TESTING\resources\views/layouts-user/footer.blade.php ENDPATH**/ ?>

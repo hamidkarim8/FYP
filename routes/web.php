@@ -48,7 +48,7 @@ Route::post('/update-avatar/{id}', [ProfileController::class, 'updateAvatar'])->
 Route::post('/update-password/{id}', [ProfileController::class, 'changePassword'])->name('changePassword');
 
 //Item Detail Route
-Route::get('/item-detail/{id:uuid}', [ItemController::class, 'itemDetail'])->name('user.itemDetail');
+Route::get('/item-detail/{id:uuid}', [ItemController::class, 'itemDetail'])->middleware(['auth', 'role:normal_user'])->name('user.itemDetail');
 
 //Simple Report
 Route::post('/simple-report', [SimpleReportController::class, 'store'])->name('simple-reports.store');
