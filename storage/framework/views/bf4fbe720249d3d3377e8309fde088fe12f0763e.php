@@ -980,10 +980,6 @@ unset($__errorArgs, $__bag); ?>
             </section>
             <!-- end cta -->
 
-            <!-- start features -->
-            
-            <!-- end features -->
-
             <!-- start faqs -->
             <section class="section bg-light" id="faqs">
                 <div class="bg-overlay bg-overlay-pattern"></div>
@@ -1342,10 +1338,6 @@ unset($__errorArgs, $__bag); ?>
                 <!-- end container -->
             </section>
             <!-- end Work Process -->
-
-            <!-- start team -->
-            
-            <!-- end team -->
 
 
             <!-- start counter -->
