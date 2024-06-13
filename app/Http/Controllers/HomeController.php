@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Item;
+use App\Models\DetailedReport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -38,7 +39,9 @@ class HomeController extends Controller
 
     public function root()
     {
-        return view('index');
+        $detailedReports = DetailedReport::with('category')->get();
+
+        return view('index', compact('detailedReports'));
     }
 
 

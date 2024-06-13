@@ -12,8 +12,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SimpleReportController;
 use App\Http\Controllers\CategoryController;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DetailedReportController;
+use Illuminate\Support\Facades\Auth;
+
 
 Auth::routes();
 

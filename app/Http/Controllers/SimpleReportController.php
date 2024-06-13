@@ -26,7 +26,7 @@ class SimpleReportController extends Controller
                     'lng' => $report->location['lng'],
                     'desc' => $report->location['desc'],
                 ],
-                'date' => Carbon::parse($report->date)->format('d/m/Y'),
+                'date' => Carbon::parse($report->date)->format('d-m-Y'),
             ];
         });
 

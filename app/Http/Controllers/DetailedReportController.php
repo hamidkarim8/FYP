@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File;
-use Illuminate\Support\Facades\File as FileFacade; // Use this facade to check file existence
+use Illuminate\Support\Facades\File as FileFacade;
 
 
 
@@ -107,34 +107,21 @@ class DetailedReportController extends Controller
             $fileLocations = [];
             if ($request->has('detailed-images')) {
                 $tmpFilePaths = $request->input('detailed-images');
-
-                
-                // Log the temporary file paths
-                Log::info('Temporary file paths: ', $tmpFilePaths);
-
+            
                 foreach ($tmpFilePaths as $tmpFilePath) {
                     $fullTmpPath = storage_path('app/' . $tmpFilePath);
-
-                    // Log the full temporary file path
-                    Log::info('Full temporary file path: ' . $fullTmpPath);
-
+            
                     if (FileFacade::exists($fullTmpPath)) {
-                        Log::info('File exists: ' . $fullTmpPath);
-
-                        // Move the file to a permanent location
-                        $newFilePath = Storage::putFile('imports', new File($fullTmpPath));
-
-                        // Log the new file location
-                        Log::info('File moved to: ' . $newFilePath);
-
-                        // Verify the new file path
-                        if (Storage::exists($newFilePath)) {
-                            Log::info('New file path verified: ' . $newFilePath);
-
-                            // Add the new file path to the array
-                            $fileLocations[] = $newFilePath;
+                        // Move the file to a permanent location in the public directory
+                        $fileName = time() . '_' . basename($tmpFilePath); // Generate a unique filename
+                        $newFilePath = public_path('item-images') . '/' . $fileName;
+                        
+                        // Move the file from the temporary location to the public directory
+                        if (rename($fullTmpPath, $newFilePath)) {
+                            Log::info('File moved to: ' . $newFilePath);
+                            $fileLocations[] = 'item-images/' . $fileName; // Store the file path
                         } else {
-                            Log::error('New file path does not exist: ' . $newFilePath);
+                            Log::error('Failed to move file from ' . $fullTmpPath . ' to ' . $newFilePath);
                         }
                     } else {
                         Log::error('File does not exist: ' . $fullTmpPath);

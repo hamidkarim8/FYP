@@ -399,8 +399,8 @@
                                                 <h4 class="card-title mb-0">Report Form</h4>
                                             </div><!-- end card header -->
                                             <div class="card-body form-steps">
-                                                <form action="{{ route('submit.detailed.report') }}"
-                                                    method="POST" enctype="multipart/form-data">
+                                                <form action="{{ route('submit.detailed.report') }}" method="POST"
+                                                    enctype="multipart/form-data">
                                                     @csrf
                                                     @method('POST')
                                                     <div class="text-center pt-3 pb-4 mb-1">
@@ -469,7 +469,7 @@
                                                                     <input type="number" class="form-control"
                                                                         id="steparrow-gen-info-phone-input"
                                                                         placeholder="Enter Phone Number" name="detailed-phone"
-                                                                        value="{{Auth::user()->profile->phone_number}}">
+                                                                        value="{{ Auth::user()->profile->phone_number }}">
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label class="form-label"
@@ -571,8 +571,12 @@
                                                                 <div class="mb-3">
                                                                     <label for="formFile" class="form-label">Upload
                                                                         Images</label>
-                                                                        <input type="file" class="filepond filepond-input-multiple" multiple name="detailed-images[]" data-allow-reorder="true" data-max-file-size="3MB" data-max-files="3">
-                                                                        <p><span class="text-danger">*</span> Please upload only: jpeg, png, jpg, gif, Maximum number of files: 3</p>
+                                                                    <input type="file"
+                                                                        class="filepond filepond-input-multiple" multiple
+                                                                        name="detailed-images[]" data-allow-reorder="true"
+                                                                        data-max-file-size="3MB" data-max-files="3">
+                                                                    <p><span class="text-danger">*</span> Please upload only:
+                                                                        jpeg, png, jpg, gif, Maximum number of files: 3</p>
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label class="form-label"
@@ -742,206 +746,66 @@
 
                     </div><!-- end row -->
                     <div class="row">
-                        <div class="col-lg-4 product-item artwork crypto-card 3d-style">
-                            <div class="card explore-box card-animate">
-                                <div class="bookmark-icon position-absolute top-0 end-0 p-2">
-                                    <button type="button" class="btn btn-icon active" data-bs-toggle="button"
-                                        aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
-                                </div>
-                                <div class="explore-place-bid-img">
-                                    <div style="position: absolute; top: 0; left: 0; z-index: 1000; margin: 5px;"
-                                        class="ribbon-box found-ribbon">
-                                        <div class="ribbon-two ribbon-two-secondary"><span>Found Item</span></div>
+                        @foreach ($detailedReports as $report)
+                            <div class="col-lg-4 product-item artwork crypto-card 3d-style">
+                                <div class="card explore-box card-animate">
+                                    <div class="bookmark-icon position-absolute top-0 end-0 p-2">
+                                        <button type="button" class="btn btn-icon active" data-bs-toggle="button"
+                                            aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
                                     </div>
-                                    <img src="{{ URL::asset('assets/images/nft/img-03.jpg') }}" alt=""
-                                        class="card-img-top explore-img" />
-                                    <div class="bg-overlay"></div>
-                                    <div class="place-bid-btn">
-                                        <a href="{{ route('user.itemDetail') }}" class="btn btn-success"><i
-                                                class="ri-information-line align-bottom me-2"></i> See Detail</a>
+                                    <div class="explore-place-bid-img">
+                                        <div style="position: absolute; top: 0; left: 0; z-index: 1000; margin: 5px;"
+                                            class="ribbon-box {{ $report->type === 'lost' ? 'lost-ribbon' : 'found-ribbon' }}">
+                                            <div
+                                                class="ribbon-two {{ $report->type === 'lost' ? 'ribbon-two-danger' : 'ribbon-two-secondary' }}">
+                                                <span>{{ ucfirst($report->type) }}</span>
+                                            </div>
+                                        </div>
+                                        @php
+                                            // Decode the JSON-encoded image_paths attribute
+                                            $imagePaths = json_decode($report->image_paths, true);
+                                            // Get the first image from the decoded array
+                                            $firstImage = $imagePaths[0] ?? null;
+                                        @endphp
+
+                                        @if ($firstImage)
+                                            <img src="{{ asset($firstImage) }}" alt="{{ $report->title }}"
+                                                class="card-img-top explore-img" />
+                                        @else
+                                            <img src="{{ asset('assets/images/image-error.png') }}" alt="error"
+                                                class="card-img-top explore-img" />
+                                        @endif
+                                        <div class="bg-overlay"></div>
+                                        <div class="place-bid-btn">
+                                            <a href="{{ route('user.itemDetail', $report->id) }}"
+                                                class="btn btn-success"><i
+                                                    class="ri-information-line align-bottom me-2"></i> See Detail</a>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="card-body">
-                                    <p class="fw-medium mb-0 float-end">[date]</p>
-                                    <h5 class="mb-1"><a href="apps-nft-item-details">[title]</a>
-                                    </h5>
-                                    <p class="text-muted mb-0">[category]</p>
-                                </div>
-                                <div class="card-footer border-top border-top-dashed">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-grow-1 fs-14">
-                                            <i class="ri-map-pin-2-fill text-danger align-bottom me-1"></i> [Location]
+                                    <div class="card-body">
+                                        <p class="fw-medium mb-0 float-end">{{ $report->created_at->format('d-m-Y') }}</p>
+                                        <h5 class="mb-1"><a
+                                                href="{{ route('user.itemDetail', $report->id) }}">{{ $report->title }}</a>
+                                        </h5>
+                                        <p class="text-muted mb-0">{{ $report->category->name }}</p>
+                                    </div>
+                                    <div class="card-footer border-top border-top-dashed">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 fs-14">
+                                                <i class="ri-map-pin-2-fill text-danger align-bottom me-1"></i>
+                                                {{ $report->location['desc'] }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-4 product-item music crypto-card games">
-                            <div class="card explore-box card-animate">
-                                <div class="bookmark-icon position-absolute top-0 end-0 p-2">
-                                    <button type="button" class="btn btn-icon active" data-bs-toggle="button"
-                                        aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
-                                </div>
-                                <div class="explore-place-bid-img">
-                                    <div style="position: absolute; top: 0; left: 0; z-index: 1000; margin: 5px;"
-                                        class="ribbon-box lost-ribbon">
-                                        <div class="ribbon-two ribbon-two-danger"><span>Lost Item</span></div>
-                                    </div>
-                                    <img src="{{ URL::asset('assets/images/nft/img-02.jpg') }}" alt=""
-                                        class="card-img-top explore-img" />
-                                    <div class="bg-overlay"></div>
-                                    <div class="place-bid-btn">
-                                        <a href="#!" class="btn btn-success"><i
-                                                class="ri-auction-fill align-bottom me-1"></i> Place Bid</a>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <p class="fw-medium mb-0 float-end"><i
-                                            class="mdi mdi-heart text-danger align-middle"></i> 23.63k </p>
-                                    <h5 class="mb-1"><a href="apps-nft-item-details">The Chirstoper</a></h5>
-                                    <p class="text-muted mb-0">Music</p>
-                                </div>
-                                <div class="card-footer border-top border-top-dashed">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-grow-1 fs-14">
-                                            <i class="ri-price-tag-3-fill text-warning align-bottom me-1"></i> Highest:
-                                            <span class="fw-medium">412.30ETH</span>
-                                        </div>
-                                        <h5 class="flex-shrink-0 fs-14 text-primary mb-0">394.7 ETH</h5>
-                                    </div>
-                                </div>
+                        @endforeach
+                        @if ($detailedReports->isEmpty())
+                            <div class="col-12 text-center mt-4">
+                                <p class="alert alert-warning">No items available.</p>
                             </div>
-                        </div>
-                        <div class="col-lg-4 product-item artwork music games">
-                            <div class="card explore-box card-animate">
-                                <div class="bookmark-icon position-absolute top-0 end-0 p-2">
-                                    <button type="button" class="btn btn-icon active" data-bs-toggle="button"
-                                        aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
-                                </div>
-                                <div class="explore-place-bid-img">
-                                    <img src="{{ URL::asset('assets/images/nft/gif/img-4.gif') }}" alt=""
-                                        class="card-img-top explore-img" />
-                                    <div class="bg-overlay"></div>
-                                    <div class="place-bid-btn">
-                                        <a href="#!" class="btn btn-success"><i
-                                                class="ri-auction-fill align-bottom me-1"></i> Place Bid</a>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <p class="fw-medium mb-0 float-end"><i
-                                            class="mdi mdi-heart text-danger align-middle"></i> 15.93k </p>
-                                    <h5 class="mb-1"><a href="apps-nft-item-details">Evolved Reality</a></h5>
-                                    <p class="text-muted mb-0">Video</p>
-                                </div>
-                                <div class="card-footer border-top border-top-dashed">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-grow-1 fs-14">
-                                            <i class="ri-price-tag-3-fill text-warning align-bottom me-1"></i> Highest:
-                                            <span class="fw-medium">2.75ETH</span>
-                                        </div>
-                                        <h5 class="flex-shrink-0 fs-14 text-primary mb-0">3.167 ETH</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 product-item crypto-card 3d-style">
-                            <div class="card explore-box card-animate">
-                                <div class="bookmark-icon position-absolute top-0 end-0 p-2">
-                                    <button type="button" class="btn btn-icon active" data-bs-toggle="button"
-                                        aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
-                                </div>
-                                <div class="explore-place-bid-img">
-                                    <img src="{{ URL::asset('assets/images/nft/img-01.jpg') }}" alt=""
-                                        class="card-img-top explore-img" />
-                                    <div class="bg-overlay"></div>
-                                    <div class="place-bid-btn">
-                                        <a href="#!" class="btn btn-success"><i
-                                                class="ri-auction-fill align-bottom me-1"></i> Place Bid</a>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <p class="fw-medium mb-0 float-end"><i
-                                            class="mdi mdi-heart text-danger align-middle"></i> 14.85k </p>
-                                    <h5 class="mb-1"><a href="apps-nft-item-details">Abstract Face Painting</a></h5>
-                                    <p class="text-muted mb-0">Collectibles</p>
-                                </div>
-                                <div class="card-footer border-top border-top-dashed">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-grow-1 fs-14">
-                                            <i class="ri-price-tag-3-fill text-warning align-bottom me-1"></i> Highest:
-                                            <span class="fw-medium">122.34ETH</span>
-                                        </div>
-                                        <h5 class="flex-shrink-0 fs-14 text-primary mb-0">97.8 ETH</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 product-item games music 3d-style">
-                            <div class="card explore-box card-animate">
-                                <div class="bookmark-icon position-absolute top-0 end-0 p-2">
-                                    <button type="button" class="btn btn-icon active" data-bs-toggle="button"
-                                        aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
-                                </div>
-                                <div class="explore-place-bid-img">
-                                    <img src="{{ URL::asset('assets/images/nft/img-05.jpg') }}" alt=""
-                                        class="card-img-top explore-img" />
-                                    <div class="bg-overlay"></div>
-                                    <div class="place-bid-btn">
-                                        <a href="#!" class="btn btn-success"><i
-                                                class="ri-auction-fill align-bottom me-1"></i> Place Bid</a>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <p class="fw-medium mb-0 float-end"><i
-                                            class="mdi mdi-heart text-danger align-middle"></i> 64.10k </p>
-                                    <h5 class="mb-1"><a href="apps-nft-item-details">Long-tailed Macaque</a></h5>
-                                    <p class="text-muted mb-0">Artwork</p>
-                                </div>
-                                <div class="card-footer border-top border-top-dashed">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-grow-1 fs-14">
-                                            <i class="ri-price-tag-3-fill text-warning align-bottom me-1"></i> Highest:
-                                            <span class="fw-medium">874.01ETH</span>
-                                        </div>
-                                        <h5 class="flex-shrink-0 fs-14 text-primary mb-0">745.14 ETH</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 product-item artwork music crypto-card">
-                            <div class="card explore-box card-animate">
-                                <div class="bookmark-icon position-absolute top-0 end-0 p-2">
-                                    <button type="button" class="btn btn-icon active" data-bs-toggle="button"
-                                        aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
-                                </div>
-                                <div class="explore-place-bid-img">
-                                    <img src="{{ URL::asset('assets/images/nft/img-06.jpg') }}" alt=""
-                                        class="card-img-top explore-img" />
-                                    <div class="bg-overlay"></div>
-                                    <div class="place-bid-btn">
-                                        <a href="#!" class="btn btn-success"><i
-                                                class="ri-auction-fill align-bottom me-1"></i> Place Bid</a>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <p class="fw-medium mb-0 float-end"><i
-                                            class="mdi mdi-heart text-danger align-middle"></i> 36.42k </p>
-                                    <h5 class="mb-1"><a href="apps-nft-item-details">Robotic Body Art</a></h5>
-                                    <p class="text-muted mb-0">Artwork</p>
-                                </div>
-                                <div class="card-footer border-top border-top-dashed">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-grow-1 fs-14">
-                                            <i class="ri-price-tag-3-fill text-warning align-bottom me-1"></i> Highest:
-                                            <span class="fw-medium">41.658 ETH</span>
-                                        </div>
-                                        <h5 class="flex-shrink-0 fs-14 text-primary mb-0">34.81 ETH</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @endif
                     </div>
-                </div><!-- end container -->
             </section>
             <!-- end items -->
 
@@ -1430,8 +1294,7 @@
                                             <div class="mb-4">
                                                 <label for="subject" class="form-label fs-13">Subject</label>
                                                 <input type="text" class="form-control bg-light border-light"
-                                                    id="subject" name="subject" placeholder="Your Subject.."
-                                                    required>
+                                                    id="subject" name="subject" placeholder="Your Subject.." required>
                                             </div>
                                         </div>
                                     </div>
@@ -1591,7 +1454,6 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
         <script>
-
             // Initialize the map
             var detailedReportMap;
 
