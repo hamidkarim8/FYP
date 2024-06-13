@@ -5,7 +5,6 @@
 @section('css')
     <link href="{{ URL::asset('assets/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
     <link href="{{ URL::asset('assets/libs/swiper/swiper.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 @section('body')
@@ -25,83 +24,106 @@
                     <div class="card mt-n5">
                         <div class="card-body p-4">
                             <div class="row g-4">
-                                <div class="col-lg-4">
+                                <div class="col-xl-4 col-lg-6">
                                     <div class="sticky-side-div">
-                                        <div class="card ribbon-box border shadow-none right">
-                                            <img src="{{ URL::asset('assets/images/nft/img-05.jpg') }}" alt=""
-                                                class="img-fluid rounded">
-                                            {{-- <div class="position-absolute bottom-0 p-3">
-                                                <div class="position-absolute top-0 end-0 start-0 bottom-0 bg-white opacity-25"></div>
-                                                <div class="row justify-content-center">
-                                                    <div class="col-3">
-                                                        <img src="{{URL::asset('assets/images/nft/img-02.jpg')}}" alt="" class="img-fluid rounded">
+                                        <div class="card ribbon-box border shadow-none left">
+                                            <div class="card-body">
+                                                <!-- Swiper -->
+                                                <div class="swiper pagination-fraction-swiper rounded">
+                                                    <div class="swiper-wrapper">
+                                                        @foreach ($report->image_paths as $image)
+                                                            <div class="swiper-slide">
+                                                                <div
+                                                                    class="ribbon-two {{ $report->type === 'lost' ? 'ribbon-two-danger' : 'ribbon-two-secondary' }}">
+                                                                    <span>{{ ucfirst($report->type) }}</span>
+                                                                </div>
+                                                                <img src="{{ asset($image) }}" alt="{{ $report->title }}"
+                                                                    class="img-fluid" />
+                                                            </div>
+                                                        @endforeach
                                                     </div>
-                                                    <div class="col-3">
-                                                        <img src="{{URL::asset('assets/images/nft/img-03.jpg')}}" alt="" class="img-fluid rounded">
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <img src="{{URL::asset('assets/images/nft/gif/img-3.gif')}}" alt="" class="img-fluid rounded h-100 object-cover">
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <img src="{{URL::asset('assets/images/nft/img-06.jpg')}}" alt="" class="img-fluid rounded">
-                                                    </div>
+                                                    <div class="swiper-button-next bg-white shadow"></div>
+                                                    <div class="swiper-button-prev bg-white shadow"></div>
+                                                    <div class="swiper-pagination"></div>
                                                 </div>
-                                            </div> --}}
+                                            </div>
                                         </div>
                                         <div class="hstack gap-2">
-                                            <button class="btn btn-primary w-100">Request to contact</button>
+                                            @if ($report->type === 'found')
+                                                <button class="btn btn-primary w-100">Request Proof of Ownership</button>
+                                            @else
+                                                <button class="btn btn-primary w-100">Request to Contact</button>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-8">
                                     <div>
-                                        {{-- <div class="dropdown float-end">
-                                            <button class="btn btn-ghost-primary btn-icon dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="ri-more-fill align-middle fs-16"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item view-item-btn" href="javascript:void(0);"><i class="ri-eye-fill align-bottom me-2 text-muted"></i>View</a></li>
-                                                <li><a class="dropdown-item edit-item-btn" href="#showModal" data-bs-toggle="modal"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit</a></li>
-                                                <li><a class="dropdown-item remove-item-btn" data-bs-toggle="modal" href="#deleteRecordModal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete</a></li>
-                                            </ul>
-                                        </div> --}}
-                                        <span class="badge badge-soft-info mb-3 fs-12"><i
-                                                class="ri-eye-line me-1 align-bottom"></i>Lost/Found Item</span>
-                                        <h4>[Name of Item] | [Category]</h4>
-                                        <div class="hstack gap-3 flex-wrap">
-                                            <div class="text-muted">Reporter : <span class="text-body fw-medium">[Full
-                                                    name of reporter]</span></div>
+                                        <h3>{{ $report->title }} | {{ $report->category->name }}</h3>
+                                        <div class="hstack gap-3 flex-wrap mt-4">
+                                            <div class="text-muted">Reporter: <span
+                                                    class="text-body fw-medium">{{ $report->fullname }}</span></div>
                                             <div class="vr"></div>
-                                            <div class="text-muted">Date found/lost : <span
-                                                    class="text-body fw-medium">[Date]</span></div>
+                                            <div class="text-muted">Date {{ $report->type }}: <span
+                                                    class="text-body fw-medium">{{ $report->reported_at->format('d-m-Y') }}</span>
+                                            </div>
                                             <div class="vr"></div>
-                                            <div class="text-muted">Reported on : <span
-                                                    class="text-body fw-medium">[Date]</span></div>
+                                            <div class="text-muted">Reported on: <span
+                                                    class="text-body fw-medium">{{ $report->created_at->format('d-m-Y') }}</span>
+                                            </div>
                                         </div>
                                         <!--end row-->
                                         <div class="mt-4 text-muted">
-                                            <h5 class="fs-14">Description :</h5>
-                                            <p>[Description]</p>
+                                            <h5 class="fs-14">Description:</h5>
+                                            <p>{{ $report->description }}</p>
                                         </div>
                                         <div class="mt-4 text-muted">
-                                            <h5 class="fs-14">Retrieval Info :</h5>
+                                            <h5 class="fs-14">Retrieval Info:</h5>
                                             <div class="hstack gap-3 flex-wrap">
-                                                <div class="text-muted">Phone Number : <span class="text-body fw-medium">[Phone Number but censored, only upon approval then show]</span></div>
+                                                <div class="text-muted">Phone Number: <span
+                                                        class="text-body fw-medium">{{ $report->phone_number }}</span>
+                                                </div>
                                                 <div class="vr"></div>
-                                                <div class="text-muted">Social Media : <span class="text-body fw-medium">[follow the json social media but censored, only upon approval then show]</span></div>
+                                                <div class="text-muted">Email: <span
+                                                        class="text-body fw-medium">{{ $report->email }}</span>
+                                                </div>
                                                 <div class="vr"></div>
+                                                <div class="text-muted">
+                                                    Social Media:
+                                                    <br>
+                                                    <span class="text-body fw-medium">
+                                                        @foreach ($report->social_media as $key => $value)
+                                                            @if ($value)
+                                                                @php
+                                                                    $platform = '';
+                                                                    if (strpos($key, 'ig_') !== false) {
+                                                                        $platform = 'Instagram';
+                                                                    } elseif (strpos($key, 'twitter_') !== false) {
+                                                                        $platform = 'Twitter';
+                                                                    } elseif (strpos($key, 'tiktok_') !== false) {
+                                                                        $platform = 'TikTok';
+                                                                    }
+                                                                @endphp
+
+                                                                @if ($platform)
+                                                                    {{ $platform }}: {{ $value }}<br>
+                                                                @endif
+                                                            @endif
+                                                        @endforeach
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="product-content mt-5">
-                                            <h5 class="fs-14 mb-3">Location Information :</h5>
+                                        <div class="product-content mt-4">
+                                            <h5 class="fs-14 mb-3">Location Information:</h5>
                                             <nav>
                                                 <ul class="nav nav-tabs nav-tabs-custom nav-success" id="nav-tab"
                                                     role="tablist">
                                                     <li class="nav-item">
-                                                        <a class="nav-link active" id="nav-speci-tab"
-                                                            data-bs-toggle="tab" href="#nav-speci" role="tab"
-                                                            aria-controls="nav-speci" aria-selected="true">Map</a>
+                                                        <a class="nav-link active" id="nav-speci-tab" data-bs-toggle="tab"
+                                                            href="#nav-speci" role="tab" aria-controls="nav-speci"
+                                                            aria-selected="true">Map</a>
                                                     </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link" id="nav-additional-tab" data-bs-toggle="tab"
@@ -109,53 +131,32 @@
                                                             aria-controls="nav-additional"
                                                             aria-selected="false">Description</a>
                                                     </li>
-                                                    {{-- <li class="nav-item">
-                                                        <a class="nav-link" id="nav-detail-tab" data-bs-toggle="tab"
-                                                            href="#nav-detail" role="tab" aria-controls="nav-detail"
-                                                            aria-selected="false">Details</a>
-                                                    </li> --}}
                                                 </ul>
                                             </nav>
                                             <div class="tab-content border border-top-0 p-4" id="nav-tabContent">
+                                                <div class="tab-pane fade show active" id="nav-speci" role="tabpanel"
+                                                    aria-labelledby="nav-speci-tab">
+                                                    <div class="embed-responsive embed-responsive-16by9">
+                                                        <!-- Replace with your map embed code or component -->
+                                                        <iframe class="embed-responsive-item"
+                                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d211036.98332039418!2d{{ $report->location['lng'] }}!3d{{ $report->location['lat'] }}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x{{ $report->location['lng'] }}%3A0x{{ $report->location['lat'] }}!2s{{ urlencode($report->location['desc']) }}!5e0!3m2!1sen!2sus!4v1623646230252!5m2!1sen!2sus"
+                                                            allowfullscreen></iframe>
+                                                    </div>
+                                                </div>
                                                 <div class="tab-pane fade" id="nav-additional" role="tabpanel"
                                                     aria-labelledby="nav-additional-tab">
                                                     <div class="table-responsive">
                                                         <table class="table mb-0">
                                                             <tbody>
                                                                 <tr>
-                                                                    <th scope="row" style="width: 200px;">Description: </th>
-                                                                    <td>Location Description</td>
+                                                                    <th scope="row" style="width: 200px;">Description:
+                                                                    </th>
+                                                                    <td>{{ $report->location['desc'] }}</td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
                                                     </div>
                                                 </div>
-                                                {{-- <div class="tab-pane fade" id="nav-detail" role="tabpanel"
-                                                    aria-labelledby="nav-detail-tab">
-                                                    <div>
-                                                        <h5 class="font-size-16 mb-3">Patterns arts & culture</h5>
-                                                        <p>Cultural patterns are the similar behaviors within similar
-                                                            situations we witness due to shared beliefs, values, norms and
-                                                            social practices that are steady over time. In art, a pattern is
-                                                            a repetition of specific visual elements. The dictionary.com
-                                                            definition of "pattern" is: an arrangement of repeated or
-                                                            corresponding parts, decorative motifs, etc.</p>
-                                                        <div>
-                                                            <p class="mb-2"><i
-                                                                    class="mdi mdi-circle-medium me-1 text-muted align-middle"></i>
-                                                                On digital or printed media</p>
-                                                            <p class="mb-2"><i
-                                                                    class="mdi mdi-circle-medium me-1 text-muted align-middle"></i>
-                                                                For commercial and personal projects</p>
-                                                            <p class="mb-2"><i
-                                                                    class="mdi mdi-circle-medium me-1 text-muted align-middle"></i>
-                                                                From anywhere in the world</p>
-                                                            <p class="mb-0"><i
-                                                                    class="mdi mdi-circle-medium me-1 text-muted align-middle"></i>
-                                                                Full copyrights sale</p>
-                                                        </div>
-                                                    </div>
-                                                </div> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -166,11 +167,9 @@
                         </div>
                     </div>
                     <!--end card-->
-
-
                 </div>
-
             </section>
+
 
             <!-- Start footer -->
             @include('layouts-user.footer')
@@ -181,6 +180,7 @@
     @endsection
     @section('script')
         <script src="{{ URL::asset('/assets/libs/swiper/swiper.min.js') }}"></script>
+        <script src="{{ URL::asset('/assets/js/pages/swiper.init.js') }}"></script>
         <script src="{{ URL::asset('/assets/js/pages/landing.init.js') }}"></script>
         <script src="{{ URL::asset('/assets/libs/jsvectormap/jsvectormap.min.js') }}"></script>
         <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
@@ -188,6 +188,5 @@
         <script src="{{ URL::asset('assets/js/pages/apps-nft-explore.init.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-        <script>
-        </script>
+        <script></script>
     @endsection

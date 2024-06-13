@@ -764,8 +764,8 @@ unset($__errorArgs, $__bag); ?>
                                             aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
                                     </div>
                                     <div class="explore-place-bid-img">
-                                        <div style="position: absolute; top: 0; left: 0; z-index: 1000; margin: 5px;"
-                                            class="ribbon-box <?php echo e($report->type === 'lost' ? 'lost-ribbon' : 'found-ribbon'); ?>">
+                                        <div
+                                            class="ribbon-box <?php echo e($report->type === 'lost' ? 'lost-ribbon' : 'found-ribbon'); ?> left">
                                             <div
                                                 class="ribbon-two <?php echo e($report->type === 'lost' ? 'ribbon-two-danger' : 'ribbon-two-secondary'); ?>">
                                                 <span><?php echo e(ucfirst($report->type)); ?></span>
@@ -1581,10 +1581,10 @@ unset($__errorArgs, $__bag); ?>
                         var ribbonHTML = '';
                         if (report.type === 'found') {
                             ribbonHTML =
-                                '<div style="position: absolute; top: 0; left: 0; z-index: 1000;" class="ribbon-box found-ribbon"><div class="ribbon-two ribbon-two-secondary"><span>Found Item</span></div></div>';
+                                '<div class="ribbon-box found-ribbon left"><div class="ribbon-two ribbon-two-secondary"><span>Found Item</span></div></div>';
                         } else if (report.type === 'lost') {
                             ribbonHTML =
-                                '<div style="position: absolute; top: 0; left: 0; z-index: 1000;" class="ribbon-box lost-ribbon"><div class="ribbon-two ribbon-two-danger"><span>Lost Item</span></div></div>';
+                                '<div class="ribbon-box lost-ribbon left"><div class="ribbon-two ribbon-two-danger"><span>Lost Item</span></div></div>';
                         }
 
                         $('#ribbonContainer').html(ribbonHTML);

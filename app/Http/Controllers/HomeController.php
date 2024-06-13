@@ -40,7 +40,7 @@ class HomeController extends Controller
     public function root()
     {
         $detailedReports = DetailedReport::with('category')->get();
-
+        // dd($detailedReports);
         return view('index', compact('detailedReports'));
     }
 

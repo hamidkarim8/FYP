@@ -4,13 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\DetailedReport;
+
 
 class ItemController extends Controller
 {
 
-    public function itemDetail()
+    public function itemDetail($id)
     {
-        return view('item-detail');
+        $report = DetailedReport::with('category')->findOrFail($id);
+        // Check if image_paths is a string and decode it if necessary
+        if (is_string($report->image_paths)) {
+            $report->image_paths = json_decode($report->image_paths, true);
+        }
+
+        // Check if social_media is a string and decode it if necessary
+        if (is_string($report->social_media)) {
+            $report->social_media = json_decode($report->social_media, true);
+        }
+
+        // dd($report);
+        return view('item-detail', compact('report'));
     }
 
     /**
