@@ -372,7 +372,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
                                             </div>
                                             <div class="form-group mt-3">
-                                                <label for="reportDate">Date</label>
+                                                <label for="reportDate">Date and Time</label>
                                                 <input type="datetime-local" class="form-control" id="reportDate"
                                                     name="date" required>
                                                 <?php $__errorArgs = ['date'];
@@ -1614,15 +1614,19 @@ unset($__errorArgs, $__bag); ?>
 
                 //Display Detailed Report
                 var detailedReports = <?php echo json_encode($detailedReports, 15, 512) ?>;
-                var reportLat = <?php echo json_encode($report->location['lat'], 15, 512) ?>;
-                var reportLng = <?php echo json_encode($report->location['lng'], 15, 512) ?>;
-                var reportType = <?php echo json_encode($report->type, 15, 512) ?>;
-                var reportTitle = <?php echo json_encode($report->title, 15, 512) ?>;
-                var reportDesc = <?php echo json_encode($report->location['desc'], 15, 512) ?>;
 
                 detailedReports.forEach(function(report) {
-                    addMarker(reportLat, reportLng, report);
+                    var reportLat = report.location.lat;
+                    var reportLng = report.location.lng;
+                    var reportType = report.type;
+                    var reportTitle = report.title;
+                    var reportDesc = report.location.desc;
+
+                    detailedReports.forEach(function(report) {
+                        addMarker(reportLat, reportLng, report);
+                    });
                 });
+
 
                 //Simple report form
                 // Add click event listener to map

@@ -1602,15 +1602,19 @@
 
                 //Display Detailed Report
                 var detailedReports = @json($detailedReports);
-                var reportLat = @json($report->location['lat']);
-                var reportLng = @json($report->location['lng']);
-                var reportType = @json($report->type);
-                var reportTitle = @json($report->title);
-                var reportDesc = @json($report->location['desc']);
 
                 detailedReports.forEach(function(report) {
-                    addMarker(reportLat, reportLng, report);
+                    var reportLat = report.location.lat;
+                    var reportLng = report.location.lng;
+                    var reportType = report.type;
+                    var reportTitle = report.title;
+                    var reportDesc = report.location.desc;
+
+                    detailedReports.forEach(function(report) {
+                        addMarker(reportLat, reportLng, report);
+                    });
                 });
+
 
                 //Simple report form
                 // Add click event listener to map

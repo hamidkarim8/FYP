@@ -19,12 +19,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(10)->create()->each(function ($user) {
-            $user->lostItems()->saveMany(LostItem::factory(3)->make());
-            $user->foundItems()->saveMany(FoundItem::factory(3)->make());
-            $user->feedbacks()->saveMany(Feedback::factory(3)->make());
-            $user->reports()->saveMany(Report::factory(3)->make());
-            $user->notifications()->saveMany(Notification::factory(3)->make());
-        });    }
+        // User::factory(10)->create()->each(function ($user) {
+        //     $user->lostItems()->saveMany(LostItem::factory(3)->make());
+        //     $user->foundItems()->saveMany(FoundItem::factory(3)->make());
+        //     $user->feedbacks()->saveMany(Feedback::factory(3)->make());
+        //     $user->reports()->saveMany(Report::factory(3)->make());
+        //     $user->notifications()->saveMany(Notification::factory(3)->make());
+        // });    
+    }
 }
  
