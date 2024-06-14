@@ -357,7 +357,7 @@
                                                 @enderror
                                             </div>
                                             <div class="form-group mt-3">
-                                                <label for="reportDate">Date</label>
+                                                <label for="reportDate">Date and Time</label>
                                                 <input type="datetime-local" class="form-control" id="reportDate"
                                                     name="date" required>
                                                 @error('date')
