@@ -785,7 +785,8 @@
                                         @endauth
                                     </div>
                                     <div class="card-body">
-                                        <p class="fw-medium mb-0 float-end">{{ $report->created_at->format('d-m-Y') }}</p>
+                                        <p class="fw-medium mb-0 float-end">{{ $report->reported_at->format('d-m-Y') }}
+                                        </p>
                                         <h5 class="mb-1">{{ $report->title }}</h5>
                                         <p class="text-muted mb-0">{{ $report->category->name }}</p>
                                     </div>
@@ -1562,9 +1563,13 @@
                         // Populate modal with report details
                         $('#modalTitle').text(report.title);
                         $('#modalType').text(report.type);
-                        $('#modalCategory').text(report.category);
+                        var categoryName = typeof report.category === 'object' ? report.category.name : report
+                            .category;
+                        $('#modalCategory').text(categoryName);
                         $('#modalDescription').text(report.location.desc);
-                        $('#modalDate').text(report.date);
+                        var dateDisplay = report.date ? report.date : new Date(report.reported_at)
+                            .toLocaleDateString('en-GB');
+                        $('#modalDate').text(dateDisplay);
 
                         // Add Ribbon based on report type
                         var ribbonHTML = '';
@@ -1595,6 +1600,17 @@
                         console.error('Error fetching reports:', error);
                     });
 
+                //Display Detailed Report
+                var detailedReports = @json($detailedReports);
+                var reportLat = @json($report->location['lat']);
+                var reportLng = @json($report->location['lng']);
+                var reportType = @json($report->type);
+                var reportTitle = @json($report->title);
+                var reportDesc = @json($report->location['desc']);
+
+                detailedReports.forEach(function(report) {
+                    addMarker(reportLat, reportLng, report);
+                });
 
                 //Simple report form
                 // Add click event listener to map

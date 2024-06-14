@@ -795,7 +795,9 @@ unset($__errorArgs, $__bag); ?>
                                         <?php endif; ?>
                                     </div>
                                     <div class="card-body">
-                                        <p class="fw-medium mb-0 float-end"><?php echo e($report->created_at->format('d-m-Y')); ?></p>
+                                        <p class="fw-medium mb-0 float-end"><?php echo e($report->reported_at->format('d-m-Y')); ?>
+
+                                        </p>
                                         <h5 class="mb-1"><?php echo e($report->title); ?></h5>
                                         <p class="text-muted mb-0"><?php echo e($report->category->name); ?></p>
                                     </div>
@@ -1573,9 +1575,13 @@ unset($__errorArgs, $__bag); ?>
                         // Populate modal with report details
                         $('#modalTitle').text(report.title);
                         $('#modalType').text(report.type);
-                        $('#modalCategory').text(report.category);
+                        var categoryName = typeof report.category === 'object' ? report.category.name : report
+                            .category;
+                        $('#modalCategory').text(categoryName);
                         $('#modalDescription').text(report.location.desc);
-                        $('#modalDate').text(report.date);
+                        var dateDisplay = report.date ? report.date : new Date(report.reported_at)
+                            .toLocaleDateString('en-GB');
+                        $('#modalDate').text(dateDisplay);
 
                         // Add Ribbon based on report type
                         var ribbonHTML = '';
@@ -1606,6 +1612,17 @@ unset($__errorArgs, $__bag); ?>
                         console.error('Error fetching reports:', error);
                     });
 
+                //Display Detailed Report
+                var detailedReports = <?php echo json_encode($detailedReports, 15, 512) ?>;
+                var reportLat = <?php echo json_encode($report->location['lat'], 15, 512) ?>;
+                var reportLng = <?php echo json_encode($report->location['lng'], 15, 512) ?>;
+                var reportType = <?php echo json_encode($report->type, 15, 512) ?>;
+                var reportTitle = <?php echo json_encode($report->title, 15, 512) ?>;
+                var reportDesc = <?php echo json_encode($report->location['desc'], 15, 512) ?>;
+
+                detailedReports.forEach(function(report) {
+                    addMarker(reportLat, reportLng, report);
+                });
 
                 //Simple report form
                 // Add click event listener to map
