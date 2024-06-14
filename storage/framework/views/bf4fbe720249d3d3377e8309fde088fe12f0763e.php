@@ -257,9 +257,9 @@
                         <div class="col-lg-8">
                             <div class="text-center mb-5">
                                 <h2 class="mb-3 fw-semibold lh-base">Report a Lost and Found Item</h2>
-                                <p class="text-muted mb-4">Do you found any misplaced item somewhere? Or did you lost any
-                                    item somewhere? Make a report now by pinning a location using simple report, or provide
-                                    more information about the items in detailed report</p>
+                                <p class="text-muted mb-4">Found something misplaced or lost an item? Submit a report now!
+                                    Pinpoint the location with a simple report or provide detailed information about your
+                                    item through Detailed Report Form.</p>
                             </div>
                         </div><!-- end col -->
                     </div><!-- end row -->
@@ -684,8 +684,8 @@ unset($__errorArgs, $__bag); ?>
                         <div class="col-lg-8">
                             <div class="text-center mb-5">
                                 <h2 class="mb-3 fw-semibold lh-base">Explore Lost and Found Items</h2>
-                                <p class="text-muted mb-4">Your lost item might be one of the list below! Do explore it and
-                                    click on the card for more details</p>
+                                <p class="text-muted mb-4">Explore the list below to find your lost item! Click on the card
+                                    for more details.</p>
                                 <ul class="nav nav-pills filter-btns justify-content-center" role="tablist">
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link fw-medium active" type="button" data-filter="all">All
@@ -700,13 +700,15 @@ unset($__errorArgs, $__bag); ?>
                                             data-filter="found">Found</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link fw-medium" type="button"
+                                        <button class="nav-link fw-medium" type="button" data-toggle="tooltip"
+                                            data-placement="bottom" title="Filtering based on your report"
                                             data-filter="auto">Auto-matching</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link fw-medium" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#collapseWithicon2" aria-expanded="false"
-                                            aria-controls="collapseWithicon2">
+                                            aria-controls="collapseWithicon2" data-toggle="tooltip"
+                                            data-placement="bottom" title="Filter">
                                             <i class="ri-filter-2-line"></i>
                                         </button>
                                     </li>
@@ -747,9 +749,8 @@ unset($__errorArgs, $__bag); ?>
                             <div class="col-lg-12">
                                 <div class="d-flex align-items-center mb-4">
                                     <div class="flex-grow-1">
-                                        <p class="text-muted fs-14 mb-0">Result: 8745</p>
+                                        <p class="text-muted fs-14 mb-0">Result: <?php echo e($detailedReports->count()); ?></p>
                                     </div>
-                                    
                                 </div>
                             </div>
                         </div>
@@ -829,7 +830,9 @@ unset($__errorArgs, $__bag); ?>
                     <div class="row align-items-center gy-4">
                         <div class="col-sm">
                             <div>
-                                <h4 class="text-white mb-0 fw-semibold">Register and become one of us the life peacer</h4>
+                                <h4 class="text-white mb-0 fw-semibold">Join Us and Make a Difference</h4>
+                                <p class="text-white fs-18">Register now and contribute to a peaceful campus environment
+                                </p>
                             </div>
                         </div>
                         <!-- end col -->
@@ -912,9 +915,11 @@ unset($__errorArgs, $__bag); ?>
                                     <div id="genques-collapseTwo" class="accordion-collapse collapse"
                                         aria-labelledby="genques-headingTwo" data-bs-parent="#genques-accordion">
                                         <div class="accordion-body ff-secondary">
-                                            To report a lost item, you need to fill out the "Report Lost Item" form on our
-                                            website, providing detailed information about the item and the location where it
-                                            was lost.
+                                            To report a lost item, you can use either the simple report or detailed report
+                                            option. We encourage using
+                                            the detailed report option as it allows you to provide comprehensive information
+                                            about the lost item and
+                                            its location. This helps us better assist in locating your lost belongings.
                                         </div>
                                     </div>
                                 </div>
@@ -929,9 +934,12 @@ unset($__errorArgs, $__bag); ?>
                                     <div id="genques-collapseThree" class="accordion-collapse collapse"
                                         aria-labelledby="genques-headingThree" data-bs-parent="#genques-accordion">
                                         <div class="accordion-body ff-secondary">
-                                            To report a found item, you need to fill out the "Report Found Item" form on our
-                                            website, providing detailed information about the item and the location where it
-                                            was found.
+                                            To report a found item, you can use either the simple report or detailed report
+                                            option. We encourage using
+                                            the detailed report option as it allows you to provide comprehensive information
+                                            about the found item and
+                                            its location. This helps you better assist in reuniting the item with its
+                                            rightful owner.
                                         </div>
                                     </div>
                                 </div>
@@ -946,7 +954,7 @@ unset($__errorArgs, $__bag); ?>
                                     <div id="genques-collapseFour" class="accordion-collapse collapse"
                                         aria-labelledby="genques-headingFour" data-bs-parent="#genques-accordion">
                                         <div class="accordion-body ff-secondary">
-                                            You can search for your lost item by browsing the "Found Items" section on our
+                                            You can search for your lost item by browsing the "Items" section on our
                                             website, using keywords or filtering by categories.
                                         </div>
                                     </div>
@@ -1011,7 +1019,7 @@ unset($__errorArgs, $__bag); ?>
                                         aria-labelledby="privacy-headingThree" data-bs-parent="#privacy-accordion">
                                         <div class="accordion-body ff-secondary">
                                             If you find your lost item, please update the status on our website by marking
-                                            it as found in your account settings. This will help us keep the database
+                                            it as found in your item log. This will help us keep the database
                                             up-to-date.
                                         </div>
                                     </div>
@@ -1063,14 +1071,11 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="row justify-content-center">
                                                 <div class="col-10">
                                                     <div class="text-white-50">
-                                                        <p class="fs-20 ff-secondary mb-4">" I am givng 5 stars. Theme is
-                                                            great and everyone one stuff everything in theme. Future request
-                                                            should not affect current
-                                                            state of theme. "</p>
+                                                        <p class="fs-20 ff-secondary mb-4">[feedback]</p>
 
                                                         <div>
-                                                            <h5 class="text-white">gregoriusus</h5>
-                                                            <p>- Skote User</p>
+                                                            <h5 class="text-white">[stars]</h5>
+                                                            <p>- [username]</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1081,14 +1086,11 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="row justify-content-center">
                                                 <div class="col-10">
                                                     <div class="text-white-50">
-                                                        <p class="fs-20 ff-secondary mb-4">" Awesome support. Had few
-                                                            issues while setting up because of my device, the support team
-                                                            helped me fix them up in a day.
-                                                            Everything looks clean and good. Highly recommended! "</p>
+                                                        <p class="fs-20 ff-secondary mb-4">[feedback]</p>
 
                                                         <div>
-                                                            <h5 class="text-white">GeekyGreenOwl</h5>
-                                                            <p>- Skote User</p>
+                                                            <h5 class="text-white">[stars]</h5>
+                                                            <p>- [username]</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1099,15 +1101,11 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="row justify-content-center">
                                                 <div class="col-10">
                                                     <div class="text-white-50">
-                                                        <p class="fs-20 ff-secondary mb-4">" Amazing template, Redux store
-                                                            and components is nicely designed.
-                                                            It's a great start point for an admin based project. Clean Code
-                                                            and good documentation. Template is
-                                                            completely in React and absolutely no usage of jQuery "</p>
+                                                        <p class="fs-20 ff-secondary mb-4">[feedback]</p>
 
                                                         <div>
-                                                            <h5 class="text-white">sreeks456</h5>
-                                                            <p>- Veltrix User</p>
+                                                            <h5 class="text-white">[stars]</h5>
+                                                            <p>- [username]</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1139,10 +1137,10 @@ unset($__errorArgs, $__bag); ?>
                         <div class="col-lg-8">
                             <div class="text-center mb-5">
                                 <h3 class="mb-3 fw-semibold">Our Work Process</h3>
-                                <p class="text-muted mb-4 ff-secondary">In an ideal world this website wouldn’t exist, a
-                                    client would
-                                    acknowledge the importance of having web copy before the Proin vitae ipsum vel ex
-                                    finibus semper design starts.</p>
+                                <p class="text-muted mb-4 ff-secondary">
+                                    Reporting lost and found items should be straightforward and effective. Here's how we
+                                    help you through the process:
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -1157,13 +1155,15 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                                 <div class="avatar-sm icon-effect mx-auto mb-4">
                                     <div class="avatar-title bg-transparent text-success rounded-circle h1">
-                                        <i class="ri-quill-pen-line"></i>
+                                        <i class="ri-pencil-line"></i>
                                     </div>
                                 </div>
 
-                                <h5>Tell us what you need</h5>
-                                <p class="text-muted ff-secondary">The profession and the employer and your desire to make
-                                    your mark.</p>
+                                <h5>Submit a Report</h5>
+                                <p class="text-muted ff-secondary">
+                                    Start by reporting your lost or found item through our easy-to-use form. Provide as much
+                                    detail as possible to help speeding up the process to locate the item.
+                                </p>
                             </div>
                         </div>
                         <!-- end col -->
@@ -1175,13 +1175,15 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                                 <div class="avatar-sm icon-effect mx-auto mb-4">
                                     <div class="avatar-title bg-transparent text-success rounded-circle h1">
-                                        <i class="ri-user-follow-line"></i>
+                                        <i class="ri-search-line"></i>
                                     </div>
                                 </div>
 
-                                <h5>Get free quotes</h5>
-                                <p class="text-muted ff-secondary">The most important aspect of beauty was, therefore, an
-                                    inherent part.</p>
+                                <h5>Search or Browse Items</h5>
+                                <p class="text-muted ff-secondary">
+                                    Explore the list of found items or search using keywords or categories to find your lost
+                                    item.
+                                </p>
                             </div>
                         </div>
                         <!-- end col -->
@@ -1189,13 +1191,15 @@ unset($__errorArgs, $__bag); ?>
                             <div class="process-card mt-4">
                                 <div class="avatar-sm icon-effect mx-auto mb-4">
                                     <div class="avatar-title bg-transparent text-success rounded-circle h1">
-                                        <i class="ri-book-mark-line"></i>
+                                        <i class="ri-hand-heart-line"></i>
                                     </div>
                                 </div>
 
-                                <h5>Deliver high quality product</h5>
-                                <p class="text-muted ff-secondary">We quickly learn to fear and thus automatically avoid
-                                    potentially.</p>
+                                <h5>Recover Your Item</h5>
+                                <p class="text-muted ff-secondary">
+                                    Once your request is accepted, use the provided contact information to arrange the
+                                    return of your item. Our priority is to reunite you with your belongings promptly.
+                                </p>
                             </div>
                         </div>
                         <!-- end col -->
@@ -1207,13 +1211,16 @@ unset($__errorArgs, $__bag); ?>
             <!-- end Work Process -->
 
 
+
             <!-- start counter -->
             <section class="py-5 position-relative bg-light">
                 <div class="container">
                     <div class="row text-center gy-4">
                         <div class="col-lg-3 col-6">
                             <div>
-                                <h2 class="mb-2"><span class="counter-value" data-target="100">0</span></h2>
+                                <h2 class="mb-2"><span id="totalReportsCount" class="counter-value"
+                                        data-target="<?php echo e($detailedReports->count() + $simpleReports->count()); ?>">0</span>
+                                </h2>
                                 <div class="text-muted">Reports</div>
                             </div>
                         </div>
@@ -1221,7 +1228,7 @@ unset($__errorArgs, $__bag); ?>
 
                         <div class="col-lg-3 col-6">
                             <div>
-                                <h2 class="mb-2"><span class="counter-value" data-target="50">0</span></h2>
+                                <h2 class="mb-2"><span class="counter-value" data-target="0">0</span></h2>
                                 <div class="text-muted">Reports Resolved</div>
                             </div>
                         </div>
@@ -1229,7 +1236,8 @@ unset($__errorArgs, $__bag); ?>
 
                         <div class="col-lg-3 col-6">
                             <div>
-                                <h2 class="mb-2"><span class="counter-value" data-target="50">0</span></h2>
+                                <h2 class="mb-2"><span class="counter-value"
+                                        data-target="<?php echo e($normalUsers->count()); ?>">0</span></h2>
                                 <div class="text-muted">Users</div>
                             </div>
                         </div>
@@ -1237,7 +1245,7 @@ unset($__errorArgs, $__bag); ?>
 
                         <div class="col-lg-3 col-6">
                             <div>
-                                <h2 class="mb-2"><span class="counter-value" data-target="40">0</span></h2>
+                                <h2 class="mb-2"><span class="counter-value" data-target="0">0</span></h2>
                                 <div class="text-muted">Satisfied Users</div>
                             </div>
                         </div>
@@ -1257,10 +1265,9 @@ unset($__errorArgs, $__bag); ?>
                         <div class="col-lg-8">
                             <div class="text-center mb-5">
                                 <h3 class="mb-3 fw-semibold">Get In Touch</h3>
-                                <p class="text-muted mb-4 ff-secondary">We thrive when coming up with innovative ideas but
-                                    also
-                                    understand that a smart concept should be supported with faucibus sapien odio measurable
-                                    results.</p>
+                                <p class="text-muted mb-4 ff-secondary">At our core, we're dedicated to innovative
+                                    solutions that deliver tangible results. We understand the importance of efficient
+                                    processes in reuniting lost items with their owners swiftly and securely.</p>
                             </div>
                         </div>
                     </div>
@@ -1348,10 +1355,9 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                                 <div class="mt-4 fs-13">
                                     <p>Lost and Found System</p>
-                                    <p class="ff-secondary">A centralized platform where lost or found items can be easily
-                                        resolved. No waiting times at counter, no hassle in filling up forms manually or
-                                        confront admin's verification. All process could get done by connecting with person
-                                        whom found or lost directly</p>
+                                    <p class="ff-secondary">A centralized platform for resolving lost and found items
+                                        efficiently. Connect directly with the person who found or lost an item, eliminating
+                                        waiting times and manual form filling.</p>
                                 </div>
                             </div>
                         </div>

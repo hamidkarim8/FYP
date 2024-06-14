@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\DetailedReport;
+use App\Models\SimpleReport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -40,8 +41,10 @@ class HomeController extends Controller
     public function root()
     {
         $detailedReports = DetailedReport::with('category')->get();
+        $simpleReports = SimpleReport::with('category')->get();
+        $normalUsers = User::where('role', 'normal_user')->get();
         // dd($detailedReports);
-        return view('index', compact('detailedReports'));
+        return view('index', compact('detailedReports','simpleReports','normalUsers'));
     }
 
 
