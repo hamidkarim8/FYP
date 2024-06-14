@@ -79,7 +79,7 @@
                                             <div class="text-muted">Reporter: <span
                                                     class="text-body fw-medium"><?php echo e($report->fullname); ?></span></div>
                                             <div class="vr"></div>
-                                            <div class="text-muted">Date <?php echo e($report->type); ?>: <span
+                                            <div class="text-muted">Date (<?php echo e($report->type); ?>): <span
                                                     class="text-body fw-medium"><?php echo e($report->reported_at->format('d-m-Y')); ?></span>
                                             </div>
                                             <div class="vr"></div>

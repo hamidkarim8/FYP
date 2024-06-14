@@ -79,7 +79,7 @@
                                             <div class="text-muted">Reporter: <span
                                                     class="text-body fw-medium">{{ $report->fullname }}</span></div>
                                             <div class="vr"></div>
-                                            <div class="text-muted">Date {{ $report->type }}: <span
+                                            <div class="text-muted">Date ({{ $report->type }}): <span
                                                     class="text-body fw-medium">{{ $report->reported_at->format('d-m-Y') }}</span>
                                             </div>
                                             <div class="vr"></div>
