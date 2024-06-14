@@ -6,6 +6,20 @@
     <link href="<?php echo e(URL::asset('assets/libs/jsvectormap/jsvectormap.min.css')); ?>" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link href="<?php echo e(URL::asset('assets/libs/swiper/swiper.min.css')); ?>" rel="stylesheet" type="text/css" />
+    <style>
+        .map-container {
+            height: 300px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .map-container {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('body'); ?>
 
@@ -137,10 +151,7 @@
                                                 <div class="tab-pane fade show active" id="nav-speci" role="tabpanel"
                                                     aria-labelledby="nav-speci-tab">
                                                     <div class="embed-responsive embed-responsive-16by9">
-                                                        <!-- Replace with your map embed code or component -->
-                                                        <iframe class="embed-responsive-item"
-                                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d211036.98332039418!2d<?php echo e($report->location['lng']); ?>!3d<?php echo e($report->location['lat']); ?>!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x<?php echo e($report->location['lng']); ?>%3A0x<?php echo e($report->location['lat']); ?>!2s<?php echo e(urlencode($report->location['desc'])); ?>!5e0!3m2!1sen!2sus!4v1623646230252!5m2!1sen!2sus"
-                                                            allowfullscreen></iframe>
+                                                        <div id="displayDetailReportMap" class="map-container"></div>
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane fade" id="nav-additional" role="tabpanel"
@@ -188,7 +199,33 @@
         <script src="<?php echo e(URL::asset('assets/js/pages/apps-nft-explore.init.js')); ?>"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-        <script></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var reportLat = <?php echo json_encode($report->location['lat'], 15, 512) ?>;
+                var reportLng = <?php echo json_encode($report->location['lng'], 15, 512) ?>;
+                var reportType = <?php echo json_encode($report->type, 15, 512) ?>;
+                var reportTitle = <?php echo json_encode($report->title, 15, 512) ?>;
+                var reportDesc = <?php echo json_encode($report->location['desc'], 15, 512) ?>;
+
+                // Initialize the map
+                var displayDetailReportMap = L.map('displayDetailReportMap').setView([3.05603, 101.70022], 17);
+
+                // Add a tile layer
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(displayDetailReportMap);
+
+                // Add a marker
+                var markerColor = reportType === 'found' ? 'blue' : 'red';
+                var marker = L.circleMarker([reportLat, reportLng], {
+                    color: markerColor,
+                    radius: 10
+                }).addTo(displayDetailReportMap);
+
+                // Add popup to the marker
+                marker.bindPopup("<b>" + reportTitle + "</b><br>" + reportDesc).openPopup();
+            });
+        </script>
     <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.master-without-nav', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\FYP-TESTING\resources\views/item-detail.blade.php ENDPATH**/ ?>
