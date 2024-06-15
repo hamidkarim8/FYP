@@ -63,7 +63,7 @@
                                             </div>
                                         </div>
                                         <div class="hstack gap-2">
-                                            @if ($report->type === 'found')
+                                            @if ($report->type === 'lost')
                                                 <button class="btn btn-primary w-100">Request Proof of Ownership</button>
                                             @else
                                                 <button class="btn btn-primary w-100">Request to Contact</button>

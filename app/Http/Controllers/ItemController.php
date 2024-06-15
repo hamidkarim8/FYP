@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\DetailedReport;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 
 class ItemController extends Controller
@@ -26,6 +29,54 @@ class ItemController extends Controller
         // dd($report);
         return view('item-detail', compact('report'));
     }
+
+    public function latestReport()
+    {
+        try {
+            if (!Auth::check()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User is not authenticated. Please log in to use this feature',
+                ], 401);
+            }
+
+            $user = User::find(Auth::id());
+
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not found.',
+                ], 404);
+            }
+
+            $latestReport = $user->reports()->latest()->first();
+
+            if ($latestReport) {
+                $similarItems = DetailedReport::where('category_id', $latestReport->category_id)
+                    ->where('title', 'LIKE', '%' . $latestReport->title . '%')
+                    ->get();
+
+                return response()->json([
+                    'success' => true,
+                    'report' => $latestReport,
+                    'similarItems' => $similarItems,
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No report found for the user.',
+                ], 404); 
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching latest report: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error fetching latest report. Please try again later.',
+            ], 500); 
+        }
+    }
+
 
     /**
      * Display a listing of the resource.

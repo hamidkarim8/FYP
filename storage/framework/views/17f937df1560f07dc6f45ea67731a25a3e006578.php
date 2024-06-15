@@ -63,7 +63,7 @@
                                             </div>
                                         </div>
                                         <div class="hstack gap-2">
-                                            <?php if($report->type === 'found'): ?>
+                                            <?php if($report->type === 'lost'): ?>
                                                 <button class="btn btn-primary w-100">Request Proof of Ownership</button>
                                             <?php else: ?>
                                                 <button class="btn btn-primary w-100">Request to Contact</button>

@@ -27,12 +27,12 @@
                             alt="logo light" height="20">
                     </a>
                     <button class="navbar-toggler py-0 fs-20 text-body" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        data-bs-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2"
                         aria-expanded="false" aria-label="Toggle navigation">
                         <i class="mdi mdi-menu"></i>
                     </button>
 
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent2">
                         <ul class="navbar-nav mx-auto mt-2 mt-lg-0" id="navbar-example">
                             <li class="nav-item">
                                 <a class="nav-link fs-14 active" href="#hero">Home</a>
@@ -680,7 +680,8 @@
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link fw-medium" type="button" data-toggle="tooltip"
                                             data-placement="bottom" title="Filtering based on your report"
-                                            data-filter="auto">Auto-matching</button>
+                                            data-filter="auto" id="auto-matching-btn">Auto-matching</button>
+
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link fw-medium" type="button" data-bs-toggle="collapse"
@@ -707,17 +708,18 @@
                                                     autocomplete="off" id="searchItem">
                                             </div>
                                             <div class="col">
+                                                <h6 class="text-uppercase fs-12 mb-2">Select Type</h6>
+                                                <select class="form-control" id="item-type" name="select-type">
+                                                    <option value="" disabled selected>Select Type</option>
+                                                    <option value="found">Found</option>
+                                                    <option value="lost">Lost</option>
+                                                </select>
+                                            </div>
+                                            <div class="col">
                                                 <h6 class="text-uppercase fs-12 mb-2">Select Category</h6>
-                                                <select class="form-control" data-choices name="select-category"
-                                                    data-choices-search-false id="select-category">
-                                                    <option value="">Select Category</option>
-                                                    <option value="Artwork">Artwork</option>
-                                                    <option value="3d Style">3d Style</option>
-                                                    <option value="Photography">Photography</option>
-                                                    <option value="Collectibles">Collectibles</option>
-                                                    <option value="Crypto Card">Crypto Card</option>
-                                                    <option value="Games">Games</option>
-                                                    <option value="Music">Music</option>
+                                                <select class="form-control" id="item-category" data-choices
+                                                    name="select-category" data-choices-search-false>
+                                                    <option value="" disabled selected>Select Category</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -732,11 +734,13 @@
                                 </div>
                             </div>
                         </div>
-
                     </div><!-- end row -->
+                    <div id="alert-container" class="mt-3"></div>
                     <div class="row">
                         @foreach ($detailedReports as $report)
-                            <div class="col-lg-4 product-item artwork crypto-card 3d-style">
+                            <div class="col-lg-4 product-item artwork crypto-card 3d-style" data-id="{{ $report->id }}"
+                                data-type="{{ $report->type }}" data-category-id="{{ $report->category_id }}"
+                                data-title="{{ $report->title }}">
                                 <div class="card explore-box card-animate">
                                     <div class="bookmark-icon position-absolute top-0 end-0 p-2">
                                         <button type="button" class="btn btn-icon active" data-bs-toggle="button"
@@ -751,9 +755,7 @@
                                             </div>
                                         </div>
                                         @php
-                                            // Decode the JSON-encoded image_paths attribute
                                             $imagePaths = json_decode($report->image_paths, true);
-                                            // Get the first image from the decoded array
                                             $firstImage = $imagePaths[0] ?? null;
                                         @endphp
 
@@ -785,6 +787,11 @@
                                                 <i class="ri-map-pin-2-fill text-danger align-bottom me-1"></i>
                                                 {{ $report->location['desc'] }}
                                             </div>
+                                            @if (Auth::check() && Auth::id() == $report->user_id)
+                                                <span class="badge badge-soft-info fs-12">
+                                                    <i class="ri-eye-line me-1 align-bottom"></i>Reported by you
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -1539,6 +1546,10 @@
                         categories.forEach(function(category) {
                             categorySelect2.append(new Option(category.name, category.id));
                         });
+                        var categorySelect3 = $('#item-category');
+                        categories.forEach(function(category) {
+                            categorySelect3.append(new Option(category.name, category.id));
+                        });
                     })
                     .catch(function(error) {
                         console.error('Error fetching categories:', error);
@@ -1662,6 +1673,89 @@
                             console.error(error);
                         });
                 });
+            });
+            document.addEventListener('DOMContentLoaded', function() {
+                const filterButtons = document.querySelectorAll('.filter-btns button[data-filter]');
+                const items = document.querySelectorAll('.product-item');
+                const alertContainer = document.getElementById(
+                    'alert-container');
+
+                filterButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const filter = this.getAttribute('data-filter');
+
+                        filterButtons.forEach(btn => btn.classList.remove('active'));
+                        this.classList.add('active');
+
+                        if (filter === 'auto') {
+                            fetchLatestReportAndFilter();
+                        } else {
+                            filterItems(filter);
+                        }
+                    });
+                });
+
+                function filterItems(filter) {
+                    alertContainer.innerHTML = '';
+                    let itemsToShow = [];
+
+                    items.forEach(item => {
+                        if (filter === 'all' || item.getAttribute('data-type') === filter) {
+                            item.style.display = '';
+                            itemsToShow.push(item);
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+
+                    if (itemsToShow.length <= 0) {
+                        showAlert("No item found.");
+                    }
+                }
+
+                function fetchLatestReportAndFilter() {
+                    alertContainer.innerHTML = '';
+                    items.innerHTML = '';
+                    fetch('{{ route('user.latestReport') }}')
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const report = data.report;
+                                const category = report.category_id;
+                                const title = report.title.toLowerCase();
+
+                                items.forEach(item => {
+                                    const itemCategory = item.getAttribute('data-category-id');
+                                    console.log('Item category:', itemCategory);
+                                    const itemTitle = item.getAttribute('data-title');
+                                    console.log('Item title:', itemTitle);
+                                    if (itemCategory == category || itemTitle) {
+                                        item.style.display = '';
+                                    } else {
+                                        item.style.display = 'none';
+                                    }
+                                });
+
+                            } else {
+                                items.forEach(item => {
+                                    item.style.display = 'none';
+                                });
+                                showAlert(data.message);
+                            }
+                        })
+                        .catch(error => console.error('Error fetching latest report:', error));
+                }
+
+                function showAlert(message) {
+                    const alertHTML = `
+        <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    `;
+
+                    alertContainer.innerHTML = alertHTML;
+                }
             });
         </script>
     @endsection

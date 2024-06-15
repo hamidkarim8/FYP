@@ -7,7 +7,7 @@
                 alt="logo light" height="20">
         </a>
         <button class="navbar-toggler py-0 fs-20 text-body" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            data-bs-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2" aria-expanded="false"
             aria-label="Toggle navigation">
             <i class="mdi mdi-menu"></i>
         </button>
@@ -18,7 +18,7 @@
             $faqsUrl = url('/home#faqs');
             $contactUrl = url('/home#contact');
         @endphp
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent2">
             <ul class="navbar-nav mx-auto mt-2 mt-lg-0" id="navbar-example">
                 <li class="nav-item">
                     <a class="nav-link fs-14 active" href="{{ $homeUrl }}">Home</a>

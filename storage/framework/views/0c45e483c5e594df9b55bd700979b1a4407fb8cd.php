@@ -8,10 +8,9 @@
                     </div>
                     <div class="mt-4 fs-13">
                         <p>Lost and Found System</p>
-                        <p class="ff-secondary">A centralized platform where lost or found items can be easily
-                            resolved. No waiting times at counter, no hassle in filling up forms manually or
-                            confront admin's verification. All process could get done by connecting with person
-                            whom found or lost directly</p>
+                        <p class="ff-secondary">A centralized platform for resolving lost and found items
+                            efficiently. Connect directly with the person who found or lost an item, eliminating
+                            waiting times and manual form filling.</p>
                     </div>
                 </div>
             </div>
