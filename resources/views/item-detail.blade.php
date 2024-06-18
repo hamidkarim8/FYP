@@ -62,22 +62,52 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="hstack gap-2">
-                                            @if ($report->type === 'lost')
-                                                <button class="btn btn-primary w-100">Request Proof of Ownership</button>
+                                        {{-- {{$report->requests}}
+                                        {{optional($report->checkRequests)->status == 'pending'}} --}}
+                                        @if (Auth::check() && Auth::id() != $report->user_id)
+                                            @if (optional($report->checkRequests)->status == 'approved')
+                                                <span class="badge bg-success text-center w-100">Request Approved</span>
+                                            @elseif (optional($report->checkRequests)->status == 'pending')
+                                                <span class="badge bg-success text-center w-100">Request Pending</span>
                                             @else
-                                                <button class="btn btn-primary w-100">Request to Contact</button>
+                                                <div class="hstack gap-2">
+                                                    @if ($report->type === 'found')
+                                                        <button class="btn btn-primary w-100"
+                                                            onclick="requestAction('{{ $report->id }}', 'contact')">Request
+                                                            to
+                                                            Contact</button>
+                                                    @else
+                                                        <button class="btn btn-primary w-100"
+                                                            onclick="requestAction('{{ $report->id }}', 'proof_of_ownership')">Request
+                                                            Proof of Ownership</button>
+                                                    @endif
+                                                </div>
                                             @endif
-                                        </div>
+                                        @else
+                                            {{-- self report --}}
+                                            @if (optional($report->checkRequests)->status == 'pending')
+                                                <button class="btn btn-success w-100"
+                                                    onclick="acceptRequest('{{ $report->id }}')">Accept Request</button>
+                                            @endif
+                                        @endif
                                     </div>
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-8">
+                                    @if (Auth::check() && Auth::id() == $report->user_id)
+                                        <span class="badge badge-soft-info mb-3 fs-12">
+                                            <i class="ri-eye-line me-1 align-bottom"></i>Reported by you
+                                        </span>
+                                    @endif
                                     <div>
                                         <h3>{{ $report->title }} | {{ $report->category->name }}</h3>
                                         <div class="hstack gap-3 flex-wrap mt-4">
-                                            <div class="text-muted">Reporter: <span
-                                                    class="text-body fw-medium">{{ $report->fullname }}</span></div>
+                                            <div class="text-muted">Reporter: @if (Auth::check() && Auth::id() != $report->user_id && optional($report->checkRequests)->status != 'approved')
+                                                    <span class="text-danger fw-medium">[Hidden]</span>
+                                                @else
+                                                    <span class="text-body fw-medium">{{ $report->fullname }}</span>
+                                                @endif
+                                            </div>
                                             <div class="vr"></div>
                                             <div class="text-muted">Date ({{ $report->type }}): <span
                                                     class="text-body fw-medium">{{ $report->reported_at->format('d-m-Y') }}</span>
@@ -95,37 +125,48 @@
                                         <div class="mt-4 text-muted">
                                             <h5 class="fs-14">Retrieval Info:</h5>
                                             <div class="hstack gap-3 flex-wrap">
-                                                <div class="text-muted">Phone Number: <span
-                                                        class="text-body fw-medium">{{ $report->phone_number }}</span>
+                                                <div class="text-muted">Phone Number: @if (Auth::check() && Auth::id() != $report->user_id && optional($report->checkRequests)->status != 'approved')
+                                                        <span class="text-danger fw-medium">[Hidden]</span>
+                                                    @else
+                                                        <span
+                                                            class="text-body fw-medium">{{ $report->phone_number }}</span>
+                                                    @endif
                                                 </div>
                                                 <div class="vr"></div>
-                                                <div class="text-muted">Email: <span
-                                                        class="text-body fw-medium">{{ $report->email }}</span>
+                                                <div class="text-muted">Email: @if (Auth::check() && Auth::id() != $report->user_id && optional($report->checkRequests)->status != 'approved')
+                                                        <span class="text-danger fw-medium">[Hidden]</span>
+                                                    @else
+                                                        <span class="text-body fw-medium">{{ $report->email }}</span>
+                                                    @endif
                                                 </div>
                                                 <div class="vr"></div>
                                                 <div class="text-muted">
                                                     Social Media:
-                                                    <br>
-                                                    <span class="text-body fw-medium">
-                                                        @foreach ($report->social_media as $key => $value)
-                                                            @if ($value)
-                                                                @php
-                                                                    $platform = '';
-                                                                    if (strpos($key, 'ig_') !== false) {
-                                                                        $platform = 'Instagram';
-                                                                    } elseif (strpos($key, 'twitter_') !== false) {
-                                                                        $platform = 'Twitter';
-                                                                    } elseif (strpos($key, 'tiktok_') !== false) {
-                                                                        $platform = 'TikTok';
-                                                                    }
-                                                                @endphp
+                                                    @if (Auth::check() && Auth::id() != $report->user_id && optional($report->checkRequests)->status != 'approved')
+                                                        <span class="text-danger fw-medium">[Hidden]</span>
+                                                    @else
+                                                        <br>
+                                                        <span class="text-body fw-medium">
+                                                            @foreach ($report->social_media as $key => $value)
+                                                                @if ($value)
+                                                                    @php
+                                                                        $platform = '';
+                                                                        if (strpos($key, 'ig_') !== false) {
+                                                                            $platform = 'Instagram';
+                                                                        } elseif (strpos($key, 'twitter_') !== false) {
+                                                                            $platform = 'Twitter';
+                                                                        } elseif (strpos($key, 'tiktok_') !== false) {
+                                                                            $platform = 'TikTok';
+                                                                        }
+                                                                    @endphp
 
-                                                                @if ($platform)
-                                                                    {{ $platform }}: {{ $value }}<br>
+                                                                    @if ($platform)
+                                                                        {{ $platform }}: {{ $value }}<br>
+                                                                    @endif
                                                                 @endif
-                                                            @endif
-                                                        @endforeach
-                                                    </span>
+                                                            @endforeach
+                                                        </span>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -200,6 +241,32 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
         <script>
+            function acceptRequest(reportId) {
+                axios.post('/reports/' + reportId + '/accept-request')
+                    .then(response => {
+                        if (response.data.status === 'success') {
+                            alert('Request accepted successfully!');
+                            location.reload();
+                        }
+                    }).catch(error => {
+                        console.error('Error accepting request:', error);
+                    });
+            }
+
+            function requestAction(reportId, type) {
+                axios.post('/reports/' + reportId + '/request-action', {
+                    type: type
+                }).then(response => {
+                    if (response.data.status === 'success') {
+                        alert('Request sent successfully!');
+                        location.reload();
+                    } else {
+                        alert('Request already exists!');
+                    }
+                }).catch(error => {
+                    console.error('Error requesting action:', error);
+                });
+            }
             document.addEventListener('DOMContentLoaded', function() {
                 var reportLat = @json($report->location['lat']);
                 var reportLng = @json($report->location['lng']);

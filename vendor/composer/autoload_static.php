@@ -722,6 +722,7 @@ class ComposerStaticInitf6d0afbd437b9deaea40c2a8b14a0e81
         'Database\\Factories\\NotificationFactory' => __DIR__ . '/../..' . '/database/factories/NotificationFactory.php',
         'Database\\Factories\\ReportFactory' => __DIR__ . '/../..' . '/database/factories/ReportFactory.php',
         'Database\\Factories\\UserFactory' => __DIR__ . '/../..' . '/database/factories/UserFactory.php',
+        'Database\\Seeders\\CategorySeeder' => __DIR__ . '/../..' . '/database/seeders/CategorySeeder.php',
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
         'DateError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateError.php',
         'DateException' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateException.php',

@@ -7,18 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Request extends Model
 {
-    use HasFactory;
+    protected $fillable = ['detailed_report_id', 'user_id', 'type', 'status'];
 
-    protected $fillable = [
-        'item_id',
-        'user_id',
-        'type',
-        'status',
-    ];
-
-    public function item()
+    public function detailedReport()
     {
-        return $this->belongsTo(Item::class);
+        return $this->belongsTo(DetailedReport::class);
     }
 
     public function user()
@@ -26,4 +19,5 @@ class Request extends Model
         return $this->belongsTo(User::class);
     }
 }
+
 

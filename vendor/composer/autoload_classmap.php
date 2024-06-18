@@ -174,6 +174,7 @@ return array(
     'Database\\Factories\\NotificationFactory' => $baseDir . '/database/factories/NotificationFactory.php',
     'Database\\Factories\\ReportFactory' => $baseDir . '/database/factories/ReportFactory.php',
     'Database\\Factories\\UserFactory' => $baseDir . '/database/factories/UserFactory.php',
+    'Database\\Seeders\\CategorySeeder' => $baseDir . '/database/seeders/CategorySeeder.php',
     'Database\\Seeders\\DatabaseSeeder' => $baseDir . '/database/seeders/DatabaseSeeder.php',
     'DateError' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/DateError.php',
     'DateException' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/DateException.php',

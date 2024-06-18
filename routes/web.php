@@ -13,6 +13,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SimpleReportController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DetailedReportController;
+use App\Http\Controllers\RequestController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -60,6 +61,10 @@ Route::get('/categories', [CategoryController::class, 'index']);
 //Detailed Report
 Route::post('/uploads', [DetailedReportController::class, 'process'])->name('uploads.process');
 Route::post('/detailed-report', [DetailedReportController::class, 'submitDetailedReport'])->name('submit.detailed.report');
+
+//Request to contact/PoO
+Route::post('/reports/{report}/request-action', [RequestController::class, 'requestAction']);
+Route::post('/reports/{report}/accept-request', [RequestController::class, 'acceptRequest']);
 
 // Fallback Route
 Route::fallback(function () {

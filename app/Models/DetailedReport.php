@@ -68,5 +68,12 @@ class DetailedReport extends Model
     {
         return $this->belongsTo(Category::class);
     }
+    public function requests()
+    {
+        return $this->hasMany(Request::class, 'detailed_report_id');
+    }
+    public function checkRequests()
+    {
+        return $this->hasOne(Request::class)->latestOfMany();
+    }
 }
-

@@ -4,82 +4,47 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\DetailedReport;
+use App\Models\Request as ReportRequest;
+use Illuminate\Support\Facades\Auth;
 
 class RequestController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function requestAction(Request $request, $reportId)
     {
-        //
+        $report = DetailedReport::findOrFail($reportId);
+
+        $existingRequest = ReportRequest::where('detailed_report_id', $reportId)
+            ->where('user_id', Auth::id())
+            ->where('status', 'pending')
+            ->first();
+
+        if ($existingRequest) {
+            return response()->json(['status' => 'error', 'message' => 'Request already exists']);
+        }
+
+        $newRequest = ReportRequest::create([
+            'detailed_report_id' => $reportId,
+            'user_id' => Auth::id(),
+            'type' => $request->type,
+            'status' => 'pending'
+        ]);
+
+        return response()->json(['status' => 'success', 'request' => $newRequest]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function acceptRequest(Request $request, $reportId)
     {
-        //
-    }
+        $report = DetailedReport::findOrFail($reportId);
+        $contactRequest = ReportRequest::where('detailed_report_id', $reportId)
+            ->where('status', 'pending')
+            ->first();
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        if ($contactRequest) {
+            $contactRequest->status = 'approved';
+            $contactRequest->save();
+        }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return response()->json(['status' => 'success']);
     }
 }
