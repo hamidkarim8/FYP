@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Item;
-use App\Models\DetailedReport;
-use App\Models\SimpleReport;
+use App\Models\Report;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -40,27 +39,28 @@ class HomeController extends Controller
 
     public function root()
     {
-        $detailedReports = DetailedReport::with('category')->get();
-        $simpleReports = SimpleReport::with('category')->get();
+        $detailedReports = Report::with(['item', 'item.category'])->where('type', 'detailed')->get();
+        // dd($detailedReports);
+        $simpleReports = Report::with(['item', 'item.category'])->where('type', 'simple')->get();
         $normalUsers = User::where('role', 'normal_user')->get();
         // dd($detailedReports);
-        return view('index', compact('detailedReports','simpleReports','normalUsers'));
+        return view('index', compact('detailedReports', 'simpleReports', 'normalUsers'));
     }
 
 
     public function timeline(Request $request)
     {
         $filter = $request->query('filter', 'found');
-    
+
         Log::info("Received request for timeline with filter: $filter");
-    
+
         try {
             if ($filter === 'lost') {
                 $items = Item::orderBy('created_at', 'desc')->where('type', 'lost')->get();
             } else {
                 $items = Item::orderBy('created_at', 'desc')->where('type', 'found')->get();
             }
-    
+
             $formattedItems = $items->map(function ($item) {
                 return [
                     'date' => $item->created_at->format('j/m/Y'),
@@ -69,12 +69,12 @@ class HomeController extends Controller
                     'description' => $item->description,
                 ];
             });
-    
+
             if ($request->expectsJson()) {
                 Log::info("Returning JSON response");
                 return response()->json(['items' => $formattedItems]);
             }
-    
+
             Log::info("Returning view response");
             return view('timeline', ['formattedItems' => $formattedItems]);
         } catch (\Exception $e) {

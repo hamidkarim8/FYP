@@ -10,10 +10,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ItemController;
-use App\Http\Controllers\SimpleReportController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\DetailedReportController;
 use App\Http\Controllers\RequestController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -54,13 +53,13 @@ Route::get('/user/latest-report', [ItemController::class, 'latestReport'])->name
 
 
 //Simple Report
-Route::post('/simple-report', [SimpleReportController::class, 'store'])->name('simple-reports.store');
-Route::post('/simple-report-display', [SimpleReportController::class, 'show'])->name('simple-reports.show');
+Route::post('/simple-report', [ReportController::class, 'storeSimpleReport'])->name('simple-reports.store');
+Route::post('/simple-report-display', [ReportController::class, 'showSimpleReport'])->name('simple-reports.show');
 Route::get('/categories', [CategoryController::class, 'index']);
 
 //Detailed Report
-Route::post('/uploads', [DetailedReportController::class, 'process'])->name('uploads.process');
-Route::post('/detailed-report', [DetailedReportController::class, 'submitDetailedReport'])->name('submit.detailed.report');
+Route::post('/uploads', [ReportController::class, 'process'])->name('uploads.process');
+Route::post('/detailed-report', [ReportController::class, 'submitDetailedReport'])->name('submit.detailed.report');
 
 //Request to contact/PoO
 Route::post('/reports/{report}/request-action', [RequestController::class, 'requestAction']);

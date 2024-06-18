@@ -45,13 +45,13 @@
                                                 <!-- Swiper -->
                                                 <div class="swiper pagination-fraction-swiper rounded">
                                                     <div class="swiper-wrapper">
-                                                        <?php $__currentLoopData = $report->image_paths; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <?php $__currentLoopData = $report->item->image_paths; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                             <div class="swiper-slide">
                                                                 <div
-                                                                    class="ribbon-two <?php echo e($report->type === 'lost' ? 'ribbon-two-danger' : 'ribbon-two-secondary'); ?>">
-                                                                    <span><?php echo e(ucfirst($report->type)); ?></span>
+                                                                    class="ribbon-two <?php echo e($report->item->type === 'lost' ? 'ribbon-two-danger' : 'ribbon-two-secondary'); ?>">
+                                                                    <span><?php echo e(ucfirst($report->item->type)); ?></span>
                                                                 </div>
-                                                                <img src="<?php echo e(asset($image)); ?>" alt="<?php echo e($report->title); ?>"
+                                                                <img src="<?php echo e(asset($image)); ?>" alt="<?php echo e($report->item->title); ?>"
                                                                     class="img-fluid" />
                                                             </div>
                                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -70,7 +70,7 @@
                                                 <span class="badge bg-success text-center w-100">Request Pending</span>
                                             <?php else: ?>
                                                 <div class="hstack gap-2">
-                                                    <?php if($report->type === 'found'): ?>
+                                                    <?php if($report->item->type === 'found'): ?>
                                                         <button class="btn btn-primary w-100"
                                                             onclick="requestAction('<?php echo e($report->id); ?>', 'contact')">Request
                                                             to
@@ -99,17 +99,17 @@
                                         </span>
                                     <?php endif; ?>
                                     <div>
-                                        <h3><?php echo e($report->title); ?> | <?php echo e($report->category->name); ?></h3>
+                                        <h3><?php echo e($report->item->title); ?> | <?php echo e($report->item->category->name); ?></h3>
                                         <div class="hstack gap-3 flex-wrap mt-4">
                                             <div class="text-muted">Reporter: <?php if(Auth::check() && Auth::id() != $report->user_id && optional($report->checkRequests)->status != 'approved'): ?>
                                                     <span class="text-danger fw-medium">[Hidden]</span>
                                                 <?php else: ?>
-                                                    <span class="text-body fw-medium"><?php echo e($report->fullname); ?></span>
+                                                    <span class="text-body fw-medium"><?php echo e($report->item->fullname); ?></span>
                                                 <?php endif; ?>
                                             </div>
                                             <div class="vr"></div>
-                                            <div class="text-muted">Date (<?php echo e($report->type); ?>): <span
-                                                    class="text-body fw-medium"><?php echo e($report->reported_at->format('d-m-Y')); ?></span>
+                                            <div class="text-muted">Date (<?php echo e($report->item->type); ?>): <span
+                                                    class="text-body fw-medium"><?php echo e($report->item->date->format('d-m-Y')); ?></span>
                                             </div>
                                             <div class="vr"></div>
                                             <div class="text-muted">Reported on: <span
@@ -119,7 +119,7 @@
                                         <!--end row-->
                                         <div class="mt-4 text-muted">
                                             <h5 class="fs-14">Description:</h5>
-                                            <p><?php echo e($report->description); ?></p>
+                                            <p><?php echo e($report->item->description); ?></p>
                                         </div>
                                         <div class="mt-4 text-muted">
                                             <h5 class="fs-14">Retrieval Info:</h5>
@@ -128,14 +128,14 @@
                                                         <span class="text-danger fw-medium">[Hidden]</span>
                                                     <?php else: ?>
                                                         <span
-                                                            class="text-body fw-medium"><?php echo e($report->phone_number); ?></span>
+                                                            class="text-body fw-medium"><?php echo e($report->item->phone_number); ?></span>
                                                     <?php endif; ?>
                                                 </div>
                                                 <div class="vr"></div>
                                                 <div class="text-muted">Email: <?php if(Auth::check() && Auth::id() != $report->user_id && optional($report->checkRequests)->status != 'approved'): ?>
                                                         <span class="text-danger fw-medium">[Hidden]</span>
                                                     <?php else: ?>
-                                                        <span class="text-body fw-medium"><?php echo e($report->email); ?></span>
+                                                        <span class="text-body fw-medium"><?php echo e($report->item->email); ?></span>
                                                     <?php endif; ?>
                                                 </div>
                                                 <div class="vr"></div>
@@ -146,7 +146,7 @@
                                                     <?php else: ?>
                                                         <br>
                                                         <span class="text-body fw-medium">
-                                                            <?php $__currentLoopData = $report->social_media; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            <?php $__currentLoopData = $report->item->social_media; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                 <?php if($value): ?>
                                                                     <?php
                                                                         $platform = '';
@@ -202,7 +202,7 @@
                                                                 <tr>
                                                                     <th scope="row" style="width: 200px;">Description:
                                                                     </th>
-                                                                    <td><?php echo e($report->location['desc']); ?></td>
+                                                                    <td><?php echo e($report->item->location['desc']); ?></td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -267,11 +267,11 @@
                 });
             }
             document.addEventListener('DOMContentLoaded', function() {
-                var reportLat = <?php echo json_encode($report->location['lat'], 15, 512) ?>;
-                var reportLng = <?php echo json_encode($report->location['lng'], 15, 512) ?>;
-                var reportType = <?php echo json_encode($report->type, 15, 512) ?>;
-                var reportTitle = <?php echo json_encode($report->title, 15, 512) ?>;
-                var reportDesc = <?php echo json_encode($report->location['desc'], 15, 512) ?>;
+                var reportLat = <?php echo json_encode($report->item->location['lat'], 15, 512) ?>;
+                var reportLng = <?php echo json_encode($report->item->location['lng'], 15, 512) ?>;
+                var reportType = <?php echo json_encode($report->item->type, 15, 512) ?>;
+                var reportTitle = <?php echo json_encode($report->item->title, 15, 512) ?>;
+                var reportDesc = <?php echo json_encode($report->item->location['desc'], 15, 512) ?>;
 
                 // Initialize the map
                 var displayDetailReportMap = L.map('displayDetailReportMap').setView([3.05603, 101.70022], 17);

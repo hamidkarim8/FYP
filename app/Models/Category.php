@@ -13,7 +13,7 @@ class Category extends Model
 
     public function simpleReports()
     {
-        return $this->hasMany(SimpleReport::class);
+        return $this->hasMany(Report::class);
     }
 
 }

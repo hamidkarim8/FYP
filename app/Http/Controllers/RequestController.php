@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\DetailedReport;
+use App\Models\Report;
 use App\Models\Request as ReportRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,7 +12,7 @@ class RequestController extends Controller
 {
     public function requestAction(Request $request, $reportId)
     {
-        $report = DetailedReport::findOrFail($reportId);
+        $report = Report::findOrFail($reportId);
 
         $existingRequest = ReportRequest::where('detailed_report_id', $reportId)
             ->where('user_id', Auth::id())
@@ -35,7 +35,7 @@ class RequestController extends Controller
 
     public function acceptRequest(Request $request, $reportId)
     {
-        $report = DetailedReport::findOrFail($reportId);
+        $report = Report::findOrFail($reportId);
         $contactRequest = ReportRequest::where('detailed_report_id', $reportId)
             ->where('status', 'pending')
             ->first();

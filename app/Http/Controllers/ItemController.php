@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\DetailedReport;
+use App\Models\Report;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -15,15 +15,19 @@ class ItemController extends Controller
 
     public function itemDetail($id)
     {
-        $report = DetailedReport::with('category')->findOrFail($id);
-        // Check if image_paths is a string and decode it if necessary
-        if (is_string($report->image_paths)) {
-            $report->image_paths = json_decode($report->image_paths, true);
+        $report = Report::with('item.category')->with('checkRequests')->where('type', 'detailed')->findOrFail($id);
+
+        $item = $report->item;
+        if (is_string($item->image_paths)) {
+            $item->image_paths = json_decode($item->image_paths, true);
         }
 
-        // Check if social_media is a string and decode it if necessary
-        if (is_string($report->social_media)) {
-            $report->social_media = json_decode($report->social_media, true);
+        if (is_string($item->social_media)) {
+            $item->social_media = json_decode($item->social_media, true);
+        }
+
+        if (is_string($item->location)) {
+            $item->location = json_decode($item->location, true);
         }
 
         // dd($report);
@@ -52,9 +56,8 @@ class ItemController extends Controller
             $latestReport = $user->reports()->latest()->first();
 
             if ($latestReport) {
-                $similarItems = DetailedReport::where('category_id', $latestReport->category_id)
-                    ->where('title', 'LIKE', '%' . $latestReport->title . '%')
-                    ->get();
+
+                $similarItems = $latestReport->getSimilarItems();
 
                 return response()->json([
                     'success' => true,
@@ -65,7 +68,7 @@ class ItemController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'No report found for the user.',
-                ], 404); 
+                ], 404);
             }
         } catch (\Exception $e) {
             Log::error('Error fetching latest report: ' . $e->getMessage());
@@ -73,7 +76,7 @@ class ItemController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error fetching latest report. Please try again later.',
-            ], 500); 
+            ], 500);
         }
     }
 

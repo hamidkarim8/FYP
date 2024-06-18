@@ -747,28 +747,25 @@
                         </div>
                         @foreach ($detailedReports as $report)
                             <div class="col-lg-4 product-item artwork crypto-card 3d-style" data-id="{{ $report->id }}"
-                                data-type="{{ $report->type }}" data-category-id="{{ $report->category_id }}"
-                                data-title="{{ $report->title }}">
+                                data-type="{{ $report->item->type }}"
+                                data-category-id="{{ $report->item->category_id }}"
+                                data-title="{{ $report->item->title }}">
                                 <div class="card explore-box card-animate">
-                                    <div class="bookmark-icon position-absolute top-0 end-0 p-2">
-                                        <button type="button" class="btn btn-icon active" data-bs-toggle="button"
-                                            aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
-                                    </div>
                                     <div class="explore-place-bid-img">
                                         <div
-                                            class="ribbon-box {{ $report->type === 'lost' ? 'lost-ribbon' : 'found-ribbon' }} left">
+                                            class="ribbon-box {{ $report->item->type === 'lost' ? 'lost-ribbon' : 'found-ribbon' }} left">
                                             <div
-                                                class="ribbon-two {{ $report->type === 'lost' ? 'ribbon-two-danger' : 'ribbon-two-secondary' }}">
-                                                <span>{{ ucfirst($report->type) }}</span>
+                                                class="ribbon-two {{ $report->item->type === 'lost' ? 'ribbon-two-danger' : 'ribbon-two-secondary' }}">
+                                                <span>{{ ucfirst($report->item->type) }}</span>
                                             </div>
                                         </div>
                                         @php
-                                            $imagePaths = json_decode($report->image_paths, true);
+                                            $imagePaths = json_decode($report->item->image_paths, true);
                                             $firstImage = $imagePaths[0] ?? null;
                                         @endphp
 
                                         @if ($firstImage)
-                                            <img src="{{ asset($firstImage) }}" alt="{{ $report->title }}"
+                                            <img src="{{ asset($firstImage) }}" alt="{{ $report->item->title }}"
                                                 class="card-img-top explore-img" />
                                         @else
                                             <img src="{{ asset('assets/images/image-error.png') }}" alt="error"
@@ -784,16 +781,16 @@
                                         @endauth
                                     </div>
                                     <div class="card-body">
-                                        <p class="fw-medium mb-0 float-end">{{ $report->reported_at->format('d-m-Y') }}
+                                        <p class="fw-medium mb-0 float-end">{{ $report->item->date->format('d-m-Y') }}
                                         </p>
-                                        <h5 class="mb-1">{{ $report->title }}</h5>
-                                        <p class="text-muted mb-0">{{ $report->category->name }}</p>
+                                        <h5 class="mb-1">{{ $report->item->title }}</h5>
+                                        <p class="text-muted mb-0">{{ $report->item->category->name }}</p>
                                     </div>
                                     <div class="card-footer border-top border-top-dashed">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 fs-14">
                                                 <i class="ri-map-pin-2-fill text-danger align-bottom me-1"></i>
-                                                {{ $report->location['desc'] }}
+                                                {{ $report->item->location['desc'] }}
                                             </div>
                                             @if (Auth::check() && Auth::id() == $report->user_id)
                                                 <span class="badge badge-soft-info fs-12">
@@ -1601,6 +1598,43 @@
                     });
                 }
 
+                function addMarker2(lat, lng, report) {
+                    var markerColor = report.item.type === 'found' ? 'blue' : 'red';
+                    var marker = L.circleMarker([lat, lng], {
+                        color: markerColor,
+                        radius: 10
+                    }).addTo(displayMap);
+
+                    marker.on('click', function() {
+                        // Populate modal with report details
+                        $('#modalTitle').text(report.item.title);
+                        $('#modalType').text(report.item.type);
+                        var categoryName = typeof report.item.category === 'object' ? report.item.category
+                            .name : report
+                            .item.category;
+                        $('#modalCategory').text(categoryName);
+                        $('#modalDescription').text(report.item.location.desc);
+                        var dateDisplay = new Date(report.item.date)
+                            .toLocaleDateString('en-GB');
+                        $('#modalDate').text(dateDisplay);
+
+                        // Add Ribbon based on report type
+                        var ribbonHTML = '';
+                        if (report.item.type === 'found') {
+                            ribbonHTML =
+                                '<div class="ribbon-box found-ribbon left"><div class="ribbon-two ribbon-two-secondary"><span>Found Item</span></div></div>';
+                        } else if (report.item.type === 'lost') {
+                            ribbonHTML =
+                                '<div class="ribbon-box lost-ribbon left"><div class="ribbon-two ribbon-two-danger"><span>Lost Item</span></div></div>';
+                        }
+
+                        $('#ribbonContainer').html(ribbonHTML);
+
+                        // Show modal
+                        $('#reportDetailsModal').modal('show');
+                    });
+                }
+
                 //Display simple report
                 axios.post('/simple-report-display')
                     .then(function(response) {
@@ -1617,15 +1651,9 @@
                 var detailedReports = @json($detailedReports);
 
                 detailedReports.forEach(function(report) {
-                    var reportLat = report.location.lat;
-                    var reportLng = report.location.lng;
-                    var reportType = report.type;
-                    var reportTitle = report.title;
-                    var reportDesc = report.location.desc;
-
-                    detailedReports.forEach(function(report) {
-                        addMarker(reportLat, reportLng, report);
-                    });
+                    var reportLat = report.item.location.lat;
+                    var reportLng = report.item.location.lng;
+                    addMarker2(reportLat, reportLng, report);
                 });
 
 
@@ -1742,6 +1770,8 @@
                     updateItemCount(itemsToShow.length);
                     if (itemsToShow.length <= 0) {
                         showAlert("No item found.");
+                        const totalContainer = document.getElementById('totalContainer');
+                        totalContainer.style.display = 'none';
                     }
                 }
 
@@ -1808,16 +1838,23 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                const report = data.report;
+                                const report = data.report.item;
+
+                                if (!report || !report.category_id || !report.title) {
+                                    console.error('Incomplete report data:', report);
+                                    return;
+                                }
+
                                 const category = report.category_id;
                                 const title = report.title.toLowerCase();
                                 let itemsToShow = [];
+
                                 items.forEach(item => {
                                     const itemCategory = item.getAttribute('data-category-id');
-                                    console.log('Item category:', itemCategory);
                                     const itemTitle = item.getAttribute('data-title');
-                                    console.log('Item title:', itemTitle);
-                                    if (itemCategory == category || itemTitle) {
+
+                                    if (itemCategory == category || itemTitle.toLowerCase().includes(
+                                            title)) {
                                         item.style.display = '';
                                         itemsToShow.push(item);
                                         updateItemCount(itemsToShow.length);
@@ -1825,7 +1862,6 @@
                                         item.style.display = 'none';
                                     }
                                 });
-
                             } else {
                                 items.forEach(item => {
                                     item.style.display = 'none';

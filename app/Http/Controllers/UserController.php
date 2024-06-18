@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\DetailedReport;
+use App\Models\Report;
 use App\Models\SimpleReport;
 
 
@@ -22,10 +22,10 @@ class UserController extends Controller
 
     public function userIndex()
     {
-        $detailedReports = DetailedReport::with('category')->get();
-        $simpleReports = SimpleReport::with('category')->get();
+        $detailedReports = Report::with(['item', 'item.category'])->where('type', 'detailed')->get();
+        $simpleReports = Report::with(['item', 'item.category'])->where('type', 'simple')->get();
         $normalUsers = User::where('role', 'normal_user')->get();
         // dd($detailedReports);
-        return view('index', compact('detailedReports','simpleReports','normalUsers'));
+        return view('index', compact('detailedReports', 'simpleReports', 'normalUsers'));
     }
 }

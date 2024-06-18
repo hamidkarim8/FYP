@@ -10,33 +10,24 @@ class Item extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title',
-        'description',
-        'location',
-        'type',
-        'reported_at',
-        'status',
-        'user_id',
+        'title', 'type', 'category_id', 'description', 'image_paths',
+        'location', 'fullname', 'email', 'phone_number', 'social_media', 'date'
     ];
 
-    public function user()
+    protected $casts = [
+        'image_paths' => 'array',
+        'location' => 'array',
+        'social_media' => 'array',
+        'date' => 'datetime',
+    ];
+
+    public function category()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Category::class);
     }
 
-    public function reports()
+    public function report()
     {
-        return $this->hasMany(Report::class);
-    }
-
-    public function requests()
-    {
-        return $this->hasMany(Request::class);
-    }
-
-    public function notifications()
-    {
-        return $this->hasMany(Notification::class);
+        return $this->hasOne(Report::class);
     }
 }
-

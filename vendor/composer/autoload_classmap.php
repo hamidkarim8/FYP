@@ -48,6 +48,7 @@ return array(
     'App\\Models\\Message' => $baseDir . '/app/Models/Message.php',
     'App\\Models\\Notification' => $baseDir . '/app/Models/Notification.php',
     'App\\Models\\Profile' => $baseDir . '/app/Models/Profile.php',
+    'App\\Models\\Report' => $baseDir . '/app/Models/Report.php',
     'App\\Models\\Request' => $baseDir . '/app/Models/Request.php',
     'App\\Models\\SimpleReport' => $baseDir . '/app/Models/SimpleReport.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',

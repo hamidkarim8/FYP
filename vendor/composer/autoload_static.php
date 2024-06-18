@@ -596,6 +596,7 @@ class ComposerStaticInitf6d0afbd437b9deaea40c2a8b14a0e81
         'App\\Models\\Message' => __DIR__ . '/../..' . '/app/Models/Message.php',
         'App\\Models\\Notification' => __DIR__ . '/../..' . '/app/Models/Notification.php',
         'App\\Models\\Profile' => __DIR__ . '/../..' . '/app/Models/Profile.php',
+        'App\\Models\\Report' => __DIR__ . '/../..' . '/app/Models/Report.php',
         'App\\Models\\Request' => __DIR__ . '/../..' . '/app/Models/Request.php',
         'App\\Models\\SimpleReport' => __DIR__ . '/../..' . '/app/Models/SimpleReport.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',

@@ -45,13 +45,13 @@
                                                 <!-- Swiper -->
                                                 <div class="swiper pagination-fraction-swiper rounded">
                                                     <div class="swiper-wrapper">
-                                                        @foreach ($report->image_paths as $image)
+                                                        @foreach ($report->item->image_paths as $image)
                                                             <div class="swiper-slide">
                                                                 <div
-                                                                    class="ribbon-two {{ $report->type === 'lost' ? 'ribbon-two-danger' : 'ribbon-two-secondary' }}">
-                                                                    <span>{{ ucfirst($report->type) }}</span>
+                                                                    class="ribbon-two {{ $report->item->type === 'lost' ? 'ribbon-two-danger' : 'ribbon-two-secondary' }}">
+                                                                    <span>{{ ucfirst($report->item->type) }}</span>
                                                                 </div>
-                                                                <img src="{{ asset($image) }}" alt="{{ $report->title }}"
+                                                                <img src="{{ asset($image) }}" alt="{{ $report->item->title }}"
                                                                     class="img-fluid" />
                                                             </div>
                                                         @endforeach
@@ -68,10 +68,10 @@
                                             @if (optional($report->checkRequests)->status == 'approved')
                                                 <span class="badge bg-success text-center w-100">Request Approved</span>
                                             @elseif (optional($report->checkRequests)->status == 'pending')
-                                                <span class="badge bg-success text-center w-100">Request Pending</span>
+                                                <span class="badge bg-warning text-center w-100">Request Pending</span>
                                             @else
                                                 <div class="hstack gap-2">
-                                                    @if ($report->type === 'found')
+                                                    @if ($report->item->type === 'found')
                                                         <button class="btn btn-primary w-100"
                                                             onclick="requestAction('{{ $report->id }}', 'contact')">Request
                                                             to
@@ -100,17 +100,17 @@
                                         </span>
                                     @endif
                                     <div>
-                                        <h3>{{ $report->title }} | {{ $report->category->name }}</h3>
+                                        <h3>{{ $report->item->title }} | {{ $report->item->category->name }}</h3>
                                         <div class="hstack gap-3 flex-wrap mt-4">
                                             <div class="text-muted">Reporter: @if (Auth::check() && Auth::id() != $report->user_id && optional($report->checkRequests)->status != 'approved')
                                                     <span class="text-danger fw-medium">[Hidden]</span>
                                                 @else
-                                                    <span class="text-body fw-medium">{{ $report->fullname }}</span>
+                                                    <span class="text-body fw-medium">{{ $report->item->fullname }}</span>
                                                 @endif
                                             </div>
                                             <div class="vr"></div>
-                                            <div class="text-muted">Date ({{ $report->type }}): <span
-                                                    class="text-body fw-medium">{{ $report->reported_at->format('d-m-Y') }}</span>
+                                            <div class="text-muted">Date ({{ $report->item->type }}): <span
+                                                    class="text-body fw-medium">{{ $report->item->date->format('d-m-Y') }}</span>
                                             </div>
                                             <div class="vr"></div>
                                             <div class="text-muted">Reported on: <span
@@ -120,7 +120,7 @@
                                         <!--end row-->
                                         <div class="mt-4 text-muted">
                                             <h5 class="fs-14">Description:</h5>
-                                            <p>{{ $report->description }}</p>
+                                            <p>{{ $report->item->description }}</p>
                                         </div>
                                         <div class="mt-4 text-muted">
                                             <h5 class="fs-14">Retrieval Info:</h5>
@@ -129,14 +129,14 @@
                                                         <span class="text-danger fw-medium">[Hidden]</span>
                                                     @else
                                                         <span
-                                                            class="text-body fw-medium">{{ $report->phone_number }}</span>
+                                                            class="text-body fw-medium">{{ $report->item->phone_number }}</span>
                                                     @endif
                                                 </div>
                                                 <div class="vr"></div>
                                                 <div class="text-muted">Email: @if (Auth::check() && Auth::id() != $report->user_id && optional($report->checkRequests)->status != 'approved')
                                                         <span class="text-danger fw-medium">[Hidden]</span>
                                                     @else
-                                                        <span class="text-body fw-medium">{{ $report->email }}</span>
+                                                        <span class="text-body fw-medium">{{ $report->item->email }}</span>
                                                     @endif
                                                 </div>
                                                 <div class="vr"></div>
@@ -147,7 +147,7 @@
                                                     @else
                                                         <br>
                                                         <span class="text-body fw-medium">
-                                                            @foreach ($report->social_media as $key => $value)
+                                                            @foreach ($report->item->social_media as $key => $value)
                                                                 @if ($value)
                                                                     @php
                                                                         $platform = '';
@@ -203,7 +203,7 @@
                                                                 <tr>
                                                                     <th scope="row" style="width: 200px;">Description:
                                                                     </th>
-                                                                    <td>{{ $report->location['desc'] }}</td>
+                                                                    <td>{{ $report->item->location['desc'] }}</td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -268,11 +268,11 @@
                 });
             }
             document.addEventListener('DOMContentLoaded', function() {
-                var reportLat = @json($report->location['lat']);
-                var reportLng = @json($report->location['lng']);
-                var reportType = @json($report->type);
-                var reportTitle = @json($report->title);
-                var reportDesc = @json($report->location['desc']);
+                var reportLat = @json($report->item->location['lat']);
+                var reportLng = @json($report->item->location['lng']);
+                var reportType = @json($report->item->type);
+                var reportTitle = @json($report->item->title);
+                var reportDesc = @json($report->item->location['desc']);
 
                 // Initialize the map
                 var displayDetailReportMap = L.map('displayDetailReportMap').setView([3.05603, 101.70022], 17);

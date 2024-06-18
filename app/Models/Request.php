@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Report;
 
 class Request extends Model
 {
@@ -11,7 +12,7 @@ class Request extends Model
 
     public function detailedReport()
     {
-        return $this->belongsTo(DetailedReport::class);
+        return $this->belongsTo(Report::class, 'detailed_report_id', 'id');
     }
 
     public function user()
