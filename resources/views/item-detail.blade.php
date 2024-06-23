@@ -51,8 +51,8 @@
                                                                     class="ribbon-two {{ $report->item->type === 'lost' ? 'ribbon-two-danger' : 'ribbon-two-secondary' }}">
                                                                     <span>{{ ucfirst($report->item->type) }}</span>
                                                                 </div>
-                                                                <img src="{{ asset($image) }}" alt="{{ $report->item->title }}"
-                                                                    class="img-fluid" />
+                                                                <img src="{{ asset($image) }}"
+                                                                    alt="{{ $report->item->title }}" class="img-fluid" />
                                                             </div>
                                                         @endforeach
                                                     </div>
@@ -62,20 +62,43 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        {{-- {{optional($report->checkRequests)->user_id}}
+                                        {{Auth::id()}}
+                                        {{$report->pendingRequests}} --}}
                                         {{-- {{$report->requests}}
                                         {{optional($report->checkRequests)->status == 'pending'}} --}}
                                         @if (Auth::check() && Auth::id() != $report->user_id)
-                                            @if (optional($report->checkRequests)->status == 'approved')
+                                            @php
+                                                $loggedInUserId = Auth::id();
+                                                $pendingRequests = $report
+                                                    ->pendingRequests()
+                                                    ->where('user_id', $loggedInUserId)
+                                                    ->get();
+                                                $approvedRequests = $report
+                                                    ->approvedRequests()
+                                                    ->where('user_id', $loggedInUserId)
+                                                    ->get();
+                                                $declinedRequests = $report
+                                                    ->declinedRequests()
+                                                    ->where('user_id', $loggedInUserId)
+                                                    ->get();
+                                            @endphp
+                                            {{-- approved:{{$approvedRequests}}
+                                            pending:{{$pendingRequests}}
+                                            check: {{$approvedRequests->isNotEmpty()}}
+                                            check2: {{Auth::check() && Auth::id() != $report->user_id && $approvedRequests->isEmpty()}} --}}
+                                            @if ($approvedRequests->count() > 0)
                                                 <span class="badge bg-success text-center w-100">Request Approved</span>
-                                            @elseif (optional($report->checkRequests)->status == 'pending')
+                                            @elseif ($pendingRequests->count() > 0)
                                                 <span class="badge bg-warning text-center w-100">Request Pending</span>
+                                            @elseif ($declinedRequests->count() > 0)
+                                                <span class="badge bg-danger text-center w-100">Request Declined</span>
                                             @else
                                                 <div class="hstack gap-2">
                                                     @if ($report->item->type === 'found')
                                                         <button class="btn btn-primary w-100"
                                                             onclick="requestAction('{{ $report->id }}', 'contact')">Request
-                                                            to
-                                                            Contact</button>
+                                                            to Contact</button>
                                                     @else
                                                         <button class="btn btn-primary w-100"
                                                             onclick="requestAction('{{ $report->id }}', 'proof_of_ownership')">Request
@@ -85,9 +108,10 @@
                                             @endif
                                         @else
                                             {{-- self report --}}
-                                            @if (optional($report->checkRequests)->status == 'pending')
-                                                <button class="btn btn-success w-100"
-                                                    onclick="acceptRequest('{{ $report->id }}')">Accept Request</button>
+                                            <!-- Button to open modal for self-reported item -->
+                                            @if (Auth::check() && Auth::id() == $report->user_id)
+                                                <button class="btn btn-success w-100" data-bs-toggle="modal"
+                                                    data-bs-target="#requestsModal">View Requests</button>
                                             @endif
                                         @endif
                                     </div>
@@ -102,7 +126,7 @@
                                     <div>
                                         <h3>{{ $report->item->title }} | {{ $report->item->category->name }}</h3>
                                         <div class="hstack gap-3 flex-wrap mt-4">
-                                            <div class="text-muted">Reporter: @if (Auth::check() && Auth::id() != $report->user_id && optional($report->checkRequests)->status != 'approved')
+                                            <div class="text-muted">Reporter: @if (Auth::check() && Auth::id() != $report->user_id && $approvedRequests->isEmpty())
                                                     <span class="text-danger fw-medium">[Hidden]</span>
                                                 @else
                                                     <span class="text-body fw-medium">{{ $report->item->fullname }}</span>
@@ -125,7 +149,7 @@
                                         <div class="mt-4 text-muted">
                                             <h5 class="fs-14">Retrieval Info:</h5>
                                             <div class="hstack gap-3 flex-wrap">
-                                                <div class="text-muted">Phone Number: @if (Auth::check() && Auth::id() != $report->user_id && optional($report->checkRequests)->status != 'approved')
+                                                <div class="text-muted">Phone Number: @if (Auth::check() && Auth::id() != $report->user_id && $approvedRequests->isEmpty())
                                                         <span class="text-danger fw-medium">[Hidden]</span>
                                                     @else
                                                         <span
@@ -133,7 +157,7 @@
                                                     @endif
                                                 </div>
                                                 <div class="vr"></div>
-                                                <div class="text-muted">Email: @if (Auth::check() && Auth::id() != $report->user_id && optional($report->checkRequests)->status != 'approved')
+                                                <div class="text-muted">Email: @if (Auth::check() && Auth::id() != $report->user_id && $approvedRequests->isEmpty())
                                                         <span class="text-danger fw-medium">[Hidden]</span>
                                                     @else
                                                         <span class="text-body fw-medium">{{ $report->item->email }}</span>
@@ -142,7 +166,7 @@
                                                 <div class="vr"></div>
                                                 <div class="text-muted">
                                                     Social Media:
-                                                    @if (Auth::check() && Auth::id() != $report->user_id && optional($report->checkRequests)->status != 'approved')
+                                                    @if (Auth::check() && Auth::id() != $report->user_id && $approvedRequests->isEmpty())
                                                         <span class="text-danger fw-medium">[Hidden]</span>
                                                     @else
                                                         <br>
@@ -222,6 +246,33 @@
                 </div>
             </section>
 
+            <!-- Requests Modal -->
+            <div class="modal fade" id="requestsModal" tabindex="-1" aria-labelledby="requestsModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="requestsModalLabel">Pending Requests</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone Number</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="requestsTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Start footer -->
             @include('layouts-user.footer')
@@ -241,15 +292,73 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
         <script>
-            function acceptRequest(reportId) {
-                axios.post('/reports/' + reportId + '/accept-request')
+            function loadRequests(reportId) {
+                fetch(`/reports/${reportId}/requests`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const requestsTableBody = document.getElementById('requestsTableBody');
+                        requestsTableBody.innerHTML = '';
+
+                        if (data.requests.length === 0) {
+                            const noRequestsRow = document.createElement('tr');
+                            noRequestsRow.innerHTML = `
+                    <td colspan="4" class="text-center text-danger">No requests found.</td>
+                `;
+                            requestsTableBody.appendChild(noRequestsRow);
+                        } else {
+                            data.requests.forEach(request => {
+                                console.log(request);
+                                const row = document.createElement('tr');
+                                let phone = request.profile.phone_number ? request.profile.phone_number :
+                                    'Not Updated';
+                                let fullname = request.profile.fullname ? request.profile.fullname : 'Not Updated';
+                                row.innerHTML = `
+                        <td>${fullname}</td>
+                        <td>${request.user.email}</td>
+                        <td>${phone}</td>
+                        <td><button class="btn btn-success" onclick="acceptRequest(${request.id})">Accept</button>
+                            <button class="btn btn-danger" onclick="declineRequest(${request.id})">Decline</button>
+                        </td>
+                    `;
+                                console.log("request id: " + request.id);
+                                console.log("report id: " + reportId);
+                                requestsTableBody.appendChild(row);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading requests:', error);
+                    });
+            }
+
+
+            function acceptRequest(requestId) {
+                axios.post('/accept-request/' + requestId, {
+                        _token: '{{ csrf_token() }}'
+                    })
                     .then(response => {
                         if (response.data.status === 'success') {
                             alert('Request accepted successfully!');
+                            // $('#requestsModal').modal('hide');
                             location.reload();
                         }
                     }).catch(error => {
                         console.error('Error accepting request:', error);
+                    });
+            }
+
+            function declineRequest(requestId) {
+                axios.post('/decline-request/' + requestId, {
+                        _token: '{{ csrf_token() }}'
+                    })
+                    .then(response => {
+                        if (response.data.status === 'success') {
+                            alert('Request declined successfully!');
+                            location.reload();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error declining request:', error);
                     });
             }
 
@@ -268,6 +377,10 @@
                 });
             }
             document.addEventListener('DOMContentLoaded', function() {
+                //load req table
+                const reportId = '{{ $report->id }}';
+                loadRequests(reportId);
+
                 var reportLat = @json($report->item->location['lat']);
                 var reportLng = @json($report->item->location['lng']);
                 var reportType = @json($report->item->type);

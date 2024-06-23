@@ -33,18 +33,35 @@ class RequestController extends Controller
         return response()->json(['status' => 'success', 'request' => $newRequest]);
     }
 
-    public function acceptRequest(Request $request, $reportId)
+    public function acceptRequestById(Request $request, $requestId)
     {
-        $report = Report::findOrFail($reportId);
-        $contactRequest = ReportRequest::where('detailed_report_id', $reportId)
-            ->where('status', 'pending')
-            ->first();
+        $contactRequest = ReportRequest::findOrFail($requestId);
 
-        if ($contactRequest) {
+        if ($contactRequest->status == 'pending') {
             $contactRequest->status = 'approved';
             $contactRequest->save();
         }
 
         return response()->json(['status' => 'success']);
+    }
+    public function declineRequestById(Request $request, $requestId)
+    {
+        $contactRequest = ReportRequest::findOrFail($requestId);
+        if ($contactRequest->status == 'pending') {
+            $contactRequest->status = 'declined';
+            $contactRequest->save();
+        }
+
+        return response()->json(['status' => 'success']);
+    }
+    public function getRequests($reportId)
+    {
+        $requests = ReportRequest::where('detailed_report_id', $reportId)
+            ->where('status', 'pending')
+            ->with('user')
+            ->with('profile')
+            ->get();
+        // dd($requests);
+        return response()->json(['requests' => $requests]);
     }
 }

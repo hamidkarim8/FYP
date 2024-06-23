@@ -51,8 +51,8 @@
                                                                     class="ribbon-two <?php echo e($report->item->type === 'lost' ? 'ribbon-two-danger' : 'ribbon-two-secondary'); ?>">
                                                                     <span><?php echo e(ucfirst($report->item->type)); ?></span>
                                                                 </div>
-                                                                <img src="<?php echo e(asset($image)); ?>" alt="<?php echo e($report->item->title); ?>"
-                                                                    class="img-fluid" />
+                                                                <img src="<?php echo e(asset($image)); ?>"
+                                                                    alt="<?php echo e($report->item->title); ?>" class="img-fluid" />
                                                             </div>
                                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     </div>
@@ -63,18 +63,36 @@
                                             </div>
                                         </div>
                                         
+                                        
                                         <?php if(Auth::check() && Auth::id() != $report->user_id): ?>
-                                            <?php if(optional($report->checkRequests)->status == 'approved'): ?>
+                                            <?php
+                                                $loggedInUserId = Auth::id();
+                                                $pendingRequests = $report
+                                                    ->pendingRequests()
+                                                    ->where('user_id', $loggedInUserId)
+                                                    ->get();
+                                                $approvedRequests = $report
+                                                    ->approvedRequests()
+                                                    ->where('user_id', $loggedInUserId)
+                                                    ->get();
+                                                $declinedRequests = $report
+                                                    ->declinedRequests()
+                                                    ->where('user_id', $loggedInUserId)
+                                                    ->get();
+                                            ?>
+                                            
+                                            <?php if($approvedRequests->count() > 0): ?>
                                                 <span class="badge bg-success text-center w-100">Request Approved</span>
-                                            <?php elseif(optional($report->checkRequests)->status == 'pending'): ?>
-                                                <span class="badge bg-success text-center w-100">Request Pending</span>
+                                            <?php elseif($pendingRequests->count() > 0): ?>
+                                                <span class="badge bg-warning text-center w-100">Request Pending</span>
+                                            <?php elseif($declinedRequests->count() > 0): ?>
+                                                <span class="badge bg-danger text-center w-100">Request Declined</span>
                                             <?php else: ?>
                                                 <div class="hstack gap-2">
                                                     <?php if($report->item->type === 'found'): ?>
                                                         <button class="btn btn-primary w-100"
                                                             onclick="requestAction('<?php echo e($report->id); ?>', 'contact')">Request
-                                                            to
-                                                            Contact</button>
+                                                            to Contact</button>
                                                     <?php else: ?>
                                                         <button class="btn btn-primary w-100"
                                                             onclick="requestAction('<?php echo e($report->id); ?>', 'proof_of_ownership')">Request
@@ -84,9 +102,10 @@
                                             <?php endif; ?>
                                         <?php else: ?>
                                             
-                                            <?php if(optional($report->checkRequests)->status == 'pending'): ?>
-                                                <button class="btn btn-success w-100"
-                                                    onclick="acceptRequest('<?php echo e($report->id); ?>')">Accept Request</button>
+                                            <!-- Button to open modal for self-reported item -->
+                                            <?php if(Auth::check() && Auth::id() == $report->user_id): ?>
+                                                <button class="btn btn-success w-100" data-bs-toggle="modal"
+                                                    data-bs-target="#requestsModal">View Requests</button>
                                             <?php endif; ?>
                                         <?php endif; ?>
                                     </div>
@@ -101,7 +120,7 @@
                                     <div>
                                         <h3><?php echo e($report->item->title); ?> | <?php echo e($report->item->category->name); ?></h3>
                                         <div class="hstack gap-3 flex-wrap mt-4">
-                                            <div class="text-muted">Reporter: <?php if(Auth::check() && Auth::id() != $report->user_id && optional($report->checkRequests)->status != 'approved'): ?>
+                                            <div class="text-muted">Reporter: <?php if(Auth::check() && Auth::id() != $report->user_id && $approvedRequests->isEmpty()): ?>
                                                     <span class="text-danger fw-medium">[Hidden]</span>
                                                 <?php else: ?>
                                                     <span class="text-body fw-medium"><?php echo e($report->item->fullname); ?></span>
@@ -124,7 +143,7 @@
                                         <div class="mt-4 text-muted">
                                             <h5 class="fs-14">Retrieval Info:</h5>
                                             <div class="hstack gap-3 flex-wrap">
-                                                <div class="text-muted">Phone Number: <?php if(Auth::check() && Auth::id() != $report->user_id && optional($report->checkRequests)->status != 'approved'): ?>
+                                                <div class="text-muted">Phone Number: <?php if(Auth::check() && Auth::id() != $report->user_id && $approvedRequests->isEmpty()): ?>
                                                         <span class="text-danger fw-medium">[Hidden]</span>
                                                     <?php else: ?>
                                                         <span
@@ -132,7 +151,7 @@
                                                     <?php endif; ?>
                                                 </div>
                                                 <div class="vr"></div>
-                                                <div class="text-muted">Email: <?php if(Auth::check() && Auth::id() != $report->user_id && optional($report->checkRequests)->status != 'approved'): ?>
+                                                <div class="text-muted">Email: <?php if(Auth::check() && Auth::id() != $report->user_id && $approvedRequests->isEmpty()): ?>
                                                         <span class="text-danger fw-medium">[Hidden]</span>
                                                     <?php else: ?>
                                                         <span class="text-body fw-medium"><?php echo e($report->item->email); ?></span>
@@ -141,7 +160,7 @@
                                                 <div class="vr"></div>
                                                 <div class="text-muted">
                                                     Social Media:
-                                                    <?php if(Auth::check() && Auth::id() != $report->user_id && optional($report->checkRequests)->status != 'approved'): ?>
+                                                    <?php if(Auth::check() && Auth::id() != $report->user_id && $approvedRequests->isEmpty()): ?>
                                                         <span class="text-danger fw-medium">[Hidden]</span>
                                                     <?php else: ?>
                                                         <br>
@@ -221,6 +240,33 @@
                 </div>
             </section>
 
+            <!-- Requests Modal -->
+            <div class="modal fade" id="requestsModal" tabindex="-1" aria-labelledby="requestsModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="requestsModalLabel">Pending Requests</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone Number</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="requestsTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Start footer -->
             <?php echo $__env->make('layouts-user.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
@@ -240,15 +286,73 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
         <script>
-            function acceptRequest(reportId) {
-                axios.post('/reports/' + reportId + '/accept-request')
+            function loadRequests(reportId) {
+                fetch(`/reports/${reportId}/requests`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const requestsTableBody = document.getElementById('requestsTableBody');
+                        requestsTableBody.innerHTML = '';
+
+                        if (data.requests.length === 0) {
+                            const noRequestsRow = document.createElement('tr');
+                            noRequestsRow.innerHTML = `
+                    <td colspan="4" class="text-center text-danger">No requests found.</td>
+                `;
+                            requestsTableBody.appendChild(noRequestsRow);
+                        } else {
+                            data.requests.forEach(request => {
+                                console.log(request);
+                                const row = document.createElement('tr');
+                                let phone = request.profile.phone_number ? request.profile.phone_number :
+                                    'Not Updated';
+                                let fullname = request.profile.fullname ? request.profile.fullname : 'Not Updated';
+                                row.innerHTML = `
+                        <td>${fullname}</td>
+                        <td>${request.user.email}</td>
+                        <td>${phone}</td>
+                        <td><button class="btn btn-success" onclick="acceptRequest(${request.id})">Accept</button>
+                            <button class="btn btn-danger" onclick="declineRequest(${request.id})">Decline</button>
+                        </td>
+                    `;
+                                console.log("request id: " + request.id);
+                                console.log("report id: " + reportId);
+                                requestsTableBody.appendChild(row);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading requests:', error);
+                    });
+            }
+
+
+            function acceptRequest(requestId) {
+                axios.post('/accept-request/' + requestId, {
+                        _token: '<?php echo e(csrf_token()); ?>'
+                    })
                     .then(response => {
                         if (response.data.status === 'success') {
                             alert('Request accepted successfully!');
+                            // $('#requestsModal').modal('hide');
                             location.reload();
                         }
                     }).catch(error => {
                         console.error('Error accepting request:', error);
+                    });
+            }
+
+            function declineRequest(requestId) {
+                axios.post('/decline-request/' + requestId, {
+                        _token: '<?php echo e(csrf_token()); ?>'
+                    })
+                    .then(response => {
+                        if (response.data.status === 'success') {
+                            alert('Request declined successfully!');
+                            location.reload();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error declining request:', error);
                     });
             }
 
@@ -267,6 +371,10 @@
                 });
             }
             document.addEventListener('DOMContentLoaded', function() {
+                //load req table
+                const reportId = '<?php echo e($report->id); ?>';
+                loadRequests(reportId);
+
                 var reportLat = <?php echo json_encode($report->item->location['lat'], 15, 512) ?>;
                 var reportLng = <?php echo json_encode($report->item->location['lng'], 15, 512) ?>;
                 var reportType = <?php echo json_encode($report->item->type, 15, 512) ?>;

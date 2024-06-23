@@ -53,5 +53,16 @@ class Report extends Model
             ->where('title', 'LIKE', '%' . $this->title . '%')
             ->get();
     }
+    public function pendingRequests()
+    {
+        return $this->hasMany(Request::class, 'detailed_report_id')->where('status', 'pending');
+    }
+    public function approvedRequests()
+    {
+        return $this->hasMany(Request::class, 'detailed_report_id')->where('status', 'approved');
+    }
+    public function declinedRequests()
+    {
+        return $this->hasMany(Request::class, 'detailed_report_id')->where('status', 'declined');
+    }
 }
-

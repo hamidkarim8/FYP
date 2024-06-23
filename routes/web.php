@@ -63,7 +63,9 @@ Route::post('/detailed-report', [ReportController::class, 'submitDetailedReport'
 
 //Request to contact/PoO
 Route::post('/reports/{report}/request-action', [RequestController::class, 'requestAction']);
-Route::post('/reports/{report}/accept-request', [RequestController::class, 'acceptRequest']);
+Route::post('/accept-request/{requestId}', [RequestController::class, 'acceptRequestById']);
+Route::post('/decline-request/{requestId}', [RequestController::class, 'declineRequestById']);
+Route::get('/reports/{reportId}/requests', [RequestController::class, 'getRequests']);
 
 // Fallback Route
 Route::fallback(function () {
