@@ -10,6 +10,16 @@
     <link rel="stylesheet" href="<?php echo e(URL::asset('assets/libs/filepond/filepond.min.css')); ?>" type="text/css" />
     <link rel="stylesheet"
         href="<?php echo e(URL::asset('assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css')); ?>">
+    <style>
+        .notification-item {
+            transition: transform 0.5s ease, background-color 0.5s ease;
+        }
+
+        .notification-item.shaded {
+            background-color: #f0f0f0;
+            /* Example shaded color */
+        }
+    </style>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('body'); ?>
 
@@ -71,10 +81,7 @@
                                                     <div class="col">
                                                         <h6 class="m-0 fs-16 fw-semibold text-white"> Notifications </h6>
                                                     </div>
-                                                    <div class="col-auto dropdown-tabs">
-                                                        <span class="badge badge-soft-light fs-13"> <span
-                                                                class="notification-count">0</span> New</span>
-                                                    </div>
+                                                    
                                                 </div>
                                             </div>
 
@@ -92,7 +99,8 @@
 
                                         </div>
 
-                                        <div class="tab-content" id="notificationItemsTabContent">
+                                        <div class="tab-content" id="notificationItemsTabContent" data-simplebar
+                                            data-simplebar-auto-hide="false" style="max-height: 300px; overflow-y: auto;">
                                         </div>
                                     </div>
                                 </div>
@@ -1791,8 +1799,11 @@ unset($__errorArgs, $__bag); ?>
                 });
             });
             document.addEventListener('DOMContentLoaded', function() {
+
+                //call notification
                 fetchNotifications();
-                setInterval(fetchNotifications, 10000);
+                setInterval(fetchNotifications, 60000);
+
                 const closeFilterBtn = document.getElementById('closeFilterBtn');
                 const collapseWithicon2 = new bootstrap.Collapse(document.getElementById('collapseWithicon2'), {
                     toggle: false
@@ -1981,24 +1992,26 @@ unset($__errorArgs, $__bag); ?>
                 function updateNotificationUI(notifications) {
                     const notificationDropdown = document.getElementById('notificationItemsTabContent');
                     const notificationBadge = document.querySelector('.topbar-badge');
-                    const notificationCountBadge = document.querySelector('.notification-count');
+                    // const notificationCountBadge = document.querySelector('.notification-count');
                     const notificationCountBadge2 = document.querySelector('.notification-count2');
 
                     let notificationCount = notifications.length;
                     notificationBadge.textContent = notificationCount;
-                    notificationCountBadge.textContent = notificationCount;
+                    // notificationCountBadge.textContent = notificationCount;
                     notificationCountBadge2.textContent = notificationCount;
 
                     let notificationHTML = notifications.map(notification => {
+                        const isRead = notification.read_at !== null ? 'read' :
+                        'unread';
                         return `
-            <div class="text-reset notification-item d-block dropdown-item position-relative">
-                <div class="d-flex">
+            <div class="text-reset notification-item d-block dropdown-item position-relative ${isRead}" data-notification-id="${notification.id}">
+                <div class="d-flex align-items-center">
                     <div class="avatar-xs me-3">
                         <span class="avatar-title bg-soft-info text-info rounded-circle fs-16">
                             <i class="bx bx-badge-check"></i>
                         </span>
                     </div>
-                    <div class="flex-1">
+                    <div class="flex-grow-1">
                         <a href="#!" class="stretched-link">
                             <h6 class="mt-0 mb-2 lh-base">${notification.data.message}</h6>
                         </a>
@@ -2018,6 +2031,29 @@ unset($__errorArgs, $__bag); ?>
                     }).join('');
 
                     notificationDropdown.innerHTML = notificationHTML;
+
+                    // Attach event listeners after updating the DOM
+                    attachCheckboxListeners();
+                }
+
+                function attachCheckboxListeners() {
+                    const checkboxes = document.querySelectorAll('.notification-checkbox');
+
+                    checkboxes.forEach(checkbox => {
+                        checkbox.addEventListener('change', function() {
+                            const notificationId = this.value;
+                            const isChecked = this.checked;
+
+                            axios.put(`/notifications/${notificationId}/mark-as-read`)
+                                .then(response => {
+                                    // Successfully marked as read
+                                    fetchNotifications(); // Refresh notifications after marking as read
+                                })
+                                .catch(error => {
+                                    console.error('Error marking notification as read:', error);
+                                });
+                        });
+                    });
                 }
             });
         </script>

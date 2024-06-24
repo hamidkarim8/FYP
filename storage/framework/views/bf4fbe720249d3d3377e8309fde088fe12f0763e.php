@@ -1982,24 +1982,31 @@ unset($__errorArgs, $__bag); ?>
                 function updateNotificationUI(notifications) {
                     const notificationDropdown = document.getElementById('notificationItemsTabContent');
                     const notificationBadge = document.querySelector('.topbar-badge');
-                    // const notificationCountBadge = document.querySelector('.notification-count');
                     const notificationCountBadge2 = document.querySelector('.notification-count2');
 
                     let notificationCount = notifications.length;
-                    notificationBadge.textContent = notificationCount;
-                    // notificationCountBadge.textContent = notificationCount;
+                    // Count only unread notifications
+                    let unreadNotificationCount = notifications.filter(notification => notification.read_at === null)
+                        .length;
+                    notificationBadge.textContent = unreadNotificationCount;
                     notificationCountBadge2.textContent = notificationCount;
 
                     let notificationHTML = notifications.map(notification => {
+                        const isRead = notification.read_at !== null ? 'read' : 'unread';
+                        const backgroundColor = notification.read_at !== null ? '#f0f0f0' :
+                            '#ffffff';
+
                         return `
-            <div class="text-reset notification-item d-block dropdown-item position-relative">
-                <div class="d-flex">
+            <div class="text-reset notification-item d-block dropdown-item position-relative ${isRead}" 
+                data-notification-id="${notification.id}"
+                style="background-color: ${backgroundColor};">
+                <div class="d-flex align-items-center">
                     <div class="avatar-xs me-3">
                         <span class="avatar-title bg-soft-info text-info rounded-circle fs-16">
                             <i class="bx bx-badge-check"></i>
                         </span>
                     </div>
-                    <div class="flex-1">
+                    <div class="flex-grow-1">
                         <a href="#!" class="stretched-link">
                             <h6 class="mt-0 mb-2 lh-base">${notification.data.message}</h6>
                         </a>
@@ -2007,12 +2014,55 @@ unset($__errorArgs, $__bag); ?>
                             <span><i class="mdi mdi-clock-outline"></i> ${new Date(notification.created_at).toLocaleString('en-GB')}</span>
                         </p>
                     </div>
+                    <div class="px-2 fs-15">
+                        <div class="form-check notification-check">
+                            <input class="form-check-input notification-checkbox" 
+                                type="checkbox" 
+                                value="${notification.id}" 
+                                id="notification-check-${notification.id}" 
+                                ${notification.read_at !== null ? 'checked' : ''}
+                                title="${notification.read_at !== null ? 'Mark as unread' : 'Mark as read'}">
+                            <label class="form-check-label" for="notification-check-${notification.id}"></label>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
                     }).join('');
 
                     notificationDropdown.innerHTML = notificationHTML;
+
+                    attachCheckboxListeners();
+                }
+
+                function attachCheckboxListeners() {
+                    const checkboxes = document.querySelectorAll('.notification-checkbox');
+
+                    checkboxes.forEach(checkbox => {
+                        checkbox.addEventListener('change', function() {
+                            const notificationId = this.value;
+                            const isChecked = this.checked;
+
+                            if (isChecked) {
+                                axios.put(`/notifications/${notificationId}/mark-as-read`)
+                                    .then(response => {
+                                        fetchNotifications();
+                                    })
+                                    .catch(error => {
+                                        console.error('Error marking notification as read:', error);
+                                    });
+                            } else {
+                                axios.put(`/notifications/${notificationId}/mark-as-unread`)
+                                    .then(response => {
+                                        fetchNotifications();
+                                    })
+                                    .catch(error => {
+                                        console.error('Error marking notification as unread:',
+                                            error);
+                                    });
+                            }
+                        });
+                    });
                 }
             });
         </script>

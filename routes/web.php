@@ -70,6 +70,8 @@ Route::get('/reports/{reportId}/requests', [RequestController::class, 'getReques
 
 //Notification
 Route::get('/notifications', [NotificationController::class, 'fetchNotifications'])->name('notifications.fetch');
+Route::put('/notifications/{notificationId}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
+Route::put('/notifications/{notificationId}/mark-as-unread', [NotificationController::class, 'markAsUnread'])->name('notifications.mark-as-unread');
 
 // Fallback Route
 Route::fallback(function () {
