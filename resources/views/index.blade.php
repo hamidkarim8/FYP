@@ -71,10 +71,10 @@
                                                     <div class="col">
                                                         <h6 class="m-0 fs-16 fw-semibold text-white"> Notifications </h6>
                                                     </div>
-                                                    <div class="col-auto dropdown-tabs">
+                                                    {{-- <div class="col-auto dropdown-tabs">
                                                         <span class="badge badge-soft-light fs-13"> <span
                                                                 class="notification-count">0</span> New</span>
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
                                             </div>
 
@@ -92,8 +92,8 @@
 
                                         </div>
 
-                                        <div class="tab-content" id="notificationItemsTabContent" data-simplebar data-simplebar-auto-hide="false"
-                                        style="max-height: 300px; overflow-y: auto;">
+                                        <div class="tab-content" id="notificationItemsTabContent" data-simplebar
+                                            data-simplebar-auto-hide="false" style="max-height: 300px; overflow-y: auto;">
                                         </div>
                                     </div>
                                 </div>
@@ -1771,7 +1771,7 @@
 
                 //call notification
                 fetchNotifications();
-                setInterval(fetchNotifications, 10000);
+                setInterval(fetchNotifications, 60000);
 
                 const closeFilterBtn = document.getElementById('closeFilterBtn');
                 const collapseWithicon2 = new bootstrap.Collapse(document.getElementById('collapseWithicon2'), {
@@ -1961,12 +1961,12 @@
                 function updateNotificationUI(notifications) {
                     const notificationDropdown = document.getElementById('notificationItemsTabContent');
                     const notificationBadge = document.querySelector('.topbar-badge');
-                    const notificationCountBadge = document.querySelector('.notification-count');
+                    // const notificationCountBadge = document.querySelector('.notification-count');
                     const notificationCountBadge2 = document.querySelector('.notification-count2');
 
                     let notificationCount = notifications.length;
                     notificationBadge.textContent = notificationCount;
-                    notificationCountBadge.textContent = notificationCount;
+                    // notificationCountBadge.textContent = notificationCount;
                     notificationCountBadge2.textContent = notificationCount;
 
                     let notificationHTML = notifications.map(notification => {
@@ -1985,12 +1985,6 @@
                         <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
                             <span><i class="mdi mdi-clock-outline"></i> ${new Date(notification.created_at).toLocaleString('en-GB')}</span>
                         </p>
-                    </div>
-                    <div class="px-2 fs-15">
-                        <div class="form-check notification-check">
-                            <input class="form-check-input" type="checkbox" value="" id="all-notification-check01">
-                            <label class="form-check-label" for="all-notification-check01"></label>
-                        </div>
                     </div>
                 </div>
             </div>
