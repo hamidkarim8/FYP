@@ -221,6 +221,9 @@ class ReportController extends Controller
             $report->item_id = $item->id;
             $report->type = 'detailed';
             $report->save();
+            
+            $user = Auth::user();
+            Notification::send($user, new ReportSubmitted($report));
 
             return redirect()->back()->with('success', 'Detailed report submitted successfully.');
         } catch (ValidationException $e) {

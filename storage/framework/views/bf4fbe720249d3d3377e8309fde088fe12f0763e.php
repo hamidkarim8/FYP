@@ -1792,8 +1792,11 @@ unset($__errorArgs, $__bag); ?>
                 });
             });
             document.addEventListener('DOMContentLoaded', function() {
+
+                //call notification
                 fetchNotifications();
                 setInterval(fetchNotifications, 10000);
+
                 const closeFilterBtn = document.getElementById('closeFilterBtn');
                 const collapseWithicon2 = new bootstrap.Collapse(document.getElementById('collapseWithicon2'), {
                     toggle: false
