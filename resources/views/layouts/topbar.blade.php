@@ -9,7 +9,8 @@
                             <img src="{{ URL::asset('assets/images/logo-sm.png') }}" alt="" height="22">
                         </span>
                         <span class="logo-lg">
-                            <img src="{{ URL::asset('assets/images/logo-dark-new.png') }}" alt="" height="17">
+                            <img src="{{ URL::asset('assets/images/logo-dark-new.png') }}" alt=""
+                                height="17">
                         </span>
                     </a>
 
@@ -372,8 +373,13 @@
                             <span class="text-start ms-xl-2">
                                 <span
                                     class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ Auth::user()->name }}</span>
-                                <span
-                                    class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">{{ Auth::user()->role }}</span>
+                                <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">
+                                    @if (Auth::user()->role === 'normal_user')
+                                        User
+                                    @else
+                                        Admin
+                                    @endif
+                                </span>
                             </span>
                         </span>
                     </button>

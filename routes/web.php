@@ -13,6 +13,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -66,6 +67,9 @@ Route::post('/reports/{report}/request-action', [RequestController::class, 'requ
 Route::post('/accept-request/{requestId}', [RequestController::class, 'acceptRequestById']);
 Route::post('/decline-request/{requestId}', [RequestController::class, 'declineRequestById']);
 Route::get('/reports/{reportId}/requests', [RequestController::class, 'getRequests']);
+
+//Notification
+Route::get('/notifications', [NotificationController::class, 'fetchNotifications'])->name('notifications.fetch');
 
 // Fallback Route
 Route::fallback(function () {

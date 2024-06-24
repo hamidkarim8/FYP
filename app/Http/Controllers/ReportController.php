@@ -7,12 +7,14 @@ use Illuminate\Http\Request;
 use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File as FileFacade;
 use App\Models\Report;
 use Carbon\Carbon;
+use App\Notifications\ReportSubmitted;
 
 class ReportController extends Controller
 {
@@ -78,6 +80,9 @@ class ReportController extends Controller
             $report->item_id = $item->id;
             $report->type = 'simple';
             $report->save();
+
+            $user = Auth::user();
+            Notification::send($user, new ReportSubmitted($report));
 
             return response()->json(['message' => 'Report submitted successfully'], 200);
         } catch (ValidationException $e) {
