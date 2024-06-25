@@ -784,7 +784,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-12" style="display: none;">
+                            <div class="col-lg-12">
                                 <div class="d-flex align-items-center mb-4">
                                     <div class="flex-grow-1">
                                         <p class="text-muted fs-14 mb-0">Filter Result: <span
@@ -796,7 +796,7 @@
                     </div><!-- end row -->
                     <div id="alert-container" class="mt-2"></div>
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-12" style="display: none;">
                             <p id="totalContainer" class="text-muted mb-3">Total: <span id="totalItemsCount2"></span></p>
                         </div>
                         @foreach ($detailedReports as $report)
@@ -862,6 +862,15 @@
                             </div>
                         @endif
                     </div>
+                    @if ($detailedReports->isNotEmpty())
+                        <!-- Pagination Links -->
+                        <div class="row">
+                            <div class="col-12 d-flex justify-content-center mt-4">
+                                {{ $detailedReports->fragment('items')->onEachSide(2)->links() }}
+                            </div>
+                        </div>
+                    @endif
+
             </section>
             <!-- end items -->
 

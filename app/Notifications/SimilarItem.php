@@ -38,7 +38,7 @@ class SimilarItem extends Notification
     {
         return [
             'item_type' => $this->item->type,
-            'message' => 'This might be your item which reported ' . $this->item->type . ' . Check it out!',
+            'message' => "Hey there! We've spotted a potential match for your " . $this->item->type . " item report. Click to check it out now!",
             'item_id' => $this->item->id,
             'report_id' => $this->report->id,
         ];

@@ -260,7 +260,7 @@ class ReportController extends Controller
                 ->where('type', 'detailed')
                 ->whereHas('item', function ($itemQuery) use ($report) {
                     $itemQuery->where('title', 'like', '%' . $report->item->title . '%')
-                        ->where('category_id', $report->item->category_id);
+                        ->orWhere('category_id', $report->item->category_id);
                 });
         })->get();
         // dd($report->id);
