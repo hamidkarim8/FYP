@@ -1986,6 +1986,14 @@
                             const isRead = notification.read_at !== null ? 'read' : 'unread';
                             const backgroundColor = notification.read_at !== null ? '#f0f0f0' : '#ffffff';
 
+                            let href;
+                            if (notification.type === 'App\\Notifications\\SimilarItem') {
+                                href = `{{ route('user.itemDetail', ['id' => ':report_id']) }}`
+                                    .replace(':report_id', notification.data.report_id);
+                            } else {
+                                href = '#items';
+                            }
+
                             return `
                 <div class="text-reset notification-item d-block dropdown-item position-relative ${isRead}" 
                     data-notification-id="${notification.id}"
@@ -1997,7 +2005,7 @@
                             </span>
                         </div>
                         <div class="flex-grow-1">
-                            <a href="#!" class="stretched-link">
+                            <a href=${href} class="stretched-link">
                                 <h6 class="mt-0 mb-2 lh-base">${notification.data.message}</h6>
                             </a>
                             <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">

@@ -13,8 +13,10 @@ use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File as FileFacade;
 use App\Models\Report;
+use App\Models\User;
 use Carbon\Carbon;
 use App\Notifications\ReportSubmitted;
+use App\Notifications\SimilarItem;
 
 class ReportController extends Controller
 {
@@ -81,6 +83,7 @@ class ReportController extends Controller
             $report->type = 'simple';
             $report->save();
 
+            //send notification successfully submitted a report
             $user = Auth::user();
             Notification::send($user, new ReportSubmitted($report));
 
@@ -221,15 +224,50 @@ class ReportController extends Controller
             $report->item_id = $item->id;
             $report->type = 'detailed';
             $report->save();
-            
+
+            //send notification successfully submitted a report
             $user = Auth::user();
             Notification::send($user, new ReportSubmitted($report));
+
+            //send notification to those who reported similar item
+            $this->notifyUsers($report);
 
             return redirect()->back()->with('success', 'Detailed report submitted successfully.');
         } catch (ValidationException $e) {
             $errorMessage = $e->getMessage();
             Log::error('Error submitting detailed report: ' . $errorMessage);
             return redirect()->back()->with('error', $errorMessage);
+        }
+    }
+    protected function notifyUsers($report)
+    {
+        $authUserId = Auth::id();
+
+        Log::info('Authenticated User ID: ' . $authUserId);
+        Log::info('Report: ', $report->toArray());
+
+
+        //testing
+        $matchingReports = Report::whereHas('item', function ($itemQuery) use ($report) {
+            $itemQuery->where('title', 'like', '%' . $report->item->title . '%')
+                ->orWhere('category_id', $report->item->category_id);
+        })->where('type', 'detailed')->get();
+        Log::info('Matching Reports: ', $matchingReports->toArray());
+
+        //find user to be notified
+        $users = User::whereHas('reports', function ($query) use ($report, $authUserId) {
+            $query->where('user_id', '!=', $authUserId)
+                ->where('type', 'detailed')
+                ->whereHas('item', function ($itemQuery) use ($report) {
+                    $itemQuery->where('title', 'like', '%' . $report->item->title . '%')
+                        ->where('category_id', $report->item->category_id);
+                });
+        })->get();
+        // dd($report->id);
+        Log::info('Users to be notified: ', $users->toArray());
+
+        foreach ($users as $user) {
+            $user->notify(new SimilarItem($report->item, $report));
         }
     }
 }

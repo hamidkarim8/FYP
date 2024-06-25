@@ -1984,56 +1984,79 @@ unset($__errorArgs, $__bag); ?>
                     const notificationBadge = document.querySelector('.topbar-badge');
                     const notificationCountBadge2 = document.querySelector('.notification-count2');
 
-                    let notificationCount = notifications.length;
                     // Count only unread notifications
                     let unreadNotificationCount = notifications.filter(notification => notification.read_at === null)
                         .length;
                     notificationBadge.textContent = unreadNotificationCount;
-                    notificationCountBadge2.textContent = notificationCount;
+                    notificationCountBadge2.textContent = notifications.length;
 
-                    let notificationHTML = notifications.map(notification => {
-                        const isRead = notification.read_at !== null ? 'read' : 'unread';
-                        const backgroundColor = notification.read_at !== null ? '#f0f0f0' :
-                            '#ffffff';
+                    let notificationHTML;
 
-                        return `
-            <div class="text-reset notification-item d-block dropdown-item position-relative ${isRead}" 
-                data-notification-id="${notification.id}"
-                style="background-color: ${backgroundColor};">
+                    if (notifications.length === 0) {
+                        notificationHTML = `
+            <div class="text-reset notification-item d-block dropdown-item position-relative">
                 <div class="d-flex align-items-center">
-                    <div class="avatar-xs me-3">
-                        <span class="avatar-title bg-soft-info text-info rounded-circle fs-16">
-                            <i class="bx bx-badge-check"></i>
-                        </span>
-                    </div>
                     <div class="flex-grow-1">
-                        <a href="#!" class="stretched-link">
-                            <h6 class="mt-0 mb-2 lh-base">${notification.data.message}</h6>
-                        </a>
-                        <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-                            <span><i class="mdi mdi-clock-outline"></i> ${new Date(notification.created_at).toLocaleString('en-GB')}</span>
-                        </p>
-                    </div>
-                    <div class="px-2 fs-15">
-                        <div class="form-check notification-check">
-                            <input class="form-check-input notification-checkbox" 
-                                type="checkbox" 
-                                value="${notification.id}" 
-                                id="notification-check-${notification.id}" 
-                                ${notification.read_at !== null ? 'checked' : ''}
-                                title="${notification.read_at !== null ? 'Mark as unread' : 'Mark as read'}">
-                            <label class="form-check-label" for="notification-check-${notification.id}"></label>
-                        </div>
+                        <h6 class="mt-0 mb-2 lh-base text-center">No notifications</h6>
                     </div>
                 </div>
             </div>
         `;
-                    }).join('');
+                    } else {
+                        notificationHTML = notifications.map(notification => {
+                            const isRead = notification.read_at !== null ? 'read' : 'unread';
+                            const backgroundColor = notification.read_at !== null ? '#f0f0f0' : '#ffffff';
+
+                            let href;
+                            if (notification.type === 'App\\Notifications\\SimilarItem') {
+                                href = `<?php echo e(route('user.itemDetail', ['id' => ':report_id'])); ?>`
+                                    .replace(':report_id', notification.data.report_id);
+                            } else {
+                                href = '#items';
+                            }
+
+                            return `
+                <div class="text-reset notification-item d-block dropdown-item position-relative ${isRead}" 
+                    data-notification-id="${notification.id}"
+                    style="background-color: ${backgroundColor};">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar-xs me-3">
+                            <span class="avatar-title bg-soft-info text-info rounded-circle fs-16">
+                                <i class="bx bx-badge-check"></i>
+                            </span>
+                        </div>
+                        <div class="flex-grow-1">
+                            <a href=${href} class="stretched-link">
+                                <h6 class="mt-0 mb-2 lh-base">${notification.data.message}</h6>
+                            </a>
+                            <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                <span><i class="mdi mdi-clock-outline"></i> ${new Date(notification.created_at).toLocaleString('en-GB')}</span>
+                            </p>
+                        </div>
+                        <div class="px-2 fs-15">
+                            <div class="form-check notification-check">
+                                <input class="form-check-input notification-checkbox" 
+                                    type="checkbox" 
+                                    value="${notification.id}" 
+                                    id="notification-check-${notification.id}" 
+                                    ${notification.read_at !== null ? 'checked' : ''}
+                                    title="${notification.read_at !== null ? 'Mark as unread' : 'Mark as read'}">
+                                <label class="form-check-label" for="notification-check-${notification.id}"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+                        }).join('');
+                    }
 
                     notificationDropdown.innerHTML = notificationHTML;
 
-                    attachCheckboxListeners();
+                    if (notifications.length > 0) {
+                        attachCheckboxListeners();
+                    }
                 }
+
 
                 function attachCheckboxListeners() {
                     const checkboxes = document.querySelectorAll('.notification-checkbox');

@@ -11,6 +11,7 @@ class Report extends Model
     use HasFactory;
 
     protected $keyType = 'string';
+    public $incrementing = false;
 
     protected $fillable = [
         'user_id', 'item_id', 'type'
