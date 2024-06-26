@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Notifications\SimpleReportSubmitted;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File as FileFacade;
 use App\Models\Report;
 use App\Models\User;
+use App\Notifications\DetailedReportSubmitted;
 use Carbon\Carbon;
 use App\Notifications\ReportSubmitted;
 use App\Notifications\SimilarItem;
@@ -85,7 +87,7 @@ class ReportController extends Controller
 
             //send notification successfully submitted a report
             $user = Auth::user();
-            Notification::send($user, new ReportSubmitted($report));
+            Notification::send($user, new SimpleReportSubmitted($report));
 
             return response()->json(['message' => 'Report submitted successfully'], 200);
         } catch (ValidationException $e) {
@@ -227,7 +229,7 @@ class ReportController extends Controller
 
             //send notification successfully submitted a report
             $user = Auth::user();
-            Notification::send($user, new ReportSubmitted($report));
+            Notification::send($user, new DetailedReportSubmitted($report));
 
             //send notification to those who reported similar item
             $this->notifyUsers($report);

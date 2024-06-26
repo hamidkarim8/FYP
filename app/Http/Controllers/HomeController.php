@@ -39,12 +39,12 @@ class HomeController extends Controller
 
     public function root()
     {
-        $detailedReports = Report::with(['item', 'item.category'])->where('type', 'detailed')->paginate(6);
-        // dd($detailedReports);
+        $detailedReports = Report::with(['item', 'item.category'])->where('type', 'detailed')->get();
+        $paginateDetailedReports = Report::with(['item', 'item.category'])->where('type', 'detailed')->paginate(6);
         $simpleReports = Report::with(['item', 'item.category'])->where('type', 'simple')->get();
         $normalUsers = User::where('role', 'normal_user')->get();
         // dd($detailedReports);
-        return view('index', compact('detailedReports', 'simpleReports', 'normalUsers'));
+        return view('index', compact('detailedReports', 'simpleReports', 'normalUsers', 'paginateDetailedReports'));
     }
 
 

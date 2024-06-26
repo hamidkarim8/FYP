@@ -799,7 +799,7 @@
                         <div class="col-12" style="display: none;">
                             <p id="totalContainer" class="text-muted mb-3">Total: <span id="totalItemsCount2"></span></p>
                         </div>
-                        @foreach ($detailedReports as $report)
+                        @foreach ($paginateDetailedReports as $report)
                             <div class="col-lg-4 product-item artwork crypto-card 3d-style" data-id="{{ $report->id }}"
                                 data-type="{{ $report->item->type }}"
                                 data-category-id="{{ $report->item->category_id }}"
@@ -862,11 +862,11 @@
                             </div>
                         @endif
                     </div>
-                    @if ($detailedReports->isNotEmpty())
+                    @if ($paginateDetailedReports->isNotEmpty())
                         <!-- Pagination Links -->
                         <div class="row">
                             <div class="col-12 d-flex justify-content-center mt-4">
-                                {{ $detailedReports->fragment('items')->onEachSide(2)->links() }}
+                                {{ $paginateDetailedReports->fragment('items')->onEachSide(2)->links() }}
                             </div>
                         </div>
                     @endif
@@ -1996,11 +1996,12 @@
                             const backgroundColor = notification.read_at !== null ? '#f0f0f0' : '#ffffff';
 
                             let href;
-                            if (notification.type === 'App\\Notifications\\SimilarItem') {
-                                href = `{{ route('user.itemDetail', ['id' => ':report_id']) }}`
-                                    .replace(':report_id', notification.data.report_id);
+                            // console.log(notification.type);
+                            if (notification.type === 'App\\Notifications\\SimpleReportSubmitted') {
+                                href = '#hero';
                             } else {
-                                href = '#items';
+                                href = `{{ route('user.itemDetail', ['id' => ':report_id']) }}`
+                                .replace(':report_id', notification.data.report_id);
                             }
 
                             return `

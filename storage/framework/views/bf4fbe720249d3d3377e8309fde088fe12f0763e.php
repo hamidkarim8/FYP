@@ -818,7 +818,7 @@ unset($__errorArgs, $__bag); ?>
                         <div class="col-12" style="display: none;">
                             <p id="totalContainer" class="text-muted mb-3">Total: <span id="totalItemsCount2"></span></p>
                         </div>
-                        <?php $__currentLoopData = $detailedReports; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php $__currentLoopData = $paginateDetailedReports; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="col-lg-4 product-item artwork crypto-card 3d-style" data-id="<?php echo e($report->id); ?>"
                                 data-type="<?php echo e($report->item->type); ?>"
                                 data-category-id="<?php echo e($report->item->category_id); ?>"
@@ -883,11 +883,11 @@ unset($__errorArgs, $__bag); ?>
                             </div>
                         <?php endif; ?>
                     </div>
-                    <?php if($detailedReports->isNotEmpty()): ?>
+                    <?php if($paginateDetailedReports->isNotEmpty()): ?>
                         <!-- Pagination Links -->
                         <div class="row">
                             <div class="col-12 d-flex justify-content-center mt-4">
-                                <?php echo e($detailedReports->fragment('items')->onEachSide(2)->links()); ?>
+                                <?php echo e($paginateDetailedReports->fragment('items')->onEachSide(2)->links()); ?>
 
                             </div>
                         </div>
@@ -2018,11 +2018,12 @@ unset($__errorArgs, $__bag); ?>
                             const backgroundColor = notification.read_at !== null ? '#f0f0f0' : '#ffffff';
 
                             let href;
-                            if (notification.type === 'App\\Notifications\\SimilarItem') {
-                                href = `<?php echo e(route('user.itemDetail', ['id' => ':report_id'])); ?>`
-                                    .replace(':report_id', notification.data.report_id);
+                            // console.log(notification.type);
+                            if (notification.type === 'App\\Notifications\\SimpleReportSubmitted') {
+                                href = '#hero';
                             } else {
-                                href = '#items';
+                                href = `<?php echo e(route('user.itemDetail', ['id' => ':report_id'])); ?>`
+                                .replace(':report_id', notification.data.report_id);
                             }
 
                             return `

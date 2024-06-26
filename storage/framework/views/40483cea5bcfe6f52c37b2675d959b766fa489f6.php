@@ -803,7 +803,7 @@ unset($__errorArgs, $__bag); ?>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-12" style="display: none;">
+                            <div class="col-lg-12">
                                 <div class="d-flex align-items-center mb-4">
                                     <div class="flex-grow-1">
                                         <p class="text-muted fs-14 mb-0">Filter Result: <span
@@ -815,7 +815,7 @@ unset($__errorArgs, $__bag); ?>
                     </div><!-- end row -->
                     <div id="alert-container" class="mt-2"></div>
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-12" style="display: none;">
                             <p id="totalContainer" class="text-muted mb-3">Total: <span id="totalItemsCount2"></span></p>
                         </div>
                         <?php $__currentLoopData = $detailedReports; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -883,6 +883,16 @@ unset($__errorArgs, $__bag); ?>
                             </div>
                         <?php endif; ?>
                     </div>
+                    <?php if($detailedReports->isNotEmpty()): ?>
+                        <!-- Pagination Links -->
+                        <div class="row">
+                            <div class="col-12 d-flex justify-content-center mt-4">
+                                <?php echo e($detailedReports->fragment('items')->onEachSide(2)->links()); ?>
+
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
             </section>
             <!-- end items -->
 
@@ -2007,6 +2017,15 @@ unset($__errorArgs, $__bag); ?>
                             const isRead = notification.read_at !== null ? 'read' : 'unread';
                             const backgroundColor = notification.read_at !== null ? '#f0f0f0' : '#ffffff';
 
+                            let href;
+                            // console.log(notification.type);
+                            if (notification.type === 'App\\Notifications\\SimpleReportSubmitted') {
+                                href = '#hero';
+                            } else {
+                                href = `<?php echo e(route('user.itemDetail', ['id' => ':report_id'])); ?>`
+                                .replace(':report_id', notification.data.report_id);
+                            }
+
                             return `
                 <div class="text-reset notification-item d-block dropdown-item position-relative ${isRead}" 
                     data-notification-id="${notification.id}"
@@ -2018,7 +2037,7 @@ unset($__errorArgs, $__bag); ?>
                             </span>
                         </div>
                         <div class="flex-grow-1">
-                            <a href="#items" class="stretched-link">
+                            <a href=${href} class="stretched-link">
                                 <h6 class="mt-0 mb-2 lh-base">${notification.data.message}</h6>
                             </a>
                             <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">

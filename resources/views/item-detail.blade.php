@@ -450,11 +450,11 @@
                             const backgroundColor = notification.read_at !== null ? '#f0f0f0' : '#ffffff';
 
                             let href;
-                            if (notification.type === 'App\\Notifications\\SimilarItem') {
-                                href = `{{ route('user.itemDetail', ['id' => ':report_id']) }}`
-                                    .replace(':report_id', notification.data.report_id);
+                            if (notification.type === 'App\\Notifications\\SimpleReportSubmitted') {
+                                href = '#hero';
                             } else {
-                                href = '/home#items';
+                                href = `{{ route('user.itemDetail', ['id' => ':report_id']) }}`
+                                .replace(':report_id', notification.data.report_id);
                             }
 
                             return `
