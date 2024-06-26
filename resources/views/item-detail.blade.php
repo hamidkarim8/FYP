@@ -451,7 +451,7 @@
 
                             let href;
                             if (notification.type === 'App\\Notifications\\SimpleReportSubmitted') {
-                                href = '#hero';
+                                href = '/home#hero';
                             } else {
                                 href = `{{ route('user.itemDetail', ['id' => ':report_id']) }}`
                                 .replace(':report_id', notification.data.report_id);
