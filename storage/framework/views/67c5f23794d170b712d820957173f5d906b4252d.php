@@ -1,0 +1,504 @@
+
+<?php $__env->startSection('title'); ?>
+    Landing
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('css'); ?>
+    <link href="<?php echo e(URL::asset('assets/libs/swiper/swiper.min.css')); ?>" rel="stylesheet" type="text/css" />
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('body'); ?>
+
+    <body data-bs-spy="scroll" data-bs-target="#navbar-example">
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('content'); ?>
+        <!-- Begin page -->
+        <div class="layout-wrapper landing">
+
+            <?php echo $__env->make('layouts-user.navbar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+            <!-- end navbar -->
+
+            <!-- start items -->
+            <section class="section bg-light" id="items">
+                <div class="bg-overlay bg-overlay-pattern"></div>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="text-center mb-5">
+                                <h2 class="mb-3 fw-semibold lh-base">Explore Lost and Found Items</h2>
+                                <p class="text-muted mb-4">Explore the list below to find your lost item! Click on the card
+                                    for more details.</p>
+                                <ul class="nav nav-pills filter-btns justify-content-center" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link fw-medium active" type="button" data-filter="all">All
+                                            Items</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link fw-medium" type="button" data-filter="lost">Lost</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link fw-medium" type="button" data-filter="found">Found</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link fw-medium" type="button" data-toggle="tooltip"
+                                            data-placement="bottom" title="Filtering based on your report"
+                                            data-filter="auto" id="auto-matching-btn">Auto-matching</button>
+
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link fw-medium" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseWithicon2" aria-expanded="false"
+                                            aria-controls="collapseWithicon2" data-toggle="tooltip" data-placement="bottom"
+                                            title="Filter">
+                                            <i class="ri-filter-2-line"></i>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div><!-- end col -->
+                        <div class="collapse" id="collapseWithicon2">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center">
+                                            <h5 class="card-title mb-0 fw-semibold flex-grow-1">Filter Item</h5>
+                                            <button type="button" class="btn btn-md btn-outline-primary"
+                                                id="closeFilterBtn">
+                                                <i class="ri-close-fill"></i> Close
+                                            </button>
+                                        </div>
+                                        <div class="row row-cols-xxl-5 row-cols-lg-3 row-cols-md-2 row-cols-1 mt-3 g-3">
+                                            <div class="col">
+                                                <h6 class="text-uppercase fs-12 mb-2">Search</h6>
+                                                <input type="text" class="form-control" placeholder="Search item keyword"
+                                                    autocomplete="off" id="searchItem">
+                                            </div>
+                                            <div class="col">
+                                                <h6 class="text-uppercase fs-12 mb-2">Select Type</h6>
+                                                <select class="form-control" id="item-type" name="select-type">
+                                                    <option value="" selected>Select Type</option>
+                                                    <option value="found">Found</option>
+                                                    <option value="lost">Lost</option>
+                                                </select>
+                                            </div>
+                                            <div class="col">
+                                                <h6 class="text-uppercase fs-12 mb-2">Select Category</h6>
+                                                <select class="form-control" id="item-category" data-choices
+                                                    name="select-category" data-choices-search-false>
+                                                    <option value="" selected>Select Category</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="d-flex align-items-center mb-4">
+                                    <div class="flex-grow-1">
+                                        <p class="text-muted fs-14 mb-0">Filter Result: <span id="filter-result-count"><span
+                                                    id="totalItemsCount"></span></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- end row -->
+                    <div id="alert-container" class="mt-2"></div>
+                    <div class="row">
+                        <div class="col-12" style="display: none;">
+                            <p id="totalContainer" class="text-muted mb-3">Total: <span id="totalItemsCount2"></span></p>
+                        </div>
+                        <?php $__currentLoopData = $paginateDetailedReports; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="col-lg-4 product-item artwork crypto-card 3d-style" data-id="<?php echo e($report->id); ?>"
+                                data-type="<?php echo e($report->item->type); ?>" data-category-id="<?php echo e($report->item->category_id); ?>"
+                                data-title="<?php echo e($report->item->title); ?>">
+                                <div class="card explore-box card-animate">
+                                    <div class="explore-place-bid-img">
+                                        <div
+                                            class="ribbon-box <?php echo e($report->item->type === 'lost' ? 'lost-ribbon' : 'found-ribbon'); ?> left">
+                                            <div
+                                                class="ribbon-two <?php echo e($report->item->type === 'lost' ? 'ribbon-two-danger' : 'ribbon-two-secondary'); ?>">
+                                                <span><?php echo e(ucfirst($report->item->type)); ?></span>
+                                            </div>
+                                        </div>
+                                        <?php
+                                            $imagePaths = json_decode($report->item->image_paths, true);
+                                            $firstImage = $imagePaths[0] ?? null;
+                                        ?>
+
+                                        <?php if($firstImage): ?>
+                                            <img src="<?php echo e(asset($firstImage)); ?>" alt="<?php echo e($report->item->title); ?>"
+                                                class="card-img-top explore-img" />
+                                        <?php else: ?>
+                                            <img src="<?php echo e(asset('assets/images/image-error.png')); ?>" alt="error"
+                                                class="card-img-top explore-img" />
+                                        <?php endif; ?>
+                                        <div class="bg-overlay"></div>
+                                        <?php if(auth()->guard()->check()): ?>
+                                            <div class="place-bid-btn">
+                                                <a href="<?php echo e(route('user.itemDetail', $report->id)); ?>"
+                                                    class="btn btn-success"><i
+                                                        class="ri-information-line align-bottom me-2"></i> See Detail</a>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="fw-medium mb-0 float-end"><?php echo e($report->item->date->format('d-m-Y')); ?>
+
+                                        </p>
+                                        <h5 class="mb-1"><?php echo e($report->item->title); ?></h5>
+                                        <p class="text-muted mb-0"><?php echo e($report->item->category->name); ?></p>
+                                    </div>
+                                    <div class="card-footer border-top border-top-dashed">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 fs-14">
+                                                <i class="ri-map-pin-2-fill text-danger align-bottom me-1"></i>
+                                                <?php echo e($report->item->location['desc']); ?>
+
+                                            </div>
+                                            <?php if(Auth::check() && Auth::id() == $report->user_id): ?>
+                                                <span class="badge badge-soft-info fs-12">
+                                                    <i class="ri-eye-line me-1 align-bottom"></i>Reported by you
+                                                </span>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php if($detailedReports->isEmpty()): ?>
+                            <div class="col-12 text-center mt-4">
+                                <p class="alert alert-warning">No items available.</p>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <?php if($paginateDetailedReports->isNotEmpty()): ?>
+                        <!-- Pagination Links -->
+                        <div class="row">
+                            <div class="col-12 d-flex justify-content-center mt-4">
+                                <?php echo e($paginateDetailedReports->fragment('items')->onEachSide(2)->links()); ?>
+
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+            </section>
+            <!-- end items -->
+
+            <!-- Start footer -->
+            <?php echo $__env->make('layouts-user.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+            <!-- end footer -->
+
+        </div>
+        <!-- end layout wrapper -->
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('script'); ?>
+        <script src="<?php echo e(URL::asset('/assets/libs/swiper/swiper.min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('/assets/js/pages/swiper.init.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('/assets/js/pages/landing.init.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('/assets/js/app.min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('assets/js/pages/apps-nft-explore.init.js')); ?>"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+
+                //call notification
+                fetchNotifications();
+                setInterval(fetchNotifications, 60000);
+
+                const closeFilterBtn = document.getElementById('closeFilterBtn');
+                const collapseWithicon2 = new bootstrap.Collapse(document.getElementById('collapseWithicon2'), {
+                    toggle: false
+                });
+                closeFilterBtn.addEventListener('click', function() {
+                    collapseWithicon2.hide();
+                    totalContainer.style.display = '';
+                    searchInput.value = '';
+                    itemTypeSelect.selectedIndex = 0;
+                    itemCategorySelect.selectedIndex = 0;
+                    filterButtons.forEach(btn => {
+                        if (btn.getAttribute('data-filter') === 'all') {
+                            btn.click();
+                        }
+                    });
+                });
+                const filterButtons = document.querySelectorAll('.filter-btns button[data-filter]');
+                const items = document.querySelectorAll('.product-item');
+                const alertContainer = document.getElementById(
+                    'alert-container');
+                const searchInput = document.getElementById('searchItem');
+                const itemTypeSelect = document.getElementById('item-type');
+                const itemCategorySelect = document.getElementById('item-category');
+                const filterResultCount = document.getElementById('filter-result-count');
+                const totalItemsCount = document.getElementById('totalItemsCount');
+                const totalItemsCount2 = document.getElementById('totalItemsCount2');
+                filterItems('all');
+                filterButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const filter = this.getAttribute('data-filter');
+
+                        filterButtons.forEach(btn => btn.classList.remove('active'));
+                        this.classList.add('active');
+
+                        if (filter === 'auto') {
+                            fetchLatestReportAndFilter();
+                        } else {
+                            filterItems(filter);
+                        }
+                    });
+                });
+
+                function filterItems(filter) {
+                    alertContainer.innerHTML = '';
+                    totalContainer.style.display = '';
+                    let itemsToShow = [];
+
+                    items.forEach(item => {
+                        if (filter === 'all' || item.getAttribute('data-type') === filter) {
+                            item.style.display = '';
+                            itemsToShow.push(item);
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+
+                    updateItemCount(itemsToShow.length);
+                    if (itemsToShow.length <= 0) {
+                        showAlert("No item found.");
+                        const totalContainer = document.getElementById('totalContainer');
+                        totalContainer.style.display = 'none';
+                    }
+                }
+
+                searchInput.addEventListener('input', function() {
+                    filterToggle();
+                });
+
+                itemTypeSelect.addEventListener('change', function() {
+                    filterToggle();
+                });
+
+                itemCategorySelect.addEventListener('change', function() {
+                    filterToggle();
+                });
+
+                function filterToggle() {
+                    alertContainer.innerHTML = '';
+                    totalContainer.style.display = '';
+                    let itemsToShow = [];
+
+                    items.forEach(item => {
+                        item.style.display = 'none';
+                        const itemType = item.getAttribute('data-type');
+                        const itemCategory = item.getAttribute('data-category-id');
+                        const itemName = item.getAttribute('data-title').toLowerCase();
+
+                        const searchValue = searchInput.value.toLowerCase();
+                        const selectedType = itemTypeSelect.value;
+                        const selectedCategory = itemCategorySelect.value;
+
+                        const matchesSearch = itemName.includes(searchValue);
+                        const matchesType = selectedType === '' || itemType === selectedType;
+                        const matchesCategory = selectedCategory === '' || itemCategory === selectedCategory;
+
+                        if (matchesSearch && matchesType && matchesCategory) {
+                            item.style.display = '';
+                            itemsToShow.push(item);
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+
+                    updateFilterResultCount(itemsToShow.length);
+                    if (itemsToShow.length <= 0) {
+                        showAlert("No item found.");
+                        const totalContainer = document.getElementById('totalContainer');
+                        totalContainer.style.display = 'none';
+                    }
+                }
+
+                function updateFilterResultCount(count) {
+                    const result = filterResultCount.textContent = count;
+                    totalItemsCount2.textContent = result;
+                }
+
+                function updateItemCount(count) {
+                    totalItemsCount.textContent = count;
+                    totalItemsCount2.textContent = count;
+                }
+
+                function fetchLatestReportAndFilter() {
+                    alertContainer.innerHTML = '';
+                    fetch('<?php echo e(route('user.latestReport')); ?>')
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const report = data.report.item;
+
+                                if (!report || !report.category_id || !report.title) {
+                                    console.error('Incomplete report data:', report);
+                                    return;
+                                }
+
+                                const category = report.category_id;
+                                const title = report.title.toLowerCase();
+                                let itemsToShow = [];
+
+                                items.forEach(item => {
+                                    const itemCategory = item.getAttribute('data-category-id');
+                                    const itemTitle = item.getAttribute('data-title');
+
+                                    if (itemCategory == category || itemTitle.toLowerCase().includes(
+                                            title)) {
+                                        item.style.display = '';
+                                        itemsToShow.push(item);
+                                        updateItemCount(itemsToShow.length);
+                                    } else {
+                                        item.style.display = 'none';
+                                    }
+                                });
+                            } else {
+                                items.forEach(item => {
+                                    item.style.display = 'none';
+                                });
+                                showAlert(data.message);
+                                const totalContainer = document.getElementById('totalContainer');
+                                totalContainer.style.display = 'none';
+                            }
+                        })
+                        .catch(error => console.error('Error fetching latest report:', error));
+                }
+
+                function showAlert(message) {
+                    const alertHTML = `
+<div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+${message}
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+`;
+
+                    alertContainer.innerHTML = alertHTML;
+                }
+
+                function fetchNotifications() {
+                    axios.get('<?php echo e(route('notifications.fetch')); ?>')
+                        .then(response => {
+                            const notifications = response.data.notifications;
+                            updateNotificationUI(notifications);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching notifications:', error);
+                        });
+                }
+
+                function updateNotificationUI(notifications) {
+                    const notificationDropdown = document.getElementById('notificationItemsTabContent');
+                    const notificationBadge = document.querySelector('.topbar-badge');
+                    const notificationCountBadge2 = document.querySelector('.notification-count2');
+
+                    // Count only unread notifications
+                    let unreadNotificationCount = notifications.filter(notification => notification.read_at === null)
+                        .length;
+                    notificationBadge.textContent = unreadNotificationCount;
+                    notificationCountBadge2.textContent = notifications.length;
+
+                    let notificationHTML;
+
+                    if (notifications.length === 0) {
+                        notificationHTML = `
+<div class="text-reset notification-item d-block dropdown-item position-relative">
+<div class="d-flex align-items-center">
+    <div class="flex-grow-1">
+        <h6 class="mt-0 mb-2 lh-base text-center">No notifications</h6>
+    </div>
+</div>
+</div>
+`;
+                    } else {
+                        notificationHTML = notifications.map(notification => {
+                            const isRead = notification.read_at !== null ? 'read' : 'unread';
+                            const backgroundColor = notification.read_at !== null ? '#f0f0f0' : '#ffffff';
+
+                            let href;
+                            // console.log(notification.type);
+                            if (notification.type === 'App\\Notifications\\SimpleReportSubmitted') {
+                                href = '#hero';
+                            } else {
+                                href = `<?php echo e(route('user.itemDetail', ['id' => ':report_id'])); ?>`
+                                    .replace(':report_id', notification.data.report_id);
+                            }
+
+                            return `
+<div class="text-reset notification-item d-block dropdown-item position-relative ${isRead}" 
+    data-notification-id="${notification.id}"
+    style="background-color: ${backgroundColor};">
+    <div class="d-flex align-items-center">
+        <div class="avatar-xs me-3">
+            <span class="avatar-title bg-soft-info text-info rounded-circle fs-16">
+                <i class="bx bx-badge-check"></i>
+            </span>
+        </div>
+        <div class="flex-grow-1">
+            <a href=${href} class="stretched-link">
+                <h6 class="mt-0 mb-2 lh-base">${notification.data.message}</h6>
+            </a>
+            <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                <span><i class="mdi mdi-clock-outline"></i> ${new Date(notification.created_at).toLocaleString('en-GB')}</span>
+            </p>
+        </div>
+        <div class="px-2 fs-15">
+            <div class="form-check notification-check">
+                <input class="form-check-input notification-checkbox" 
+                    type="checkbox" 
+                    value="${notification.id}" 
+                    id="notification-check-${notification.id}" 
+                    ${notification.read_at !== null ? 'checked' : ''}
+                    title="${notification.read_at !== null ? 'Mark as unread' : 'Mark as read'}">
+                <label class="form-check-label" for="notification-check-${notification.id}"></label>
+            </div>
+        </div>
+    </div>
+</div>
+`;
+                        }).join('');
+                    }
+
+                    notificationDropdown.innerHTML = notificationHTML;
+
+                    if (notifications.length > 0) {
+                        attachCheckboxListeners();
+                    }
+                }
+
+
+                function attachCheckboxListeners() {
+                    const checkboxes = document.querySelectorAll('.notification-checkbox');
+
+                    checkboxes.forEach(checkbox => {
+                        checkbox.addEventListener('change', function() {
+                            const notificationId = this.value;
+                            const isChecked = this.checked;
+
+                            if (isChecked) {
+                                axios.put(`/notifications/${notificationId}/mark-as-read`)
+                                    .then(response => {
+                                        fetchNotifications();
+                                    })
+                                    .catch(error => {
+                                        console.error('Error marking notification as read:', error);
+                                    });
+                            } else {
+                                axios.put(`/notifications/${notificationId}/mark-as-unread`)
+                                    .then(response => {
+                                        fetchNotifications();
+                                    })
+                                    .catch(error => {
+                                        console.error('Error marking notification as unread:',
+                                            error);
+                                    });
+                            }
+                        });
+                    });
+                }
+            });
+        </script>
+    <?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master-without-nav', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\FYP-TESTING\resources\views/my-reports.blade.php ENDPATH**/ ?>

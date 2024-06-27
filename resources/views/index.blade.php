@@ -140,12 +140,14 @@
                                         <a class="dropdown-item" href="{{ route('user.profile') }}"><i
                                                 class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
                                                 class="align-middle">Profile</span></a>
+                                        <a class="dropdown-item" href="{{ route('user.myReports') }}"><i
+                                                class="mdi mdi-briefcase-check text-muted fs-16 align-middle me-1"></i> <span
+                                                class="align-middle">My Reports</span></a>
                                         <a class="dropdown-item " href="javascript:void();"
                                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
-                                                class="bx bx-power-off font-size-16 align-middle me-1"></i> <span
+                                                class="mdi mdi-logout-variant text-muted fs-16 align-middle me-1"></i> <span
                                                 key="t-logout">@lang('translation.logout')</span></a>
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                            style="display: none;">
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                             @csrf
                                         </form>
                                     </div>

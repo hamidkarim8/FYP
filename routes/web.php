@@ -39,6 +39,7 @@ Route::get('/admin', [AdminController::class, 'adminIndex'])->middleware(['auth'
 
 // User Home Route
 Route::get('/home', [UserController::class, 'userIndex'])->middleware(['auth', 'role:normal_user'])->name('user.index');
+Route::get('/my-reports', [UserController::class, 'myReports'])->middleware(['auth', 'role:normal_user'])->name('user.myReports');
 
 // Profile Routes
 Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
