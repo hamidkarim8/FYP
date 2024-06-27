@@ -8,7 +8,8 @@ use App\Models\Report;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ItemController extends Controller
 {
@@ -33,7 +34,72 @@ class ItemController extends Controller
         // dd($report);
         return view('item-detail', compact('report'));
     }
+    public function edit($id)
+    {
+        $report = Report::with('item.category')->findOrFail($id);
 
+        $item = $report->item;
+        if (is_string($item->image_paths)) {
+            $item->image_paths = json_decode($item->image_paths, true);
+        }
+
+        if (is_string($item->social_media)) {
+            $item->social_media = json_decode($item->social_media, true);
+        }
+
+        if (is_string($item->location)) {
+            $item->location = json_decode($item->location, true);
+        }
+
+        return response()->json(['report' => $report]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $report = Report::findOrFail($id);
+        $item = $report->item;
+    
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'fullname' => 'required|string|max:255',
+            'description' => 'required|string',
+            'phone_number' => 'required|string|max:15',
+            'email' => 'required|email|max:255',
+            'ig_username' => 'nullable|string',
+            'twt_username' => 'nullable|string',
+            'tt_username' => 'nullable|string',
+            'date' => 'required|date',
+        ]);
+    
+        $item->fullname = $request->input('fullname');
+        $item->title = $request->input('title');
+        $item->description = $request->input('description');
+        $item->phone_number = $request->input('phone_number');
+        $item->email = $request->input('email');
+        $item->social_media = json_encode([
+            'ig_username' => $request->input('ig_username'),
+            'twitter_username' => $request->input('twt_username'),
+            'tiktok_username' => $request->input('tt_username'),
+        ]);
+    
+        $item->save();
+    
+        DB::table('items')->where('id', $item->id)->update(['date' => $request->input('date')]);
+
+
+        Log::info('Date being saved:', ['date' => $item->date]);
+    
+        return response()->json(['status' => 'success', 'message' => 'Report updated successfully']);
+    }
+    
+
+    public function delete($id)
+    {
+        $report = Report::findOrFail($id);
+        $report->delete();
+
+        return response()->json(['status' => 'success', 'message' => 'Report deleted successfully']);
+    }
     public function latestReport()
     {
         try {
@@ -78,82 +144,5 @@ class ItemController extends Controller
                 'message' => 'Error fetching latest report. Please try again later.',
             ], 500);
         }
-    }
-
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

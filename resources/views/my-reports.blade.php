@@ -3,6 +3,8 @@
     Landing
 @endsection
 @section('css')
+    <link href="{{ URL::asset('assets/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link href="{{ URL::asset('assets/libs/swiper/swiper.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 @section('body')
@@ -23,8 +25,8 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
                             <div class="text-center mb-5">
-                                <h2 class="mb-3 fw-semibold lh-base">Explore Lost and Found Items</h2>
-                                <p class="text-muted mb-4">Explore the list below to find your lost item! Click on the card
+                                <h2 class="mb-3 fw-semibold lh-base">Explore Your Reported Items</h2>
+                                <p class="text-muted mb-4">Explore the list below and click on the card
                                     for more details.</p>
                                 <ul class="nav nav-pills filter-btns justify-content-center" role="tablist">
                                     <li class="nav-item" role="presentation">
@@ -190,9 +192,12 @@
         <script src="{{ URL::asset('/assets/libs/swiper/swiper.min.js') }}"></script>
         <script src="{{ URL::asset('/assets/js/pages/swiper.init.js') }}"></script>
         <script src="{{ URL::asset('/assets/js/pages/landing.init.js') }}"></script>
+        <script src="{{ URL::asset('/assets/libs/jsvectormap/jsvectormap.min.js') }}"></script>
         <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
+        <script src="{{ URL::asset('assets/js/pages/form-wizard.init.js') }}"></script>
         <script src="{{ URL::asset('assets/js/pages/apps-nft-explore.init.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
 

@@ -116,6 +116,22 @@
                                         <span class="badge badge-soft-info mb-3 fs-12">
                                             <i class="ri-eye-line me-1 align-bottom"></i>Reported by you
                                         </span>
+                                        <div class="dropdown float-end">
+                                            <button class="btn btn-ghost-primary btn-icon dropdown" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ri-more-fill align-middle fs-16"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li><a class="dropdown-item edit-item-btn" href="#showModal"
+                                                        data-bs-toggle="modal"><i
+                                                            class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                                                        Edit</a></li>
+                                                <li><a class="dropdown-item remove-item-btn" data-bs-toggle="modal"
+                                                        href="#deleteRecordModal"><i
+                                                            class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                        Delete</a></li>
+                                            </ul>
+                                        </div>
                                     <?php endif; ?>
                                     <div>
                                         <h3><?php echo e($report->item->title); ?> | <?php echo e($report->item->category->name); ?></h3>
@@ -263,6 +279,93 @@
                                 <tbody id="requestsTableBody">
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Edit Report Modal -->
+            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <form id="editForm">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editModalLabel">Edit Report</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">Title</label>
+                                    <input type="text" class="form-control" id="title" name="title" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fullname" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="fullname" name="fullname" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="phone_number" class="form-label">Phone Number</label>
+                                    <input type="text" class="form-control" id="phone_number" name="phone_number"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                                <input type="hidden" id="date" name="date">
+                                <div class="mb-3">
+                                    <label for="ig_username" class="form-label">Instagram</label>
+                                    <div class="input-group">
+                                        <div class="input-group-text">@</div>
+                                        <input type="text" class="form-control" id="socialmedia_ig"
+                                            name="ig_username">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="twt_username" class="form-label">Twitter</label>
+                                    <div class="input-group">
+                                        <div class="input-group-text">@</div>
+                                        <input type="text" class="form-control" id="socialmedia_twt"
+                                            name="twt_username">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="tt_username" class="form-label">Tiktok</label>
+                                    <div class="input-group">
+                                        <div class="input-group-text">@</div>
+                                        <input type="text" class="form-control" id="socialmedia_tt"
+                                            name="tt_username">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Delete Confirmation Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete this report?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -445,10 +548,10 @@
 
                             let href;
                             if (notification.type === 'App\\Notifications\\SimpleReportSubmitted') {
-                                href = '#hero';
+                                href = '/home#hero';
                             } else {
                                 href = `<?php echo e(route('user.itemDetail', ['id' => ':report_id'])); ?>`
-                                .replace(':report_id', notification.data.report_id);
+                                    .replace(':report_id', notification.data.report_id);
                             }
 
                             return `
@@ -522,6 +625,81 @@
                         });
                     });
                 }
+
+                function fillEditForm(report) {
+                    document.getElementById('title').value = report.item.title;
+                    document.getElementById('description').value = report.item.description;
+                    document.getElementById('phone_number').value = report.item.phone_number;
+                    document.getElementById('email').value = report.item.email;
+                    document.getElementById('fullname').value = report.item.fullname;
+                    document.getElementById('date').value = report.item.date;
+                    document.getElementById('socialmedia_ig').value = report.item.social_media.ig_username ? report.item.social_media.ig_username : "";
+                    document.getElementById('socialmedia_twt').value = report.item.social_media.twitter_username ? report.item.social_media.twitter_username : "";
+                    document.getElementById('socialmedia_tt').value = report.item.social_media.tiktok_username ? report.item.social_media.tiktok_username : "";
+                }
+
+                // Handle Edit button click
+                document.querySelector('.edit-item-btn').addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const reportId = '<?php echo e($report->id); ?>';
+                    fetch(`/item/edit/${reportId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            fillEditForm(data.report);
+                            console.log(data.report.item);
+                            const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+                            editModal.show();
+                        })
+                        .catch(error => console.error('Error fetching report data:', error));
+                });
+
+                // Handle Edit form submission
+                document.getElementById('editForm').addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const reportId = '<?php echo e($report->id); ?>';
+                    const formData = new FormData(this);
+                    fetch(`/item/update/${reportId}`, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                alert('Report updated successfully!');
+                                location.reload();
+                            }
+                        })
+                        .catch(error => console.error('Error updating report:', error));
+                });
+
+                // Handle Delete button click
+                document.querySelector('.remove-item-btn').addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+                    deleteModal.show();
+                });
+
+                // Handle Delete confirmation
+                document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+                    const reportId = '<?php echo e($report->id); ?>';
+                    fetch(`/item/delete/${reportId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                alert('Report deleted successfully!');
+                                window.location.href = '/';
+                            }
+                        })
+                        .catch(error => console.error('Error deleting report:', error));
+                });
             });
         </script>
     <?php $__env->stopSection(); ?>

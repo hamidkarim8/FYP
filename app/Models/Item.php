@@ -9,6 +9,11 @@ class Item extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
+    protected $dates = ['date'];
+    const UPDATED_AT = null;
+
     protected $fillable = [
         'title', 'type', 'category_id', 'description', 'image_paths',
         'location', 'fullname', 'email', 'phone_number', 'social_media', 'date'

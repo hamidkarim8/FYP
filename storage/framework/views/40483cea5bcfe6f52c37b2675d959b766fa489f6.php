@@ -138,12 +138,14 @@
                                         <a class="dropdown-item" href="<?php echo e(route('user.profile')); ?>"><i
                                                 class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
                                                 class="align-middle">Profile</span></a>
+                                        <a class="dropdown-item" href="<?php echo e(route('user.myReports')); ?>"><i
+                                                class="mdi mdi-briefcase-check text-muted fs-16 align-middle me-1"></i> <span
+                                                class="align-middle">My Reports</span></a>
                                         <a class="dropdown-item " href="javascript:void();"
                                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
-                                                class="bx bx-power-off font-size-16 align-middle me-1"></i> <span
+                                                class="mdi mdi-logout-variant text-muted fs-16 align-middle me-1"></i> <span
                                                 key="t-logout"><?php echo app('translator')->get('translation.logout'); ?></span></a>
-                                        <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST"
-                                            style="display: none;">
+                                        <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
                                             <?php echo csrf_field(); ?>
                                         </form>
                                     </div>
@@ -818,7 +820,7 @@ unset($__errorArgs, $__bag); ?>
                         <div class="col-12" style="display: none;">
                             <p id="totalContainer" class="text-muted mb-3">Total: <span id="totalItemsCount2"></span></p>
                         </div>
-                        <?php $__currentLoopData = $detailedReports; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php $__currentLoopData = $paginateDetailedReports; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="col-lg-4 product-item artwork crypto-card 3d-style" data-id="<?php echo e($report->id); ?>"
                                 data-type="<?php echo e($report->item->type); ?>"
                                 data-category-id="<?php echo e($report->item->category_id); ?>"
@@ -883,11 +885,11 @@ unset($__errorArgs, $__bag); ?>
                             </div>
                         <?php endif; ?>
                     </div>
-                    <?php if($detailedReports->isNotEmpty()): ?>
+                    <?php if($paginateDetailedReports->isNotEmpty()): ?>
                         <!-- Pagination Links -->
                         <div class="row">
                             <div class="col-12 d-flex justify-content-center mt-4">
-                                <?php echo e($detailedReports->fragment('items')->onEachSide(2)->links()); ?>
+                                <?php echo e($paginateDetailedReports->fragment('items')->onEachSide(2)->links()); ?>
 
                             </div>
                         </div>
