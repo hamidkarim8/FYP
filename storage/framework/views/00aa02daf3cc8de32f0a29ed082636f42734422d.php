@@ -1,18 +1,18 @@
-@extends('layouts.master-without-nav')
-@section('title')
+
+<?php $__env->startSection('title'); ?>
     Profile
-@endsection
-@section('css')
-    <link href="{{ URL::asset('assets/libs/swiper/swiper.min.css') }}" rel="stylesheet" type="text/css" />
-@endsection
-@section('body')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('css'); ?>
+    <link href="<?php echo e(URL::asset('assets/libs/swiper/swiper.min.css')); ?>" rel="stylesheet" type="text/css" />
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('body'); ?>
 
     <body data-bs-spy="scroll" data-bs-target="#navbar-example">
-    @endsection
-    @section('content')
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('content'); ?>
         <div class="layout-wrapper landing">
 
-            @include('layouts-user.navbar')
+            <?php echo $__env->make('layouts-user.navbar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
             <section class="section bg-light">
                 <div class="bg-overlay bg-overlay-pattern"></div>
@@ -22,13 +22,13 @@
                             <div class="card mt-n5">
                                 <div class="card-body p-4">
                                     <div class="text-center">
-                                        <form action="{{ route('updateAvatar', ['id' => Auth::id()]) }}" method="POST"
+                                        <form action="<?php echo e(route('updateAvatar', ['id' => Auth::id()])); ?>" method="POST"
                                             enctype="multipart/form-data">
-                                            @csrf
-                                            @method('POST')
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('POST'); ?>
                                             <!-- Avatar upload field -->
                                             <div class="profile-user position-relative d-inline-block mx-auto mb-4">
-                                                <img src="{{ $profile->avatar ? URL::asset('images/' . $profile->avatar) : URL::asset('images/default-avatar.jpg') }}"
+                                                <img src="<?php echo e($profile->avatar ? URL::asset('images/' . $profile->avatar) : URL::asset('images/default-avatar.jpg')); ?>"
                                                     class="rounded-circle avatar-xl img-thumbnail user-profile-image shadow"
                                                     alt="user-profile-image">
                                                 <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
@@ -43,9 +43,9 @@
                                                 </div>
                                             </div>
                                         </form>
-                                        <h5 class="fs-16 mb-1">{{ Auth::user()->name }}</h5>
+                                        <h5 class="fs-16 mb-1"><?php echo e(Auth::user()->name); ?></h5>
                                         <p class="text-muted mb-0">
-                                            {{ Auth::user()->role == 'admin' ? 'Admin' : 'Normal User' }}</p>
+                                            <?php echo e(Auth::user()->role == 'admin' ? 'Admin' : 'Normal User'); ?></p>
                                     </div>
                                 </div>
                             </div>
@@ -57,13 +57,13 @@
                                             <h5 class="card-title mb-0">Social Media</h5>
                                         </div>
                                     </div>
-                                    <form action="{{ route('updateSocialMedia', ['id' => Auth::id()]) }}" method="POST"
+                                    <form action="<?php echo e(route('updateSocialMedia', ['id' => Auth::id()])); ?>" method="POST"
                                         enctype="multipart/form-data">
-                                        @csrf
-                                        @method('POST')
-                                        @php
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo method_field('POST'); ?>
+                                        <?php
                                             $socialMedia = json_decode($profile->social_media, true);
-                                        @endphp
+                                        ?>
                                         <div class="mb-3 d-flex">
                                             <div class="avatar-xs d-block flex-shrink-0 me-3">
                                                 <span class="avatar-title rounded-circle fs-16 text-light shadow">
@@ -74,7 +74,7 @@
                                                 <div class="input-group-text">@</div>
                                                 <input type="text" class="form-control" id="igUsername"
                                                     name="ig_username" placeholder="Username"
-                                                    value="{{ $socialMedia['ig_username'] ?? '' }}">
+                                                    value="<?php echo e($socialMedia['ig_username'] ?? ''); ?>">
                                             </div>
                                         </div>
                                         <div class="mb-3 d-flex">
@@ -87,7 +87,7 @@
                                                 <div class="input-group-text">@</div>
                                                 <input type="text" class="form-control" id="twitterUsername"
                                                     name="twitter_username" placeholder="Username"
-                                                    value="{{ $socialMedia['twitter_username'] ?? '' }}">
+                                                    value="<?php echo e($socialMedia['twitter_username'] ?? ''); ?>">
                                             </div>
                                         </div>
                                         <div class="mb-3 d-flex">
@@ -100,7 +100,7 @@
                                                 <div class="input-group-text">@</div>
                                                 <input type="text" class="form-control" id="tiktokUsername"
                                                     name="tiktok_username" placeholder="Username"
-                                                    value="{{ $socialMedia['tiktok_username'] ?? '' }}">
+                                                    value="<?php echo e($socialMedia['tiktok_username'] ?? ''); ?>">
                                             </div>
                                         </div>
                                         <div class="text-end">
@@ -140,17 +140,17 @@
                                 <div class="card-body p-4">
                                     <div class="tab-content">
                                         <div class="tab-pane active" id="personalDetails" role="tabpanel">
-                                            <form action="{{ route('updateProfile', ['id' => Auth::id()]) }}"
+                                            <form action="<?php echo e(route('updateProfile', ['id' => Auth::id()])); ?>"
                                                 method="POST" enctype="multipart/form-data">
-                                                @csrf
-                                                @method('POST')
+                                                <?php echo csrf_field(); ?>
+                                                <?php echo method_field('POST'); ?>
                                                 <div class="row">
                                                     <div class="col-lg-6">
                                                         <div class="mb-3">
                                                             <label for="usernameInput" class="form-label">Username</label>
                                                             <input type="text" class="form-control" id="usernameInput"
                                                                 name="username" placeholder="Enter your username"
-                                                                value="{{ Auth::user()->name }}" required>
+                                                                value="<?php echo e(Auth::user()->name); ?>" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6">
@@ -158,7 +158,7 @@
                                                             <label for="emailInput" class="form-label">Email</label>
                                                             <input type="email" class="form-control" id="emailInput"
                                                                 name="email" placeholder="Enter your email"
-                                                                value="{{ Auth::user()->email }}" required>
+                                                                value="<?php echo e(Auth::user()->email); ?>" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6">
@@ -167,7 +167,7 @@
                                                                 Name</label>
                                                             <input type="text" class="form-control" id="fullNameInput"
                                                                 name="full_name" placeholder="Enter your full name"
-                                                                value="{{ $profile->fullname }}">
+                                                                value="<?php echo e($profile->fullname); ?>">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6">
@@ -177,7 +177,7 @@
                                                             <input type="number" class="form-control"
                                                                 id="phonenumberInput" name="phone_number"
                                                                 placeholder="Enter your phone number"
-                                                                value="{{ $profile->phone_number }}">
+                                                                value="<?php echo e($profile->phone_number); ?>">
                                                         </div>
                                                     </div>
 
@@ -186,7 +186,7 @@
                                                             <label for="cityInput" class="form-label">City</label>
                                                             <input type="text" class="form-control" id="cityInput"
                                                                 name="city" placeholder="City"
-                                                                value="{{ $profile->city }}">
+                                                                value="<?php echo e($profile->city); ?>">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-4">
@@ -194,7 +194,7 @@
                                                             <label for="countryInput" class="form-label">Country</label>
                                                             <input type="text" class="form-control" id="countryInput"
                                                                 name="country" placeholder="Country"
-                                                                value="{{ $profile->country }}">
+                                                                value="<?php echo e($profile->country); ?>">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-4">
@@ -202,7 +202,7 @@
                                                             <label for="postcodeInput" class="form-label">Postcode</label>
                                                             <input type="text" class="form-control" id="postcodeInput"
                                                                 name="postcode" placeholder="Enter postcode"
-                                                                value="{{ $profile->postcode }}">
+                                                                value="<?php echo e($profile->postcode); ?>">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-12 mt-4">
@@ -217,10 +217,10 @@
                                         </div>
                                         <!--end tab-pane-->
                                         <div class="tab-pane" id="changePassword" role="tabpanel">
-                                            <form action="{{ route('changePassword', ['id' => Auth::id()]) }}"
+                                            <form action="<?php echo e(route('changePassword', ['id' => Auth::id()])); ?>"
                                                 method="POST">
-                                                @csrf
-                                                @method('POST')
+                                                <?php echo csrf_field(); ?>
+                                                <?php echo method_field('POST'); ?>
                                                 <div class="row g-2">
                                                     <div class="col-lg-4">
                                                         <div>
@@ -251,7 +251,7 @@
                                                     </div>
                                                     <div class="col-lg-12">
                                                         <div class="mb-3">
-                                                            <a href="{{ route('forgot-password-form') }}"
+                                                            <a href="<?php echo e(route('forgot-password-form')); ?>"
                                                                 class="link-primary text-decoration-underline">Forgot
                                                                 Password?</a>
                                                         </div>
@@ -342,13 +342,13 @@
 
             </section>
             <!--end row-->
-            @include('layouts-user.footer')
+            <?php echo $__env->make('layouts-user.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
         </div>
-    @endsection
-    @section('script')
-        <script src="{{ URL::asset('assets/js/pages/profile-setting.init.js') }}"></script>
-        <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('script'); ?>
+        <script src="<?php echo e(URL::asset('assets/js/pages/profile-setting.init.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('/assets/js/app.min.js')); ?>"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script>
@@ -359,7 +359,7 @@
                     formData.append('avatar', $(this)[0].files[0]);
 
                     $.ajax({
-                        url: '{{ route('updateAvatar', ['id' => Auth::id()]) }}',
+                        url: '<?php echo e(route('updateAvatar', ['id' => Auth::id()])); ?>',
                         method: 'POST',
                         data: formData,
                         processData: false,
@@ -397,7 +397,7 @@
                 setInterval(fetchNotifications, 60000);
 
                 function fetchNotifications() {
-                    axios.get('{{ route('notifications.fetch') }}')
+                    axios.get('<?php echo e(route('notifications.fetch')); ?>')
                         .then(response => {
                             const notifications = response.data.notifications;
                             updateNotificationUI(notifications);
@@ -439,7 +439,7 @@
                             if ((notification.type === 'App\\Notifications\\SimpleReportSubmitted') || (notification.type === 'App\\Notifications\\DeleteItemDetails')) {
                                 href = '/home#hero';
                             } else {
-                                href = `{{ route('user.itemDetail', ['id' => ':report_id']) }}`
+                                href = `<?php echo e(route('user.itemDetail', ['id' => ':report_id'])); ?>`
                                 .replace(':report_id', notification.data.report_id);
                             }
 
@@ -516,4 +516,6 @@
                 }
             });
         </script>
-    @endsection
+    <?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master-without-nav', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\FYP-TESTING\resources\views/profile.blade.php ENDPATH**/ ?>

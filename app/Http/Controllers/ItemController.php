@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Report;
 use App\Models\User;
+use App\Notifications\EditItemDetails;
+use App\Notifications\DeleteItemDetails;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Carbon\Carbon;
 
 class ItemController extends Controller
@@ -58,7 +61,7 @@ class ItemController extends Controller
     {
         $report = Report::findOrFail($id);
         $item = $report->item;
-    
+
         $request->validate([
             'title' => 'required|string|max:255',
             'fullname' => 'required|string|max:255',
@@ -70,7 +73,7 @@ class ItemController extends Controller
             'tt_username' => 'nullable|string',
             'date' => 'required|date',
         ]);
-    
+
         $item->fullname = $request->input('fullname');
         $item->title = $request->input('title');
         $item->description = $request->input('description');
@@ -81,22 +84,27 @@ class ItemController extends Controller
             'twitter_username' => $request->input('twt_username'),
             'tiktok_username' => $request->input('tt_username'),
         ]);
-    
+
         $item->save();
-    
+
         DB::table('items')->where('id', $item->id)->update(['date' => $request->input('date')]);
 
+        //send notification successfully updated item details
+        $user = Auth::user();
+        Notification::send($user, new EditItemDetails($report));
 
-        Log::info('Date being saved:', ['date' => $item->date]);
-    
         return response()->json(['status' => 'success', 'message' => 'Report updated successfully']);
     }
-    
+
 
     public function delete($id)
     {
         $report = Report::findOrFail($id);
         $report->delete();
+
+        //send notification successfully updated item details
+        $user = Auth::user();
+        Notification::send($user, new DeleteItemDetails($report));
 
         return response()->json(['status' => 'success', 'message' => 'Report deleted successfully']);
     }

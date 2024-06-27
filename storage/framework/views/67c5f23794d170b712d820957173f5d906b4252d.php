@@ -1,21 +1,21 @@
-@extends('layouts.master-without-nav')
-@section('title')
+
+<?php $__env->startSection('title'); ?>
     Landing
-@endsection
-@section('css')
-    <link href="{{ URL::asset('assets/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('css'); ?>
+    <link href="<?php echo e(URL::asset('assets/libs/jsvectormap/jsvectormap.min.css')); ?>" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link href="{{ URL::asset('assets/libs/swiper/swiper.min.css') }}" rel="stylesheet" type="text/css" />
-@endsection
-@section('body')
+    <link href="<?php echo e(URL::asset('assets/libs/swiper/swiper.min.css')); ?>" rel="stylesheet" type="text/css" />
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('body'); ?>
 
     <body data-bs-spy="scroll" data-bs-target="#navbar-example">
-    @endsection
-    @section('content')
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('content'); ?>
         <!-- Begin page -->
         <div class="layout-wrapper landing">
 
-            @include('layouts-user.navbar')
+            <?php echo $__env->make('layouts-user.navbar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             <!-- end navbar -->
 
             <!-- start items -->
@@ -107,95 +107,98 @@
                         <div class="col-12" style="display: none;">
                             <p id="totalContainer" class="text-muted mb-3">Total: <span id="totalItemsCount2"></span></p>
                         </div>
-                        @foreach ($paginateDetailedReports as $report)
-                            <div class="col-lg-4 product-item artwork crypto-card 3d-style" data-id="{{ $report->id }}"
-                                data-type="{{ $report->item->type }}" data-category-id="{{ $report->item->category_id }}"
-                                data-title="{{ $report->item->title }}">
+                        <?php $__currentLoopData = $paginateDetailedReports; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="col-lg-4 product-item artwork crypto-card 3d-style" data-id="<?php echo e($report->id); ?>"
+                                data-type="<?php echo e($report->item->type); ?>" data-category-id="<?php echo e($report->item->category_id); ?>"
+                                data-title="<?php echo e($report->item->title); ?>">
                                 <div class="card explore-box card-animate">
                                     <div class="explore-place-bid-img">
                                         <div
-                                            class="ribbon-box {{ $report->item->type === 'lost' ? 'lost-ribbon' : 'found-ribbon' }} left">
+                                            class="ribbon-box <?php echo e($report->item->type === 'lost' ? 'lost-ribbon' : 'found-ribbon'); ?> left">
                                             <div
-                                                class="ribbon-two {{ $report->item->type === 'lost' ? 'ribbon-two-danger' : 'ribbon-two-secondary' }}">
-                                                <span>{{ ucfirst($report->item->type) }}</span>
+                                                class="ribbon-two <?php echo e($report->item->type === 'lost' ? 'ribbon-two-danger' : 'ribbon-two-secondary'); ?>">
+                                                <span><?php echo e(ucfirst($report->item->type)); ?></span>
                                             </div>
                                         </div>
-                                        @php
+                                        <?php
                                             $imagePaths = json_decode($report->item->image_paths, true);
                                             $firstImage = $imagePaths[0] ?? null;
-                                        @endphp
+                                        ?>
 
-                                        @if ($firstImage)
-                                            <img src="{{ asset($firstImage) }}" alt="{{ $report->item->title }}"
+                                        <?php if($firstImage): ?>
+                                            <img src="<?php echo e(asset($firstImage)); ?>" alt="<?php echo e($report->item->title); ?>"
                                                 class="card-img-top explore-img" />
-                                        @else
-                                            <img src="{{ asset('assets/images/image-error.png') }}" alt="error"
+                                        <?php else: ?>
+                                            <img src="<?php echo e(asset('assets/images/image-error.png')); ?>" alt="error"
                                                 class="card-img-top explore-img" />
-                                        @endif
+                                        <?php endif; ?>
                                         <div class="bg-overlay"></div>
-                                        @auth
+                                        <?php if(auth()->guard()->check()): ?>
                                             <div class="place-bid-btn">
-                                                <a href="{{ route('user.itemDetail', $report->id) }}"
+                                                <a href="<?php echo e(route('user.itemDetail', $report->id)); ?>"
                                                     class="btn btn-success"><i
                                                         class="ri-information-line align-bottom me-2"></i> See Detail</a>
                                             </div>
-                                        @endauth
+                                        <?php endif; ?>
                                     </div>
                                     <div class="card-body">
-                                        <p class="fw-medium mb-0 float-end">{{ $report->item->date->format('d-m-Y') }}
+                                        <p class="fw-medium mb-0 float-end"><?php echo e($report->item->date->format('d-m-Y')); ?>
+
                                         </p>
-                                        <h5 class="mb-1">{{ $report->item->title }}</h5>
-                                        <p class="text-muted mb-0">{{ $report->item->category->name }}</p>
+                                        <h5 class="mb-1"><?php echo e($report->item->title); ?></h5>
+                                        <p class="text-muted mb-0"><?php echo e($report->item->category->name); ?></p>
                                     </div>
                                     <div class="card-footer border-top border-top-dashed">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 fs-14">
                                                 <i class="ri-map-pin-2-fill text-danger align-bottom me-1"></i>
-                                                {{ $report->item->location['desc'] }}
+                                                <?php echo e($report->item->location['desc']); ?>
+
                                             </div>
-                                            @if (Auth::check() && Auth::id() == $report->user_id)
+                                            <?php if(Auth::check() && Auth::id() == $report->user_id): ?>
                                                 <span class="badge badge-soft-info fs-12">
                                                     <i class="ri-eye-line me-1 align-bottom"></i>Reported by you
                                                 </span>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
-                        @if ($detailedReports->isEmpty())
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php if($detailedReports->isEmpty()): ?>
                             <div class="col-12 text-center mt-4">
                                 <p class="alert alert-warning">No items available.</p>
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
-                    @if ($paginateDetailedReports->isNotEmpty())
+                    <?php if($paginateDetailedReports->isNotEmpty()): ?>
                         <!-- Pagination Links -->
                         <div class="row">
                             <div class="col-12 d-flex justify-content-center mt-4">
-                                {{ $paginateDetailedReports->fragment('items')->onEachSide(2)->links() }}
+                                <?php echo e($paginateDetailedReports->fragment('items')->onEachSide(2)->links()); ?>
+
                             </div>
                         </div>
-                    @endif
+                    <?php endif; ?>
 
             </section>
             <!-- end items -->
 
             <!-- Start footer -->
-            @include('layouts-user.footer')
+            <?php echo $__env->make('layouts-user.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             <!-- end footer -->
 
         </div>
         <!-- end layout wrapper -->
-    @endsection
-    @section('script')
-        <script src="{{ URL::asset('/assets/libs/swiper/swiper.min.js') }}"></script>
-        <script src="{{ URL::asset('/assets/js/pages/swiper.init.js') }}"></script>
-        <script src="{{ URL::asset('/assets/js/pages/landing.init.js') }}"></script>
-        <script src="{{ URL::asset('/assets/libs/jsvectormap/jsvectormap.min.js') }}"></script>
-        <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
-        <script src="{{ URL::asset('assets/js/pages/form-wizard.init.js') }}"></script>
-        <script src="{{ URL::asset('assets/js/pages/apps-nft-explore.init.js') }}"></script>
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('script'); ?>
+        <script src="<?php echo e(URL::asset('/assets/libs/swiper/swiper.min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('/assets/js/pages/swiper.init.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('/assets/js/pages/landing.init.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('/assets/libs/jsvectormap/jsvectormap.min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('/assets/js/app.min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('assets/js/pages/form-wizard.init.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('assets/js/pages/apps-nft-explore.init.js')); ?>"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
         <script>
@@ -328,7 +331,7 @@
 
                 function fetchLatestReportAndFilter() {
                     alertContainer.innerHTML = '';
-                    fetch('{{ route('user.latestReport') }}')
+                    fetch('<?php echo e(route('user.latestReport')); ?>')
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
@@ -380,7 +383,7 @@ ${message}
                 }
 
                 function fetchNotifications() {
-                    axios.get('{{ route('notifications.fetch') }}')
+                    axios.get('<?php echo e(route('notifications.fetch')); ?>')
                         .then(response => {
                             const notifications = response.data.notifications;
                             updateNotificationUI(notifications);
@@ -424,7 +427,7 @@ ${message}
                                     notification.type === 'App\\Notifications\\DeleteItemDetails')) {
                                 href = '/home#hero';
                             } else {
-                                href = `{{ route('user.itemDetail', ['id' => ':report_id']) }}`
+                                href = `<?php echo e(route('user.itemDetail', ['id' => ':report_id'])); ?>`
                                     .replace(':report_id', notification.data.report_id);
                             }
 
@@ -502,4 +505,6 @@ ${message}
                 }
             });
         </script>
-    @endsection
+    <?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master-without-nav', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\FYP-TESTING\resources\views/my-reports.blade.php ENDPATH**/ ?>

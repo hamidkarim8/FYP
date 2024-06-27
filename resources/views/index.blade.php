@@ -1999,7 +1999,7 @@
 
                             let href;
                             // console.log(notification.type);
-                            if (notification.type === 'App\\Notifications\\SimpleReportSubmitted') {
+                            if ((notification.type === 'App\\Notifications\\SimpleReportSubmitted') || (notification.type === 'App\\Notifications\\DeleteItemDetails')) {
                                 href = '#hero';
                             } else {
                                 href = `{{ route('user.itemDetail', ['id' => ':report_id']) }}`

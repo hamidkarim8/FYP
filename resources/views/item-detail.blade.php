@@ -553,7 +553,7 @@
                             const backgroundColor = notification.read_at !== null ? '#f0f0f0' : '#ffffff';
 
                             let href;
-                            if (notification.type === 'App\\Notifications\\SimpleReportSubmitted') {
+                            if ((notification.type === 'App\\Notifications\\SimpleReportSubmitted') || (notification.type === 'App\\Notifications\\DeleteItemDetails')) {
                                 href = '/home#hero';
                             } else {
                                 href = `{{ route('user.itemDetail', ['id' => ':report_id']) }}`
