@@ -39,12 +39,13 @@ class HomeController extends Controller
 
     public function root()
     {
-        $detailedReports = Report::with(['item', 'item.category'])->where('type', 'detailed')->get();
-        $paginateDetailedReports = Report::with(['item', 'item.category'])->where('type', 'detailed')->paginate(6);
+        $detailedReports = Report::with(['item', 'item.category'])->where('type', 'detailed')->whereNot('isResolved', 'resolved')->get();
+        $paginateDetailedReports = Report::with(['item', 'item.category'])->where('type', 'detailed')->whereNot('isResolved', 'resolved')->paginate(6);
         $simpleReports = Report::with(['item', 'item.category'])->where('type', 'simple')->get();
         $normalUsers = User::where('role', 'normal_user')->get();
         // dd($detailedReports);
-        return view('index', compact('detailedReports', 'simpleReports', 'normalUsers', 'paginateDetailedReports'));
+        $resolvedReports = Report::with(['item', 'item.category'])->where('type', 'detailed')->where('isResolved', 'resolved')->get();
+        return view('index', compact('detailedReports', 'simpleReports', 'normalUsers', 'paginateDetailedReports', 'resolvedReports'));
     }
 
 

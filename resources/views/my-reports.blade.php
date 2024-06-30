@@ -153,10 +153,14 @@
                                                 <i class="ri-map-pin-2-fill text-danger align-bottom me-1"></i>
                                                 {{ $report->item->location['desc'] }}
                                             </div>
-                                            @if (Auth::check() && Auth::id() == $report->user_id)
+                                            @if (Auth::check() && Auth::id() == $report->user_id && $report->isResolved != 'resolved')
                                                 <span class="badge badge-soft-info fs-12">
                                                     <i class="ri-eye-line me-1 align-bottom"></i>Reported by you
                                                 </span>
+                                            @else
+                                            <span class="badge badge-soft-success fs-12">
+                                                <i class="ri-eye-line me-1 align-bottom"></i>Resolved
+                                            </span>
                                             @endif
                                         </div>
                                     </div>

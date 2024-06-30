@@ -155,10 +155,14 @@
                                                 <?php echo e($report->item->location['desc']); ?>
 
                                             </div>
-                                            <?php if(Auth::check() && Auth::id() == $report->user_id): ?>
+                                            <?php if(Auth::check() && Auth::id() == $report->user_id && $report->isResolved != 'resolved'): ?>
                                                 <span class="badge badge-soft-info fs-12">
                                                     <i class="ri-eye-line me-1 align-bottom"></i>Reported by you
                                                 </span>
+                                            <?php else: ?>
+                                            <span class="badge badge-soft-success fs-12">
+                                                <i class="ri-eye-line me-1 align-bottom"></i>Resolved
+                                            </span>
                                             <?php endif; ?>
                                         </div>
                                     </div>

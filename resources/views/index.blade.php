@@ -1271,18 +1271,18 @@
                     <div class="row text-center gy-4">
                         <div class="col-lg-3 col-6">
                             <div>
-                                <h2 class="mb-2"><span id="totalReportsCount" class="counter-value"
-                                        data-target="{{ $detailedReports->count() + $simpleReports->count() }}">0</span>
+                                <h2 class="mb-2"><span class="counter-value"
+                                        data-target="{{ $simpleReports->count() }}">0</span>
                                 </h2>
-                                <div class="text-muted">Reports</div>
+                                <div class="text-muted">Simple Reports</div>
                             </div>
                         </div>
                         <!-- end col -->
 
                         <div class="col-lg-3 col-6">
                             <div>
-                                <h2 class="mb-2"><span class="counter-value" data-target="0">0</span></h2>
-                                <div class="text-muted">Reports Resolved</div>
+                                <h2 class="mb-2"><span class="counter-value" data-target="{{ $detailedReports->count() }}">0</span></h2>
+                                <div class="text-muted">Detailed Reports</div>
                             </div>
                         </div>
                         <!-- end col -->
@@ -1290,16 +1290,16 @@
                         <div class="col-lg-3 col-6">
                             <div>
                                 <h2 class="mb-2"><span class="counter-value"
-                                        data-target="{{ $normalUsers->count() }}">0</span></h2>
-                                <div class="text-muted">Users</div>
+                                        data-target="{{ $resolvedReports->count() }}">0</span></h2>
+                                <div class="text-muted">Reports Resolved</div>
                             </div>
                         </div>
                         <!-- end col -->
 
                         <div class="col-lg-3 col-6">
                             <div>
-                                <h2 class="mb-2"><span class="counter-value" data-target="0">0</span></h2>
-                                <div class="text-muted">Satisfied Users</div>
+                                <h2 class="mb-2"><span class="counter-value" data-target="{{ $normalUsers->count() }}">0</span></h2>
+                                <div class="text-muted">Registered Users</div>
                             </div>
                         </div>
                         <!-- end col -->

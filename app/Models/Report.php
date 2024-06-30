@@ -14,7 +14,7 @@ class Report extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'user_id', 'item_id', 'type'
+        'user_id', 'item_id', 'type', 'isResolved'
     ];
 
     protected static function boot()
@@ -51,7 +51,7 @@ class Report extends Model
     {
         return Item::where('type', 'detailed')
             ->where('category_id', $this->item->category_id)
-            ->where('title', 'LIKE', '%' . $this->title . '%')
+            ->orWhere('title', 'LIKE', '%' . $this->title . '%')
             ->get();
     }
     public function pendingRequests()

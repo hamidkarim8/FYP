@@ -87,7 +87,9 @@ class ReportController extends Controller
 
             //send notification successfully submitted a report
             $user = Auth::user();
-            Notification::send($user, new SimpleReportSubmitted($report));
+            if($user){
+                Notification::send($user, new SimpleReportSubmitted($report));
+            }
 
             return response()->json(['message' => 'Report submitted successfully'], 200);
         } catch (ValidationException $e) {

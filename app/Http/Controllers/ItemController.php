@@ -8,6 +8,7 @@ use App\Models\Report;
 use App\Models\User;
 use App\Notifications\EditItemDetails;
 use App\Notifications\DeleteItemDetails;
+use App\Notifications\ResolvedItemDetails;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -152,5 +153,17 @@ class ItemController extends Controller
                 'message' => 'Error fetching latest report. Please try again later.',
             ], 500);
         }
+    }
+    public function resolved(Request $request, $id)
+    {
+        $report = Report::findOrFail($id);
+        $report->isResolved = "Resolved";
+        $report->save();
+
+        //send notification successfully updated item details
+        $user = Auth::user();
+        Notification::send($user, new ResolvedItemDetails($report));
+
+        return response()->json(['status' => 'success', 'message' => 'Report resolved successfully']);
     }
 }
