@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Report;
+use App\Models\Feedback;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -28,7 +29,8 @@ class UserController extends Controller
         $normalUsers = User::where('role', 'normal_user')->get();
         // dd($detailedReports);
         $resolvedReports = Report::with(['item', 'item.category'])->where('type', 'detailed')->where('isResolved', 'resolved')->get();
-        return view('index', compact('detailedReports', 'simpleReports', 'normalUsers', 'paginateDetailedReports', 'resolvedReports'));
+        $feedbacks = Feedback::where('isDisplay', true)->with('user')->get();
+        return view('index', compact('detailedReports', 'simpleReports', 'normalUsers', 'paginateDetailedReports', 'resolvedReports', 'feedbacks'));
     }
     public function myReports()
     {

@@ -2,84 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Feedback;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\FeedbackSubmitted;
 
 class FeedbackController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'type' => 'required|string|in:enhancement,comment,fraudulent',
+            'message' => 'required|string',
+            'rating' => 'required|integer|min:1|max:5',
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        $feedback = Feedback::create([
+            'user_id' => auth()->id(),
+            'message' => $request->message,
+            'type' => $request->type,
+            'stars' => $request->rating,
+            'isDisplay' => false,
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        //send notification successfully submitted a feedback
+        $user = Auth::user();
+        Notification::send($user, new FeedbackSubmitted($feedback));
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return response()->json(['success' => 'Feedback submitted successfully.']);
     }
 }

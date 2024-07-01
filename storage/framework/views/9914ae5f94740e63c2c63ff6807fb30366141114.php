@@ -155,10 +155,14 @@
                                                 <?php echo e($report->item->location['desc']); ?>
 
                                             </div>
-                                            <?php if(Auth::check() && Auth::id() == $report->user_id): ?>
+                                            <?php if(Auth::check() && Auth::id() == $report->user_id && $report->isResolved != 'resolved'): ?>
                                                 <span class="badge badge-soft-info fs-12">
                                                     <i class="ri-eye-line me-1 align-bottom"></i>Reported by you
                                                 </span>
+                                            <?php else: ?>
+                                            <span class="badge badge-soft-success fs-12">
+                                                <i class="ri-eye-line me-1 align-bottom"></i>Resolved
+                                            </span>
                                             <?php endif; ?>
                                         </div>
                                     </div>
@@ -423,8 +427,9 @@ ${message}
 
                             let href;
                             // console.log(notification.type);
-                            if (notification.type === 'App\\Notifications\\SimpleReportSubmitted') {
-                                href = '#hero';
+                            if ((notification.type === 'App\\Notifications\\SimpleReportSubmitted') || (
+                                    notification.type === 'App\\Notifications\\DeleteItemDetails')) {
+                                href = '/home#hero';
                             } else {
                                 href = `<?php echo e(route('user.itemDetail', ['id' => ':report_id'])); ?>`
                                     .replace(':report_id', notification.data.report_id);

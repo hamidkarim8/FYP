@@ -10,6 +10,73 @@
     <link rel="stylesheet" href="<?php echo e(URL::asset('assets/libs/filepond/filepond.min.css')); ?>" type="text/css" />
     <link rel="stylesheet"
         href="<?php echo e(URL::asset('assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css')); ?>">
+    <style>
+        .rate {
+
+            border-bottom-right-radius: 12px;
+            border-bottom-left-radius: 12px;
+
+        }
+
+
+
+        .rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center
+        }
+
+        .rating>input {
+            display: none
+        }
+
+        .rating>label {
+            position: relative;
+            width: 1em;
+            font-size: 30px;
+            font-weight: 300;
+            color: #FFD600;
+            cursor: pointer
+        }
+
+        .rating>label::before {
+            content: "\2605";
+            position: absolute;
+            opacity: 0
+        }
+
+        .rating>label:hover:before,
+        .rating>label:hover~label:before {
+            opacity: 1 !important
+        }
+
+        .rating>input:checked~label:before {
+            opacity: 1
+        }
+
+        .rating:hover>input:checked~label:before {
+            opacity: 0.4
+        }
+
+
+        .buttons {
+            top: 36px;
+            position: relative;
+        }
+
+
+        .rating-submit {
+            border-radius: 15px;
+            color: #fff;
+            height: 49px;
+        }
+
+
+        .rating-submit:hover {
+
+            color: #fff;
+        }
+    </style>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('body'); ?>
 
@@ -145,7 +212,8 @@
                                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
                                                 class="mdi mdi-logout-variant text-muted fs-16 align-middle me-1"></i> <span
                                                 key="t-logout"><?php echo app('translator')->get('translation.logout'); ?></span></a>
-                                        <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
+                                        <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST"
+                                            style="display: none;">
                                             <?php echo csrf_field(); ?>
                                         </form>
                                     </div>
@@ -1128,7 +1196,7 @@ unset($__errorArgs, $__bag); ?>
 
 
             <!-- start review -->
-            <section class="section bg-primary" id="reviews">
+            <section class="section bg-primary" id="feedbacks">
                 <div class="bg-overlay bg-overlay-pattern"></div>
                 <div class="container">
                     <div class="row justify-content-center">
@@ -1198,11 +1266,74 @@ unset($__errorArgs, $__bag); ?>
                         <!-- end col -->
                     </div>
                     <!-- end row -->
+                    <?php if(auth()->guard()->check()): ?>
+                        <div class="text-center mt-4">
+                            <div>
+                                <a href="#showModal" data-bs-toggle="modal"
+                                    class="btn bg-gradient btn-success btn-give-feedback"><i
+                                        class=" ri-feedback-line align-middle me-1"></i> Give Feedback</a>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <!-- end container -->
             </section>
             <!-- end review -->
 
+
+            <!-- Feedback Modal -->
+            <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="feedbackModalLabel">Submit Feedback</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="feedbackForm" action="/feedback" method="POST">
+                                <?php echo csrf_field(); ?>
+                                <div class="mb-3">
+                                    <label for="type" class="form-label">Feedback Type</label>
+                                    <select id="type" name="type" class="form-select" required>
+                                        <option value="" selected>-- Select Type --</option>
+                                        <option value="enhancement">Enhancement</option>
+                                        <option value="comments">Comments</option>
+                                        <option value="fraudulent">Fraudulent or Scam</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="message" class="form-label">Message</label>
+                                    <textarea id="message" name="message" class="form-control" rows="3" required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="stars" class="form-label">Rating</label>
+                                    <div class="rate text-white">
+                                        <div class="rating">
+                                            <input type="radio" name="rating" value="5" id="5"><label
+                                                for="5">☆</label>
+                                            <input type="radio" name="rating" value="4" id="4"><label
+                                                for="4">☆</label>
+                                            <input type="radio" name="rating" value="3" id="3"><label
+                                                for="3">☆</label>
+                                            <input type="radio" name="rating" value="2" id="2"><label
+                                                for="2">☆</label>
+                                            <input type="radio" name="rating" value="1" id="1"><label
+                                                for="1">☆</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
             <!-- start Work Process -->
@@ -1293,17 +1424,27 @@ unset($__errorArgs, $__bag); ?>
                     <div class="row text-center gy-4">
                         <div class="col-lg-3 col-6">
                             <div>
-                                <h2 class="mb-2"><span id="totalReportsCount" class="counter-value"
-                                        data-target="<?php echo e($detailedReports->count() + $simpleReports->count()); ?>">0</span>
+                                <h2 class="mb-2"><span class="counter-value"
+                                        data-target="<?php echo e($simpleReports->count()); ?>">0</span>
                                 </h2>
-                                <div class="text-muted">Reports</div>
+                                <div class="text-muted">Simple Reports</div>
                             </div>
                         </div>
                         <!-- end col -->
 
                         <div class="col-lg-3 col-6">
                             <div>
-                                <h2 class="mb-2"><span class="counter-value" data-target="0">0</span></h2>
+                                <h2 class="mb-2"><span class="counter-value"
+                                        data-target="<?php echo e($detailedReports->count()); ?>">0</span></h2>
+                                <div class="text-muted">Detailed Reports</div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+
+                        <div class="col-lg-3 col-6">
+                            <div>
+                                <h2 class="mb-2"><span class="counter-value"
+                                        data-target="<?php echo e($resolvedReports->count()); ?>">0</span></h2>
                                 <div class="text-muted">Reports Resolved</div>
                             </div>
                         </div>
@@ -1313,15 +1454,7 @@ unset($__errorArgs, $__bag); ?>
                             <div>
                                 <h2 class="mb-2"><span class="counter-value"
                                         data-target="<?php echo e($normalUsers->count()); ?>">0</span></h2>
-                                <div class="text-muted">Users</div>
-                            </div>
-                        </div>
-                        <!-- end col -->
-
-                        <div class="col-lg-3 col-6">
-                            <div>
-                                <h2 class="mb-2"><span class="counter-value" data-target="0">0</span></h2>
-                                <div class="text-muted">Satisfied Users</div>
+                                <div class="text-muted">Registered Users</div>
                             </div>
                         </div>
                         <!-- end col -->
@@ -1389,7 +1522,8 @@ unset($__errorArgs, $__bag); ?>
                                             <div class="mb-4">
                                                 <label for="subject" class="form-label fs-13">Subject</label>
                                                 <input type="text" class="form-control bg-light border-light"
-                                                    id="subject" name="subject" placeholder="Your Subject.." required>
+                                                    id="subject" name="subject" placeholder="Your Subject.."
+                                                    required>
                                             </div>
                                         </div>
                                     </div>
@@ -2021,11 +2155,12 @@ unset($__errorArgs, $__bag); ?>
 
                             let href;
                             // console.log(notification.type);
-                            if (notification.type === 'App\\Notifications\\SimpleReportSubmitted') {
+                            if ((notification.type === 'App\\Notifications\\SimpleReportSubmitted') || (
+                                    notification.type === 'App\\Notifications\\DeleteItemDetails')) {
                                 href = '#hero';
                             } else {
                                 href = `<?php echo e(route('user.itemDetail', ['id' => ':report_id'])); ?>`
-                                .replace(':report_id', notification.data.report_id);
+                                    .replace(':report_id', notification.data.report_id);
                             }
 
                             return `
@@ -2100,6 +2235,42 @@ unset($__errorArgs, $__bag); ?>
                         });
                     });
                 }
+                // Handle feedback button click
+                document.querySelector('.btn-give-feedback').addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const feedbackModal = new bootstrap.Modal(document.getElementById('feedbackModal'));
+                    feedbackModal.show();
+                });
+
+                //submit feedback
+                document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+                    event.preventDefault();
+
+                    let formData = new FormData(this);
+
+                    fetch('/feedback', {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                    .getAttribute('content')
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert(data.success);
+                                document.getElementById('feedbackForm').reset();
+                                var feedbackModal = bootstrap.Modal.getInstance(document.getElementById(
+                                    'feedbackModal'));
+                                feedbackModal.hide();
+                            } else {
+                                alert('An error occurred. Please try again.');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                });
+
             });
         </script>
     <?php $__env->stopSection(); ?>

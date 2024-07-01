@@ -10,6 +10,75 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/libs/filepond/filepond.min.css') }}" type="text/css" />
     <link rel="stylesheet"
         href="{{ URL::asset('assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css') }}">
+    <style>
+        .rate {
+
+            border-bottom-right-radius: 12px;
+            border-bottom-left-radius: 12px;
+
+        }
+
+        .rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center
+        }
+
+        .rating>input {
+            display: none
+        }
+
+        .rating>label {
+            position: relative;
+            width: 1em;
+            font-size: 30px;
+            font-weight: 300;
+            color: #FFD600;
+            cursor: pointer
+        }
+
+        .rating>label::before {
+            content: "\2605";
+            position: absolute;
+            opacity: 0
+        }
+
+        .rating>label:hover:before,
+        .rating>label:hover~label:before {
+            opacity: 1 !important
+        }
+
+        .rating>input:checked~label:before {
+            opacity: 1
+        }
+
+        .rating:hover>input:checked~label:before {
+            opacity: 0.4
+        }
+
+
+        .buttons {
+            top: 36px;
+            position: relative;
+        }
+
+
+        .rating-submit {
+            border-radius: 15px;
+            color: #fff;
+            height: 49px;
+        }
+
+
+        .rating-submit:hover {
+
+            color: #fff;
+        }
+        .star-rating {
+        color: #FFD600;
+        font-size: 1.5rem;
+    }
+    </style>
 @endsection
 @section('body')
 
@@ -147,7 +216,8 @@
                                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
                                                 class="mdi mdi-logout-variant text-muted fs-16 align-middle me-1"></i> <span
                                                 key="t-logout">@lang('translation.logout')</span></a>
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                            style="display: none;">
                                             @csrf
                                         </form>
                                     </div>
@@ -1072,7 +1142,7 @@
                                         aria-labelledby="privacy-headingThree" data-bs-parent="#privacy-accordion">
                                         <div class="accordion-body ff-secondary">
                                             If you find your lost item, please update the status on our website by marking
-                                            it as found in your item log. This will help us keep the database
+                                            it as resolved in your item log. This will help us keep the database
                                             up-to-date.
                                         </div>
                                     </div>
@@ -1088,8 +1158,7 @@
                                     <div id="privacy-collapseFour" class="accordion-collapse collapse"
                                         aria-labelledby="privacy-headingFour" data-bs-parent="#privacy-accordion">
                                         <div class="accordion-body ff-secondary">
-                                            You can contact someone who found your item through the messaging system on our
-                                            website. We do not share personal contact information to ensure privacy.
+                                            The contact information of someone who found your item will be visible for you to contact upon approval of the report's owner through the requests contact or proof of ownership that you have made.
                                         </div>
                                     </div>
                                 </div>
@@ -1105,8 +1174,8 @@
             <!-- end faqs -->
 
 
-            <!-- start review -->
-            <section class="section bg-primary" id="reviews">
+            <!-- start feedback -->
+            <section class="section bg-primary" id="feedbacks">
                 <div class="bg-overlay bg-overlay-pattern"></div>
                 <div class="container">
                     <div class="row justify-content-center">
@@ -1116,55 +1185,38 @@
                                     <i class="ri-double-quotes-l text-success display-3"></i>
                                 </div>
                                 <h4 class="text-white mb-5">Satisfied Users</h4>
-
+            
                                 <!-- Swiper -->
                                 <div class="swiper client-review-swiper rounded" dir="ltr">
                                     <div class="swiper-wrapper">
-                                        <div class="swiper-slide">
-                                            <div class="row justify-content-center">
-                                                <div class="col-10">
-                                                    <div class="text-white-50">
-                                                        <p class="fs-20 ff-secondary mb-4">[feedback]</p>
-
-                                                        <div>
-                                                            <h5 class="text-white">[stars]</h5>
-                                                            <p>- [username]</p>
+                                        @if($feedbacks->isEmpty())
+                                            <div class="swiper-slide">
+                                                <div class="row justify-content-center">
+                                                    <div class="col-10">
+                                                        <div class="text-white-50">
+                                                            <p class="fs-20 ff-secondary mb-4 text-center">No feedbacks available.</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- end slide -->
-                                        <div class="swiper-slide">
-                                            <div class="row justify-content-center">
-                                                <div class="col-10">
-                                                    <div class="text-white-50">
-                                                        <p class="fs-20 ff-secondary mb-4">[feedback]</p>
-
-                                                        <div>
-                                                            <h5 class="text-white">[stars]</h5>
-                                                            <p>- [username]</p>
+                                        @else
+                                            @foreach ($feedbacks as $feedback)
+                                                <div class="swiper-slide">
+                                                    <div class="row justify-content-center">
+                                                        <div class="col-10">
+                                                            <div class="text-white-50">
+                                                                <p class="fs-20 ff-secondary mb-4">" {{ $feedback->message }} "</p>
+            
+                                                                <div>
+                                                                    <h5 class="star-rating">{{ str_repeat('★', $feedback->stars) }}</h5>
+                                                                    <p>- {{ $feedback->user->name }}</p>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <!-- end slide -->
-                                        <div class="swiper-slide">
-                                            <div class="row justify-content-center">
-                                                <div class="col-10">
-                                                    <div class="text-white-50">
-                                                        <p class="fs-20 ff-secondary mb-4">[feedback]</p>
-
-                                                        <div>
-                                                            <h5 class="text-white">[stars]</h5>
-                                                            <p>- [username]</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- end slide -->
+                                            @endforeach
+                                        @endif
                                     </div>
                                     <div class="swiper-button-next bg-white rounded-circle"></div>
                                     <div class="swiper-button-prev bg-white rounded-circle"></div>
@@ -1176,11 +1228,74 @@
                         <!-- end col -->
                     </div>
                     <!-- end row -->
+                    @auth
+                        <div class="text-center mt-4">
+                            <div>
+                                <a href="#showModal" data-bs-toggle="modal"
+                                    class="btn bg-gradient btn-success btn-give-feedback"><i
+                                        class=" ri-feedback-line align-middle me-1"></i> Give Feedback</a>
+                            </div>
+                        </div>
+                    @endauth
                 </div>
                 <!-- end container -->
             </section>
-            <!-- end review -->
+            <!-- end feedback -->
 
+
+            <!-- Feedback Modal -->
+            <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="feedbackModalLabel">Submit Feedback</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="feedbackForm" action="/feedback" method="POST">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="type" class="form-label">Feedback Type</label>
+                                    <select id="type" name="type" class="form-select" required>
+                                        <option value="" selected>-- Select Type --</option>
+                                        <option value="enhancement">Enhancement</option>
+                                        <option value="comment">Comments</option>
+                                        <option value="fraudulent">Fraudulent or Scam</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="message" class="form-label">Message</label>
+                                    <textarea id="message" name="message" class="form-control" rows="3" required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="stars" class="form-label">Rating</label>
+                                    <div class="rate text-white">
+                                        <div class="rating">
+                                            <input type="radio" name="rating" value="5" id="5"><label
+                                                for="5">☆</label>
+                                            <input type="radio" name="rating" value="4" id="4"><label
+                                                for="4">☆</label>
+                                            <input type="radio" name="rating" value="3" id="3"><label
+                                                for="3">☆</label>
+                                            <input type="radio" name="rating" value="2" id="2"><label
+                                                for="2">☆</label>
+                                            <input type="radio" name="rating" value="1" id="1"><label
+                                                for="1">☆</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
             <!-- start Work Process -->
@@ -1281,7 +1396,8 @@
 
                         <div class="col-lg-3 col-6">
                             <div>
-                                <h2 class="mb-2"><span class="counter-value" data-target="{{ $detailedReports->count() }}">0</span></h2>
+                                <h2 class="mb-2"><span class="counter-value"
+                                        data-target="{{ $detailedReports->count() }}">0</span></h2>
                                 <div class="text-muted">Detailed Reports</div>
                             </div>
                         </div>
@@ -1298,7 +1414,8 @@
 
                         <div class="col-lg-3 col-6">
                             <div>
-                                <h2 class="mb-2"><span class="counter-value" data-target="{{ $normalUsers->count() }}">0</span></h2>
+                                <h2 class="mb-2"><span class="counter-value"
+                                        data-target="{{ $normalUsers->count() }}">0</span></h2>
                                 <div class="text-muted">Registered Users</div>
                             </div>
                         </div>
@@ -1343,22 +1460,21 @@
                         <!-- end col -->
                         <div class="col-lg-8">
                             <div>
-                                <form>
+                                <form action="{{ route('sendEmail') }}" method="POST">
+                                    @csrf
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="mb-4">
                                                 <label for="name" class="form-label fs-13">Name</label>
-                                                <input name="name" id="name" type="text"
-                                                    class="form-control bg-light border-light" placeholder="Your name"
-                                                    required>
+                                                <input name="name" id="name" type="text" class="form-control bg-light border-light"
+                                                    placeholder="Your name" required>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="mb-4">
                                                 <label for="email" class="form-label fs-13">Email</label>
-                                                <input name="email" id="email" type="email"
-                                                    class="form-control bg-light border-light" placeholder="Your email"
-                                                    required>
+                                                <input name="email" id="email" type="email" class="form-control bg-light border-light"
+                                                    placeholder="Your email" required>
                                             </div>
                                         </div>
                                     </div>
@@ -1366,8 +1482,8 @@
                                         <div class="col-lg-12">
                                             <div class="mb-4">
                                                 <label for="subject" class="form-label fs-13">Subject</label>
-                                                <input type="text" class="form-control bg-light border-light"
-                                                    id="subject" name="subject" placeholder="Your Subject.." required>
+                                                <input type="text" class="form-control bg-light border-light" id="subject" name="subject"
+                                                    placeholder="Your Subject.." required>
                                             </div>
                                         </div>
                                     </div>
@@ -1375,15 +1491,14 @@
                                         <div class="col-lg-12">
                                             <div class="mb-3">
                                                 <label for="comments" class="form-label fs-13">Message</label>
-                                                <textarea name="comments" id="comments" rows="3" class="form-control bg-light border-light"
-                                                    placeholder="Your message..." required></textarea>
+                                                <textarea name="comments" id="comments" rows="3"
+                                                    class="form-control bg-light border-light" placeholder="Your message..." required></textarea>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-12 text-end">
-                                            <input type="submit" id="submit" name="send"
-                                                class="submitBnt btn btn-primary" value="Send Message">
+                                            <input type="submit" class="submitBtn btn btn-primary" value="Send Message">
                                         </div>
                                     </div>
                                 </form>
@@ -1999,11 +2114,13 @@
 
                             let href;
                             // console.log(notification.type);
-                            if ((notification.type === 'App\\Notifications\\SimpleReportSubmitted') || (notification.type === 'App\\Notifications\\DeleteItemDetails')) {
+                            if ((notification.type === 'App\\Notifications\\SimpleReportSubmitted') || (
+                                    notification.type === 'App\\Notifications\\DeleteItemDetails') || (
+                                    notification.type === 'App\\Notifications\\FeedbackSubmitted')) {
                                 href = '#hero';
                             } else {
                                 href = `{{ route('user.itemDetail', ['id' => ':report_id']) }}`
-                                .replace(':report_id', notification.data.report_id);
+                                    .replace(':report_id', notification.data.report_id);
                             }
 
                             return `
@@ -2078,6 +2195,43 @@
                         });
                     });
                 }
+                // Handle feedback button click
+                document.querySelector('.btn-give-feedback').addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const feedbackModal = new bootstrap.Modal(document.getElementById('feedbackModal'));
+                    feedbackModal.show();
+                });
+
+                //submit feedback
+                document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+                    event.preventDefault();
+
+                    let formData = new FormData(this);
+
+                    fetch('/feedback', {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                    .getAttribute('content')
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert(data.success);
+                                document.getElementById('feedbackForm').reset();
+                                var feedbackModal = bootstrap.Modal.getInstance(document.getElementById(
+                                    'feedbackModal'));
+                                feedbackModal.hide();
+                                location.reload();
+                            } else {
+                                alert('An error occurred. Please try again.');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                });
+
             });
         </script>
     @endsection

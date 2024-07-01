@@ -14,6 +14,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -76,6 +78,13 @@ Route::get('/reports/{reportId}/requests', [RequestController::class, 'getReques
 Route::get('/notifications', [NotificationController::class, 'fetchNotifications'])->name('notifications.fetch');
 Route::put('/notifications/{notificationId}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
 Route::put('/notifications/{notificationId}/mark-as-unread', [NotificationController::class, 'markAsUnread'])->name('notifications.mark-as-unread');
+
+//Feedback
+Route::post('/feedback', [FeedbackController::class, 'store'])->middleware('auth');
+
+//Contact send email
+Route::post('/send-email', [ContactController::class, 'sendEmail'])->name('sendEmail');
+
 
 // Fallback Route
 Route::fallback(function () {

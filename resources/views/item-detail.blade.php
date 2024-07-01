@@ -588,7 +588,8 @@
 
                             let href;
                             if ((notification.type === 'App\\Notifications\\SimpleReportSubmitted') || (
-                                    notification.type === 'App\\Notifications\\DeleteItemDetails')) {
+                                    notification.type === 'App\\Notifications\\DeleteItemDetails')|| (
+                                        notification.type === 'App\\Notifications\\FeedbackSubmitted')) {
                                 href = '/home#hero';
                             } else {
                                 href = `{{ route('user.itemDetail', ['id' => ':report_id']) }}`

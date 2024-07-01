@@ -582,7 +582,8 @@
 
                             let href;
                             if ((notification.type === 'App\\Notifications\\SimpleReportSubmitted') || (
-                                    notification.type === 'App\\Notifications\\DeleteItemDetails')) {
+                                    notification.type === 'App\\Notifications\\DeleteItemDetails')|| (
+                                        notification.type === 'App\\Notifications\\FeedbackSubmitted')) {
                                 href = '/home#hero';
                             } else {
                                 href = `<?php echo e(route('user.itemDetail', ['id' => ':report_id'])); ?>`

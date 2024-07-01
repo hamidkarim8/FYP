@@ -35,8 +35,15 @@
             <section class="section bg-light">
                 <div class="bg-overlay bg-overlay-pattern"></div>
                 <div class="container mt-4 pt-4">
-                    <div class="card mt-n5">
+                    <div
+                        class="card <?php echo e($report->isResolved === 'resolved' ? 'ribbon-box right border shadow-none overflow-hidden' : ''); ?>  mt-n5">
                         <div class="card-body p-4">
+                            <?php if($report->isResolved == 'resolved'): ?>
+                                <div class="ribbon ribbon-success ribbon-shape trending-ribbon">
+                                    <i class=" ri-check-line text-white align-bottom float-start me-1"></i>
+                                    <span class="trending-ribbon-text">Resolved</span>
+                                </div>
+                            <?php endif; ?>
                             <div class="row g-4">
                                 <div class="col-xl-4 col-lg-6">
                                     <div class="sticky-side-div">
@@ -116,22 +123,28 @@
                                         <span class="badge badge-soft-info mb-3 fs-12">
                                             <i class="ri-eye-line me-1 align-bottom"></i>Reported by you
                                         </span>
-                                        <div class="dropdown float-end">
-                                            <button class="btn btn-ghost-primary btn-icon dropdown" type="button"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="ri-more-fill align-middle fs-16"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item edit-item-btn" href="#showModal"
-                                                        data-bs-toggle="modal"><i
-                                                            class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                        Edit</a></li>
-                                                <li><a class="dropdown-item remove-item-btn" data-bs-toggle="modal"
-                                                        href="#deleteRecordModal"><i
-                                                            class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                        Delete</a></li>
-                                            </ul>
-                                        </div>
+                                        <?php if($report->isResolved != 'resolved'): ?>
+                                            <div class="dropdown float-end">
+                                                <button class="btn btn-ghost-primary btn-icon dropdown" type="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="ri-more-fill align-middle fs-16"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item edit-item-btn" href="#showModal"
+                                                            data-bs-toggle="modal"><i
+                                                                class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                                                            Edit</a></li>
+                                                    <li><a class="dropdown-item remove-item-btn" data-bs-toggle="modal"
+                                                            href="#deleteRecordModal"><i
+                                                                class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                            Delete</a></li>
+                                                    <li><a class="dropdown-item resolved-item-btn" data-bs-toggle="modal"
+                                                            href="#resolvedItemModal"><i
+                                                                class="ri-checkbox-circle-fill align-bottom me-2 text-muted"></i>
+                                                            Mark as Resolved</a></li>
+                                                </ul>
+                                            </div>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                     <div>
                                         <h3><?php echo e($report->item->title); ?> | <?php echo e($report->item->category->name); ?></h3>
@@ -308,7 +321,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="phone_number" class="form-label">Phone Number</label>
-                                    <input type="text" class="form-control" id="phone_number" name="phone_number"
+                                    <input type="number" class="form-control" id="phone_number" name="phone_number"
                                         required>
                                 </div>
                                 <div class="mb-3">
@@ -366,6 +379,27 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resolved Confirmation Modal -->
+            <div class="modal fade" id="resolvedItemModal" tabindex="-1" aria-labelledby="resolvedModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="resolvedModalLabel">Confirm Resolved</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you have resolved this report?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-success" id="confirmResolvedBtn">Confirm</button>
                         </div>
                     </div>
                 </div>
@@ -547,7 +581,8 @@
                             const backgroundColor = notification.read_at !== null ? '#f0f0f0' : '#ffffff';
 
                             let href;
-                            if (notification.type === 'App\\Notifications\\SimpleReportSubmitted') {
+                            if ((notification.type === 'App\\Notifications\\SimpleReportSubmitted') || (
+                                    notification.type === 'App\\Notifications\\DeleteItemDetails')) {
                                 href = '/home#hero';
                             } else {
                                 href = `<?php echo e(route('user.itemDetail', ['id' => ':report_id'])); ?>`
@@ -632,10 +667,15 @@
                     document.getElementById('phone_number').value = report.item.phone_number;
                     document.getElementById('email').value = report.item.email;
                     document.getElementById('fullname').value = report.item.fullname;
-                    document.getElementById('date').value = report.item.date;
-                    document.getElementById('socialmedia_ig').value = report.item.social_media.ig_username ? report.item.social_media.ig_username : "";
-                    document.getElementById('socialmedia_twt').value = report.item.social_media.twitter_username ? report.item.social_media.twitter_username : "";
-                    document.getElementById('socialmedia_tt').value = report.item.social_media.tiktok_username ? report.item.social_media.tiktok_username : "";
+                    let date = new Date(report.item.date);
+                    let formattedDate = date.toISOString().substring(0, 19);
+                    document.getElementById('date').value = formattedDate;
+                    document.getElementById('socialmedia_ig').value = report.item.social_media.ig_username ? report.item
+                        .social_media.ig_username : "";
+                    document.getElementById('socialmedia_twt').value = report.item.social_media.twitter_username ?
+                        report.item.social_media.twitter_username : "";
+                    document.getElementById('socialmedia_tt').value = report.item.social_media.tiktok_username ? report
+                        .item.social_media.tiktok_username : "";
                 }
 
                 // Handle Edit button click
@@ -699,6 +739,32 @@
                             }
                         })
                         .catch(error => console.error('Error deleting report:', error));
+                });
+
+                // Handle Resolved button click
+                document.querySelector('.resolved-item-btn').addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const resolvedItemModal = new bootstrap.Modal(document.getElementById('resolvedItemModal'));
+                    resolvedItemModal.show();
+                });
+
+                // Handle Resolved confirmation
+                document.getElementById('confirmResolvedBtn').addEventListener('click', function() {
+                    const reportId = '<?php echo e($report->id); ?>';
+                    fetch(`/item/resolved/${reportId}`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                alert('Report marked as resolved!');
+                                window.location.href = '/';
+                            }
+                        })
+                        .catch(error => console.error('Error resolving report:', error));
                 });
             });
         </script>
