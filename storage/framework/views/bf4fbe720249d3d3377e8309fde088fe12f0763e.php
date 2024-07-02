@@ -1255,7 +1255,7 @@ unset($__errorArgs, $__bag); ?>
                             <div>
                                 <a href="#showModal" data-bs-toggle="modal"
                                     class="btn bg-gradient btn-success btn-give-feedback"><i
-                                        class=" ri-feedback-line align-middle me-1"></i> Give Feedback</a>
+                                        class="mdi mdi-comment-outline align-middle me-1"></i> Give Feedback</a>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -2121,13 +2121,13 @@ unset($__errorArgs, $__bag); ?>
 
                     if (notifications.length === 0) {
                         notificationHTML = `
-            <div class="text-reset notification-item d-block dropdown-item position-relative">
-                <div class="d-flex align-items-center">
-                    <div class="flex-grow-1">
-                        <h6 class="mt-0 mb-2 lh-base text-center">No notifications</h6>
-                    </div>
+<div class="w-25 w-sm-50 pt-3 mx-auto">
+                    <img src="<?php echo e(URL::asset('assets/images/svg/bell.svg')); ?>" class="img-fluid"
+                        alt="user-pic">
                 </div>
-            </div>
+                <div class="text-center pb-5 mt-2">
+                    <h6 class="fs-18 fw-semibold lh-base">Hey! You have no any notifications </h6>
+                </div>
         `;
                     } else {
                         notificationHTML = notifications.map(notification => {
