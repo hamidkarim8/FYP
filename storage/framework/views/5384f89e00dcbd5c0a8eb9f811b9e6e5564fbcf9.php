@@ -144,7 +144,10 @@
                     },
                     {
                         data: 'type',
-                        name: 'type'
+                        name: 'type',
+                        render: function(data, type, row) {
+                            return data == 'simple' ? 'Simple' : 'Detailed';
+                        }
                     },
                     {
                         data: 'item.date',
@@ -381,8 +384,8 @@
 
         });
         document.addEventListener('DOMContentLoaded', function() {
-                        //call notification
-                        fetchNotifications();
+            //call notification
+            fetchNotifications();
             setInterval(fetchNotifications, 60000);
 
             function fetchNotifications() {
@@ -508,7 +511,6 @@
                 });
             }
         });
-
     </script>
 <?php $__env->stopSection(); ?>
 
