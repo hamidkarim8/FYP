@@ -38,6 +38,10 @@ Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('
 
 // Admin Dashboard Route
 Route::get('/admin', [AdminController::class, 'adminIndex'])->middleware(['auth', 'role:admin'])->name('admin.index');
+Route::get('/reports', [AdminController::class, 'displayReports'])->middleware(['auth', 'role:admin'])->name('admin.displayReports');
+Route::get('/get-reports', [AdminController::class, 'getReports'])->middleware(['auth', 'role:admin'])->name('admin.getReports');
+Route::get('admin/reports/{id}', [AdminController::class, 'viewReport'])->middleware(['auth', 'role:admin'])->name('admin.viewReport');
+Route::delete('admin/reports/{id}', [AdminController::class, 'deleteReport'])->middleware(['auth', 'role:admin'])->name('admin.deleteReport');
 
 // User Home Route
 Route::get('/home', [UserController::class, 'userIndex'])->middleware(['auth', 'role:normal_user'])->name('user.index');

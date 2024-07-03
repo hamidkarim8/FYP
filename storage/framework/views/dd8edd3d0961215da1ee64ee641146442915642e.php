@@ -40,7 +40,7 @@
                 </li>
                 <li class="menu-title"><span>Management</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#report">
+                    <a class="nav-link menu-link" href="<?php echo e(route('admin.displayReports')); ?>">
                         <i class="mdi mdi-file-document-outline"></i> <span>Reports</span>
                     </a>
                 </li>

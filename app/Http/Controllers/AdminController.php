@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Report;
+use App\Models\DeletedReport;
 use Carbon\Carbon;
+use Yajra\DataTables\DataTables;
 
 
 class AdminController extends Controller
@@ -81,5 +83,60 @@ class AdminController extends Controller
         } else {
             return 0;
         }
+    }
+    public function displayReports()
+    {
+        return view('admin.reports');
+    }
+
+    public function getReports(Request $request)
+    {
+        // dd($request);
+
+        if ($request->ajax()) {
+            $data = Report::with('item', 'user.profile')->get();
+            // dd($data);
+            return DataTables::of($data)
+                ->addColumn('action', function($row){
+                    $btn = '<div class="dropdown">
+                                <a href="#" role="button" id="dropdownMenuLink'.$row->id.'" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="ri-more-2-fill"></i>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink'.$row->id.'">
+                                    <li><a class="dropdown-item view-report" href="#" data-id="'.$row->id.'">View</a></li>
+                                    <li><a class="dropdown-item delete-report" href="#" data-id="'.$row->id.'">Delete</a></li>
+                                </ul>
+                            </div>';
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+    }
+    public function viewReport($id)
+    {
+        // dd($id);
+
+        $report = Report::with('item', 'item.category', 'user.profile')->find($id);
+        // dd($report);
+        if ($report) {
+            return response()->json($report);
+        }
+        return response()->json(['error' => 'Report not found.'], 404);
+    }
+    
+    public function deleteReport(Request $request, $id)
+    {
+        $report = Report::find($id);
+        if ($report) {
+            DeletedReport::create([
+                'report_id' => $report->id,
+                'deleted_type' => $request->deleted_type,
+                'remarks' => $request->remarks,
+            ]);
+            $report->delete();
+            return response()->json(['success' => 'Report deleted successfully.']);
+        }
+        return response()->json(['error' => 'Report not found.'], 404);
     }
 }

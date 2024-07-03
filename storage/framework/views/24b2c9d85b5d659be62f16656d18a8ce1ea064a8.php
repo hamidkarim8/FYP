@@ -567,13 +567,13 @@
 
                     if (notifications.length === 0) {
                         notificationHTML = `
-            <div class="text-reset notification-item d-block dropdown-item position-relative">
-                <div class="d-flex align-items-center">
-                    <div class="flex-grow-1">
-                        <h6 class="mt-0 mb-2 lh-base text-center">No notifications</h6>
-                    </div>
+<div class="w-25 w-sm-50 pt-3 mx-auto">
+                    <img src="<?php echo e(URL::asset('assets/images/svg/bell.svg')); ?>" class="img-fluid"
+                        alt="user-pic">
                 </div>
-            </div>
+                <div class="text-center pb-5 mt-2">
+                    <h6 class="fs-18 fw-semibold lh-base">Hey! You have no any notifications </h6>
+                </div>
         `;
                     } else {
                         notificationHTML = notifications.map(notification => {
@@ -582,7 +582,8 @@
 
                             let href;
                             if ((notification.type === 'App\\Notifications\\SimpleReportSubmitted') || (
-                                    notification.type === 'App\\Notifications\\DeleteItemDetails')) {
+                                    notification.type === 'App\\Notifications\\DeleteItemDetails')|| (
+                                        notification.type === 'App\\Notifications\\FeedbackSubmitted')) {
                                 href = '/home#hero';
                             } else {
                                 href = `<?php echo e(route('user.itemDetail', ['id' => ':report_id'])); ?>`

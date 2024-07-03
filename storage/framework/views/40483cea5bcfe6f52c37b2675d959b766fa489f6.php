@@ -18,8 +18,6 @@
 
         }
 
-
-
         .rating {
             display: flex;
             flex-direction: row-reverse;
@@ -76,6 +74,10 @@
 
             color: #fff;
         }
+        .star-rating {
+        color: #FFD600;
+        font-size: 1.5rem;
+    }
     </style>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('body'); ?>
@@ -1162,7 +1164,7 @@ unset($__errorArgs, $__bag); ?>
                                         aria-labelledby="privacy-headingThree" data-bs-parent="#privacy-accordion">
                                         <div class="accordion-body ff-secondary">
                                             If you find your lost item, please update the status on our website by marking
-                                            it as found in your item log. This will help us keep the database
+                                            it as resolved in your item log. This will help us keep the database
                                             up-to-date.
                                         </div>
                                     </div>
@@ -1178,8 +1180,7 @@ unset($__errorArgs, $__bag); ?>
                                     <div id="privacy-collapseFour" class="accordion-collapse collapse"
                                         aria-labelledby="privacy-headingFour" data-bs-parent="#privacy-accordion">
                                         <div class="accordion-body ff-secondary">
-                                            You can contact someone who found your item through the messaging system on our
-                                            website. We do not share personal contact information to ensure privacy.
+                                            The contact information of someone who found your item will be visible for you to contact upon approval of the report's owner through the requests contact or proof of ownership that you have made.
                                         </div>
                                     </div>
                                 </div>
@@ -1195,7 +1196,7 @@ unset($__errorArgs, $__bag); ?>
             <!-- end faqs -->
 
 
-            <!-- start review -->
+            <!-- start feedback -->
             <section class="section bg-primary" id="feedbacks">
                 <div class="bg-overlay bg-overlay-pattern"></div>
                 <div class="container">
@@ -1206,55 +1207,38 @@ unset($__errorArgs, $__bag); ?>
                                     <i class="ri-double-quotes-l text-success display-3"></i>
                                 </div>
                                 <h4 class="text-white mb-5">Satisfied Users</h4>
-
+            
                                 <!-- Swiper -->
                                 <div class="swiper client-review-swiper rounded" dir="ltr">
                                     <div class="swiper-wrapper">
-                                        <div class="swiper-slide">
-                                            <div class="row justify-content-center">
-                                                <div class="col-10">
-                                                    <div class="text-white-50">
-                                                        <p class="fs-20 ff-secondary mb-4">[feedback]</p>
-
-                                                        <div>
-                                                            <h5 class="text-white">[stars]</h5>
-                                                            <p>- [username]</p>
+                                        <?php if($feedbacks->isEmpty()): ?>
+                                            <div class="swiper-slide">
+                                                <div class="row justify-content-center">
+                                                    <div class="col-10">
+                                                        <div class="text-white-50">
+                                                            <p class="fs-20 ff-secondary mb-4 text-center">No feedbacks available.</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- end slide -->
-                                        <div class="swiper-slide">
-                                            <div class="row justify-content-center">
-                                                <div class="col-10">
-                                                    <div class="text-white-50">
-                                                        <p class="fs-20 ff-secondary mb-4">[feedback]</p>
-
-                                                        <div>
-                                                            <h5 class="text-white">[stars]</h5>
-                                                            <p>- [username]</p>
+                                        <?php else: ?>
+                                            <?php $__currentLoopData = $feedbacks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feedback): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <div class="swiper-slide">
+                                                    <div class="row justify-content-center">
+                                                        <div class="col-10">
+                                                            <div class="text-white-50">
+                                                                <p class="fs-20 ff-secondary mb-4">" <?php echo e($feedback->message); ?> "</p>
+            
+                                                                <div>
+                                                                    <h5 class="star-rating"><?php echo e(str_repeat('★', $feedback->stars)); ?></h5>
+                                                                    <p>- <?php echo e($feedback->user->name); ?></p>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <!-- end slide -->
-                                        <div class="swiper-slide">
-                                            <div class="row justify-content-center">
-                                                <div class="col-10">
-                                                    <div class="text-white-50">
-                                                        <p class="fs-20 ff-secondary mb-4">[feedback]</p>
-
-                                                        <div>
-                                                            <h5 class="text-white">[stars]</h5>
-                                                            <p>- [username]</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- end slide -->
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php endif; ?>
                                     </div>
                                     <div class="swiper-button-next bg-white rounded-circle"></div>
                                     <div class="swiper-button-prev bg-white rounded-circle"></div>
@@ -1271,14 +1255,14 @@ unset($__errorArgs, $__bag); ?>
                             <div>
                                 <a href="#showModal" data-bs-toggle="modal"
                                     class="btn bg-gradient btn-success btn-give-feedback"><i
-                                        class=" ri-feedback-line align-middle me-1"></i> Give Feedback</a>
+                                        class="mdi mdi-comment-outline align-middle me-1"></i> Give Feedback</a>
                             </div>
                         </div>
                     <?php endif; ?>
                 </div>
                 <!-- end container -->
             </section>
-            <!-- end review -->
+            <!-- end feedback -->
 
 
             <!-- Feedback Modal -->
@@ -1299,7 +1283,7 @@ unset($__errorArgs, $__bag); ?>
                                     <select id="type" name="type" class="form-select" required>
                                         <option value="" selected>-- Select Type --</option>
                                         <option value="enhancement">Enhancement</option>
-                                        <option value="comments">Comments</option>
+                                        <option value="comment">Comments</option>
                                         <option value="fraudulent">Fraudulent or Scam</option>
                                     </select>
                                 </div>
@@ -1498,22 +1482,21 @@ unset($__errorArgs, $__bag); ?>
                         <!-- end col -->
                         <div class="col-lg-8">
                             <div>
-                                <form>
+                                <form action="<?php echo e(route('sendEmail')); ?>" method="POST">
+                                    <?php echo csrf_field(); ?>
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="mb-4">
                                                 <label for="name" class="form-label fs-13">Name</label>
-                                                <input name="name" id="name" type="text"
-                                                    class="form-control bg-light border-light" placeholder="Your name"
-                                                    required>
+                                                <input name="name" id="name" type="text" class="form-control bg-light border-light"
+                                                    placeholder="Your name" required>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="mb-4">
                                                 <label for="email" class="form-label fs-13">Email</label>
-                                                <input name="email" id="email" type="email"
-                                                    class="form-control bg-light border-light" placeholder="Your email"
-                                                    required>
+                                                <input name="email" id="email" type="email" class="form-control bg-light border-light"
+                                                    placeholder="Your email" required>
                                             </div>
                                         </div>
                                     </div>
@@ -1521,9 +1504,8 @@ unset($__errorArgs, $__bag); ?>
                                         <div class="col-lg-12">
                                             <div class="mb-4">
                                                 <label for="subject" class="form-label fs-13">Subject</label>
-                                                <input type="text" class="form-control bg-light border-light"
-                                                    id="subject" name="subject" placeholder="Your Subject.."
-                                                    required>
+                                                <input type="text" class="form-control bg-light border-light" id="subject" name="subject"
+                                                    placeholder="Your Subject.." required>
                                             </div>
                                         </div>
                                     </div>
@@ -1531,15 +1513,14 @@ unset($__errorArgs, $__bag); ?>
                                         <div class="col-lg-12">
                                             <div class="mb-3">
                                                 <label for="comments" class="form-label fs-13">Message</label>
-                                                <textarea name="comments" id="comments" rows="3" class="form-control bg-light border-light"
-                                                    placeholder="Your message..." required></textarea>
+                                                <textarea name="comments" id="comments" rows="3"
+                                                    class="form-control bg-light border-light" placeholder="Your message..." required></textarea>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-12 text-end">
-                                            <input type="submit" id="submit" name="send"
-                                                class="submitBnt btn btn-primary" value="Send Message">
+                                            <input type="submit" class="submitBtn btn btn-primary" value="Send Message">
                                         </div>
                                     </div>
                                 </form>
@@ -2140,13 +2121,13 @@ unset($__errorArgs, $__bag); ?>
 
                     if (notifications.length === 0) {
                         notificationHTML = `
-            <div class="text-reset notification-item d-block dropdown-item position-relative">
-                <div class="d-flex align-items-center">
-                    <div class="flex-grow-1">
-                        <h6 class="mt-0 mb-2 lh-base text-center">No notifications</h6>
-                    </div>
+<div class="w-25 w-sm-50 pt-3 mx-auto">
+                    <img src="<?php echo e(URL::asset('assets/images/svg/bell.svg')); ?>" class="img-fluid"
+                        alt="user-pic">
                 </div>
-            </div>
+                <div class="text-center pb-5 mt-2">
+                    <h6 class="fs-18 fw-semibold lh-base">Hey! You have no any notifications </h6>
+                </div>
         `;
                     } else {
                         notificationHTML = notifications.map(notification => {
@@ -2156,7 +2137,8 @@ unset($__errorArgs, $__bag); ?>
                             let href;
                             // console.log(notification.type);
                             if ((notification.type === 'App\\Notifications\\SimpleReportSubmitted') || (
-                                    notification.type === 'App\\Notifications\\DeleteItemDetails')) {
+                                    notification.type === 'App\\Notifications\\DeleteItemDetails') || (
+                                    notification.type === 'App\\Notifications\\FeedbackSubmitted')) {
                                 href = '#hero';
                             } else {
                                 href = `<?php echo e(route('user.itemDetail', ['id' => ':report_id'])); ?>`
@@ -2264,6 +2246,7 @@ unset($__errorArgs, $__bag); ?>
                                 var feedbackModal = bootstrap.Modal.getInstance(document.getElementById(
                                     'feedbackModal'));
                                 feedbackModal.hide();
+                                location.reload();
                             } else {
                                 alert('An error occurred. Please try again.');
                             }

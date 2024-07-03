@@ -38,19 +38,20 @@
                         <i class="mdi mdi-speedometer"></i> <span><?php echo app('translator')->get('translation.dashboards'); ?></span>
                     </a>
                 </li>
+                <li class="menu-title"><span>Management</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#report">
+                    <a class="nav-link menu-link" href="<?php echo e(route('admin.displayReports')); ?>">
                         <i class="mdi mdi-file-document-outline"></i> <span>Reports</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#items">
-                        <i class="mdi mdi-cube-outline"></i> <span>Items</span>
+                    <a class="nav-link menu-link" href="#admins">
+                        <i class="mdi mdi-account-key-outline"></i> <span>Admins</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#users">
-                        <i class="mdi mdi-account-outline"></i> <span>Users</span>
+                        <i class="mdi mdi-account-multiple-outline"></i> <span>Users</span>
                     </a>
                 </li>
 
@@ -59,6 +60,7 @@
                         <i class="mdi mdi-comment-outline"></i> <span>Feedback</span>
                     </a>
                 </li>
+                <li class="menu-title"><span>Settings</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="<?php echo e(route('profile')); ?>">
                         <i class="mdi mdi-account-circle-outline"></i> <span>Profile</span>

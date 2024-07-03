@@ -183,8 +183,8 @@
                                     </div>
                                     <div class="col-lg-12 mt-4">
                                         <div class="hstack gap-2 justify-content-end mt-2">
-                                            <button type="submit" class="btn btn-primary">Update</button>
                                             <button type="button" class="btn btn-soft-success">Cancel</button>
+                                            <button type="submit" class="btn btn-primary">Update</button>
                                         </div>
                                     </div>
                                 </div>
