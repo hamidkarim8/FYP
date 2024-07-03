@@ -45,7 +45,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#admins">
+                    <a class="nav-link menu-link" href="<?php echo e(route('admin.displayAdmins')); ?>">
                         <i class="mdi mdi-account-key-outline"></i> <span>Admins</span>
                     </a>
                 </li>
@@ -57,7 +57,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#feedback">
-                        <i class="mdi mdi-comment-outline"></i> <span>Feedback</span>
+                        <i class="mdi mdi-comment-outline"></i> <span>Feedbacks</span>
                     </a>
                 </li>
                 <li class="menu-title"><span>Settings</span></li>

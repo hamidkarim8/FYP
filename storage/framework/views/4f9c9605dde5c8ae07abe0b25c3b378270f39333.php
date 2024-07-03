@@ -134,6 +134,8 @@
                 ajax: "<?php echo e(route('admin.getReports')); ?>",
                 columns: [{
                         data: null,
+                        orderable: false,
+                        searchable: false,
                         render: function(data, type, row, meta) {
                             return meta.row + 1;
                         }
@@ -144,7 +146,10 @@
                     },
                     {
                         data: 'type',
-                        name: 'type'
+                        name: 'type',
+                        render: function(data, type, row) {
+                            return data == 'simple' ? 'Simple' : 'Detailed';
+                        }
                     },
                     {
                         data: 'item.date',
@@ -218,8 +223,8 @@
                                 itemDetails += '<p><strong>Category:</strong> ' + report.item.category
                                     .name + '</p>';
 
-                                itemDetails += '<p><strong>Image:</strong></p>';
                                 if (report.item.image_paths) {
+                                    itemDetails += '<p><strong>Image:</strong></p>';
                                     var images = JSON.parse(report.item.image_paths);
                                     if (Array.isArray(images) && images.length > 0) {
                                         itemDetails +=
@@ -381,8 +386,8 @@
 
         });
         document.addEventListener('DOMContentLoaded', function() {
-                        //call notification
-                        fetchNotifications();
+            //call notification
+            fetchNotifications();
             setInterval(fetchNotifications, 60000);
 
             function fetchNotifications() {
@@ -508,7 +513,6 @@
                 });
             }
         });
-
     </script>
 <?php $__env->stopSection(); ?>
 

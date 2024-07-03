@@ -153,15 +153,10 @@ unset($__errorArgs, $__bag); ?>"
                                                 <i data-feather="lock"></i>
                                             </div>
                                         </div>
-                                        
-
-                                        
 
                                         <div class="mt-4">
                                             <button class="btn btn-success w-100" type="submit">Sign Up</button>
                                         </div>
-
-                                        
                                     </form>
 
                                 </div>

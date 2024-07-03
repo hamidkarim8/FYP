@@ -223,8 +223,8 @@
                                 itemDetails += '<p><strong>Category:</strong> ' + report.item.category
                                     .name + '</p>';
 
-                                itemDetails += '<p><strong>Image:</strong></p>';
                                 if (report.item.image_paths) {
+                                    itemDetails += '<p><strong>Image:</strong></p>';
                                     var images = JSON.parse(report.item.image_paths);
                                     if (Array.isArray(images) && images.length > 0) {
                                         itemDetails +=

@@ -38,10 +38,24 @@ Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('
 
 // Admin Dashboard Route
 Route::get('/admin', [AdminController::class, 'adminIndex'])->middleware(['auth', 'role:admin'])->name('admin.index');
+
+// Admin Reports
 Route::get('/reports', [AdminController::class, 'displayReports'])->middleware(['auth', 'role:admin'])->name('admin.displayReports');
 Route::get('/get-reports', [AdminController::class, 'getReports'])->middleware(['auth', 'role:admin'])->name('admin.getReports');
 Route::get('admin/reports/{id}', [AdminController::class, 'viewReport'])->middleware(['auth', 'role:admin'])->name('admin.viewReport');
 Route::delete('admin/reports/{id}', [AdminController::class, 'deleteReport'])->middleware(['auth', 'role:admin'])->name('admin.deleteReport');
+
+// Admin Admins
+Route::get('/admins', [AdminController::class, 'displayAdmins'])->middleware(['auth', 'role:admin'])->name('admin.displayAdmins');
+Route::get('/get-admins', [AdminController::class, 'getAdmins'])->middleware(['auth', 'role:admin'])->name('admin.getAdmins');
+Route::get('admin/admins/{id}', [AdminController::class, 'viewAdmin'])->middleware(['auth', 'role:admin'])->name('admin.viewAdmin');
+Route::delete('admin/admins/{id}', [AdminController::class, 'deleteAdmin'])->middleware(['auth', 'role:admin'])->name('admin.deleteAdmin');
+Route::post('/admin/store', [AdminController::class, 'store'])->middleware(['auth', 'role:admin'])->name('admin.store');
+
+
+
+// Admin Users
+// Admin Feedbacks
 
 // User Home Route
 Route::get('/home', [UserController::class, 'userIndex'])->middleware(['auth', 'role:normal_user'])->name('user.index');
