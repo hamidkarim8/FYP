@@ -1,6 +1,6 @@
 
 <?php $__env->startSection('title'); ?>
-    Report List
+    Admin List
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('css'); ?>
     <link href="<?php echo e(URL::asset('assets/libs/swiper/swiper.min.css')); ?>" rel="stylesheet" type="text/css" />
@@ -37,7 +37,7 @@
             Dashboards
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
-            Reports
+            Admins
         <?php $__env->endSlot(); ?>
     <?php echo $__env->renderComponent(); ?>
     <div class="row">

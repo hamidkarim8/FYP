@@ -50,7 +50,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#users">
+                    <a class="nav-link menu-link" href="{{ route('admin.displayUsers') }}">
                         <i class="mdi mdi-account-multiple-outline"></i> <span>Users</span>
                     </a>
                 </li>

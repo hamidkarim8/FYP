@@ -52,6 +52,11 @@ Route::get('admin/admins/{id}', [AdminController::class, 'viewAdmin'])->middlewa
 Route::delete('admin/admins/{id}', [AdminController::class, 'deleteAdmin'])->middleware(['auth', 'role:admin'])->name('admin.deleteAdmin');
 Route::post('/admin/store', [AdminController::class, 'store'])->middleware(['auth', 'role:admin'])->name('admin.store');
 
+// Admin Users
+Route::get('/users', [AdminController::class, 'displayUsers'])->middleware(['auth', 'role:admin'])->name('admin.displayUsers');
+Route::get('/get-users', [AdminController::class, 'getUsers'])->middleware(['auth', 'role:admin'])->name('admin.getUsers');
+Route::get('admin/users/{id}', [AdminController::class, 'viewUser'])->middleware(['auth', 'role:admin'])->name('admin.viewUser');
+Route::delete('admin/users/{id}', [AdminController::class, 'deleteUsers'])->middleware(['auth', 'role:admin'])->name('admin.deleteUsers');
 
 
 // Admin Users

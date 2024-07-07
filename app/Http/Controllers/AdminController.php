@@ -94,6 +94,10 @@ class AdminController extends Controller
     {
         return view('admin.admins');
     }
+    public function displayUsers()
+    {
+        return view('admin.users');
+    }
 
     public function getReports(Request $request)
     {
@@ -239,5 +243,37 @@ class AdminController extends Controller
         ]);
 
         return response()->json(['success' => 'Admin added successfully']);
+    }
+
+    public function getUsers(Request $request)
+    {
+        // dd($request);
+
+        if ($request->ajax()) {
+            $data = User::with('profile')->where('role', 'normal_user')->get();
+            // dd($data);
+            return DataTables::of($data)
+                ->addColumn('action', function($row){
+                    $btn = '<div class="dropdown">
+                                <a href="#" role="button" id="dropdownMenuLink'.$row->id.'" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="ri-more-2-fill"></i>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink'.$row->id.'">
+                                    <li><a class="dropdown-item view-user" href="#" data-id="'.$row->id.'">View</a></li>
+                                </ul>
+                            </div>';
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+    }
+    public function viewUser($id)
+    {
+        $user = User::with('profile')->where('role', 'normal_user')->where('id', $id)->first();
+        if ($user) {
+            return response()->json($user);
+        }
+        return response()->json(['error' => 'User not found.'], 404);
     }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    Report List
+    Admin List
 @endsection
 @section('css')
     <link href="{{ URL::asset('assets/libs/swiper/swiper.min.css') }}" rel="stylesheet" type="text/css" />
@@ -37,7 +37,7 @@
             Dashboards
         @endslot
         @slot('title')
-            Reports
+            Admins
         @endslot
     @endcomponent
     <div class="row">
