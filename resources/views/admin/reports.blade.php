@@ -55,6 +55,7 @@
                                     <th>No.</th>
                                     <th>Report ID</th>
                                     <th>Report Type</th>
+                                    <th>Item Type</th>
                                     <th>Found/Lost Date</th>
                                     <th>Report Date</th>
                                     <th>Status</th>
@@ -149,6 +150,16 @@
                         name: 'type',
                         render: function(data, type, row) {
                             return data == 'simple' ? 'Simple' : 'Detailed';
+                        }
+                    },
+                    {
+                        data: 'item.type',
+                        name: 'item.type',
+                        render: function(data, type, row) {
+                            var badgeClass = data == 'lost' ? 'badge bg-danger' :
+                                'badge bg-secondary';
+                            var statusText = data == 'lost' ? 'Lost' : 'Found';
+                            return '<span class="' + badgeClass + '">' + statusText + '</span>';
                         }
                     },
                     {

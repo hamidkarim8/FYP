@@ -56,7 +56,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#feedback">
+                    <a class="nav-link menu-link" href="<?php echo e(route('admin.displayFeedbacks')); ?>">
                         <i class="mdi mdi-comment-outline"></i> <span>Feedbacks</span>
                     </a>
                 </li>

@@ -1,6 +1,6 @@
 
 <?php $__env->startSection('title'); ?>
-    Report List
+    Admin List
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('css'); ?>
     <link href="<?php echo e(URL::asset('assets/libs/swiper/swiper.min.css')); ?>" rel="stylesheet" type="text/css" />
@@ -37,7 +37,7 @@
             Dashboards
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
-            Reports
+            Admins
         <?php $__env->endSlot(); ?>
     <?php echo $__env->renderComponent(); ?>
     <div class="row">
@@ -45,9 +45,10 @@
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title mb-0">Admin List</h5>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAdminModal">Add Admin</button>
                 </div>
                 <div class="card-body">
+                    <button class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#addAdminModal">Add
+                        Admin</button>
                     <div class="table-responsive">
                         <table id="adminList" class="table table-bordered dt-responsive nowrap table-striped align-middle"
                             style="width:100%">
@@ -126,7 +127,7 @@
                             <input type="email" class="form-control" name="email" id="adminEmail"
                                 placeholder="Enter email address" required>
                             <div class="invalid-feedback">
-                                Please enter email
+                                Please enter a valid email.
                             </div>
                         </div>
                         <div class="mb-3">
@@ -135,7 +136,7 @@
                             <input type="text" class="form-control" name="username" id="adminUsername"
                                 placeholder="Enter username" required>
                             <div class="invalid-feedback">
-                                Please enter username
+                                Please enter a username.
                             </div>
                         </div>
                         <div class="mb-2">
@@ -144,7 +145,7 @@
                             <input type="password" class="form-control" name="password" id="adminPassword"
                                 placeholder="Enter password" required>
                             <div class="invalid-feedback">
-                                Please enter password
+                                Please enter a password.
                             </div>
                         </div>
                         <input type="hidden" name="role" value="admin">
@@ -227,9 +228,10 @@
                         } else {
                             var userDetails = '<div><h4 class="mb-4">Admin Profile</h4>';
                             if (admin.profile) {
-                                userDetails += '<p><strong>Full Name:</strong> ' + admin.profile
-                                    .fullname + '</p>';
-                                userDetails += '<p><strong>Address:</strong> ' + admin.profile.address +
+                                userDetails += '<p><strong>Full Name:</strong> ' + (admin.profile
+                                    .fullname ? admin.profile.fullname : 'Not provided') + '</p>';
+                                userDetails += '<p><strong>Address:</strong> ' + (admin.profile
+                                        .address ? admin.profile.address : 'Not provided') +
                                     '</p>';
                                 if (admin.profile.avatar) {
                                     userDetails += '<p><strong>Avatar:</strong></p>';
@@ -326,7 +328,6 @@
                 e.preventDefault();
 
                 var adminId = $('#delete_admin_id').val();
-
                 // Perform delete action
                 axios.delete("<?php echo e(url('admin/admins')); ?>/" + adminId, {
                         data: {
@@ -339,7 +340,23 @@
                         table.ajax.reload();
                     })
                     .catch(function(error) {
-                        alert('Error deleting report: ' + error.message);
+                        if (error.response) {
+                            if (error.response.status === 403) {
+                                alert(error.response.data
+                                .error);
+                            } else {
+                                alert('Error deleting admin: ' + error
+                                .message); // Display generic error message
+                            }
+                        } else if (error.request) {
+                            // The request was made but no response was received
+                            console.error(error.request);
+                            alert('Error deleting admin: No response received');
+                        } else {
+                            // Something happened in setting up the request that triggered an error
+                            console.error('Error deleting admin:', error.message);
+                            alert('Error deleting admin: ' + error.message);
+                        }
                     });
             });
 
@@ -362,8 +379,26 @@
                         table.ajax.reload();
                     })
                     .catch(function(error) {
-                        console.error('Error adding admin:', error);
-                        alert('Error adding admin: ' + error.message);
+                        if (error.response) {
+                            // Server responded with a status code outside of 2xx range
+                            console.error('Error adding admin:', error.response.data);
+                            // Display specific error messages from server validation
+                            if (error.response.data.errors) {
+                                Object.keys(error.response.data.errors).forEach(function(key) {
+                                    var inputField = $('#admin' + key.charAt(0).toUpperCase() +
+                                        key.slice(1));
+                                    inputField.addClass('is-invalid');
+                                    inputField.siblings('.invalid-feedback').html(error.response
+                                        .data.errors[key][0]);
+                                });
+                            }
+                        } else if (error.request) {
+                            // The request was made but no response was received
+                            console.error('Error adding admin:', error.request);
+                        } else {
+                            // Something happened in setting up the request that triggered an Error
+                            console.error('Error adding admin:', error.message);
+                        }
                     });
             });
 

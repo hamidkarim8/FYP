@@ -50,13 +50,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#users">
+                    <a class="nav-link menu-link" href="<?php echo e(route('admin.displayUsers')); ?>">
                         <i class="mdi mdi-account-multiple-outline"></i> <span>Users</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#feedback">
+                    <a class="nav-link menu-link" href="<?php echo e(route('admin.displayFeedbacks')); ?>">
                         <i class="mdi mdi-comment-outline"></i> <span>Feedbacks</span>
                     </a>
                 </li>

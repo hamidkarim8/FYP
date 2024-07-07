@@ -273,7 +273,7 @@
             //             if (error.response) {
             //                 if (error.response.status === 403) {
             //                     alert(error.response.data
-            //                     .error); // Display custom error message from Laravel
+            //                     .error); 
             //                 } else {
             //                     alert('Error deleting admin: ' + error
             //                     .message); // Display generic error message
@@ -286,48 +286,6 @@
             //                 // Something happened in setting up the request that triggered an error
             //                 console.error('Error deleting admin:', error.message);
             //                 alert('Error deleting admin: ' + error.message);
-            //             }
-            //         });
-            // });
-
-            // // add admin modal
-            // $('#addAdminModalBtn').click(function() {
-            //     $('#addAdminModal').modal('show');
-            // });
-
-            // // Handle form submission for adding admin
-            // $('#addAdminForm').submit(function(e) {
-            //     e.preventDefault();
-
-            //     var formData = new FormData(this);
-
-            //     axios.post("<?php echo e(route('admin.store')); ?>", formData)
-            //         .then(function(response) {
-            //             alert(response.data.success);
-            //             $('#addAdminModal').modal('hide');
-            //             $('#addAdminForm')[0].reset();
-            //             table.ajax.reload();
-            //         })
-            //         .catch(function(error) {
-            //             if (error.response) {
-            //                 // Server responded with a status code outside of 2xx range
-            //                 console.error('Error adding admin:', error.response.data);
-            //                 // Display specific error messages from server validation
-            //                 if (error.response.data.errors) {
-            //                     Object.keys(error.response.data.errors).forEach(function(key) {
-            //                         var inputField = $('#admin' + key.charAt(0).toUpperCase() +
-            //                             key.slice(1));
-            //                         inputField.addClass('is-invalid');
-            //                         inputField.siblings('.invalid-feedback').html(error.response
-            //                             .data.errors[key][0]);
-            //                     });
-            //                 }
-            //             } else if (error.request) {
-            //                 // The request was made but no response was received
-            //                 console.error('Error adding admin:', error.request);
-            //             } else {
-            //                 // Something happened in setting up the request that triggered an Error
-            //                 console.error('Error adding admin:', error.message);
             //             }
             //         });
             // });

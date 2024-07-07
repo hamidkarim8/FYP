@@ -47,7 +47,7 @@
                     <h5 class="card-title mb-0">Admin List</h5>
                 </div>
                 <div class="card-body">
-                    <button class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#addAdminModal">Add
+                    <button class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#addAdminModal"><span> <i class="ri-user-add-line me-2"></i></span> Add
                         Admin</button>
                     <div class="table-responsive">
                         <table id="adminList" class="table table-bordered dt-responsive nowrap table-striped align-middle"
@@ -343,7 +343,7 @@
                         if (error.response) {
                             if (error.response.status === 403) {
                                 alert(error.response.data
-                                .error); // Display custom error message from Laravel
+                                .error);
                             } else {
                                 alert('Error deleting admin: ' + error
                                 .message); // Display generic error message
