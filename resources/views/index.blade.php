@@ -74,10 +74,11 @@
 
             color: #fff;
         }
+
         .star-rating {
-        color: #FFD600;
-        font-size: 1.5rem;
-    }
+            color: #FFD600;
+            font-size: 1.5rem;
+        }
     </style>
 @endsection
 @section('body')
@@ -1158,7 +1159,9 @@
                                     <div id="privacy-collapseFour" class="accordion-collapse collapse"
                                         aria-labelledby="privacy-headingFour" data-bs-parent="#privacy-accordion">
                                         <div class="accordion-body ff-secondary">
-                                            The contact information of someone who found your item will be visible for you to contact upon approval of the report's owner through the requests contact or proof of ownership that you have made.
+                                            The contact information of someone who found your item will be visible for you
+                                            to contact upon approval of the report's owner through the requests contact or
+                                            proof of ownership that you have made.
                                         </div>
                                     </div>
                                 </div>
@@ -1185,16 +1188,17 @@
                                     <i class="ri-double-quotes-l text-success display-3"></i>
                                 </div>
                                 <h4 class="text-white mb-5">Satisfied Users</h4>
-            
+
                                 <!-- Swiper -->
                                 <div class="swiper client-review-swiper rounded" dir="ltr">
                                     <div class="swiper-wrapper">
-                                        @if($feedbacks->isEmpty())
+                                        @if ($feedbacks->isEmpty())
                                             <div class="swiper-slide">
                                                 <div class="row justify-content-center">
                                                     <div class="col-10">
                                                         <div class="text-white-50">
-                                                            <p class="fs-20 ff-secondary mb-4 text-center">No feedbacks available.</p>
+                                                            <p class="fs-20 ff-secondary mb-4 text-center">No feedbacks
+                                                                available.</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1205,10 +1209,12 @@
                                                     <div class="row justify-content-center">
                                                         <div class="col-10">
                                                             <div class="text-white-50">
-                                                                <p class="fs-20 ff-secondary mb-4">" {{ $feedback->message }} "</p>
-            
+                                                                <p class="fs-20 ff-secondary mb-4">"
+                                                                    {{ $feedback->message }} "</p>
+
                                                                 <div>
-                                                                    <h5 class="star-rating">{{ str_repeat('★', $feedback->stars) }}</h5>
+                                                                    <h5 class="star-rating">
+                                                                        {{ str_repeat('★', $feedback->stars) }}</h5>
                                                                     <p>- {{ $feedback->user->name }}</p>
                                                                 </div>
                                                             </div>
@@ -1297,6 +1303,24 @@
                 </div>
             </div>
 
+            <!-- Feedback Reply Modal -->
+            <div class="modal fade" id="feedbackReplyModal" tabindex="-1" aria-labelledby="feedbackReplyModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="feedbackReplyModalLabel">Feedback Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="feedbackContent">
+                                <!-- Feedback and reply content will be populated here by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- start Work Process -->
             <section class="section">
@@ -1466,15 +1490,17 @@
                                         <div class="col-lg-6">
                                             <div class="mb-4">
                                                 <label for="name" class="form-label fs-13">Name</label>
-                                                <input name="name" id="name" type="text" class="form-control bg-light border-light"
-                                                    placeholder="Your name" required>
+                                                <input name="name" id="name" type="text"
+                                                    class="form-control bg-light border-light" placeholder="Your name"
+                                                    required>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="mb-4">
                                                 <label for="email" class="form-label fs-13">Email</label>
-                                                <input name="email" id="email" type="email" class="form-control bg-light border-light"
-                                                    placeholder="Your email" required>
+                                                <input name="email" id="email" type="email"
+                                                    class="form-control bg-light border-light" placeholder="Your email"
+                                                    required>
                                             </div>
                                         </div>
                                     </div>
@@ -1482,8 +1508,9 @@
                                         <div class="col-lg-12">
                                             <div class="mb-4">
                                                 <label for="subject" class="form-label fs-13">Subject</label>
-                                                <input type="text" class="form-control bg-light border-light" id="subject" name="subject"
-                                                    placeholder="Your Subject.." required>
+                                                <input type="text" class="form-control bg-light border-light"
+                                                    id="subject" name="subject" placeholder="Your Subject.."
+                                                    required>
                                             </div>
                                         </div>
                                     </div>
@@ -1491,14 +1518,15 @@
                                         <div class="col-lg-12">
                                             <div class="mb-3">
                                                 <label for="comments" class="form-label fs-13">Message</label>
-                                                <textarea name="comments" id="comments" rows="3"
-                                                    class="form-control bg-light border-light" placeholder="Your message..." required></textarea>
+                                                <textarea name="comments" id="comments" rows="3" class="form-control bg-light border-light"
+                                                    placeholder="Your message..." required></textarea>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-12 text-end">
-                                            <input type="submit" class="submitBtn btn btn-primary" value="Send Message">
+                                            <input type="submit" class="submitBtn btn btn-primary"
+                                                value="Send Message">
                                         </div>
                                     </div>
                                 </form>
@@ -2118,6 +2146,11 @@
                                     notification.type === 'App\\Notifications\\DeleteItemDetails') || (
                                     notification.type === 'App\\Notifications\\FeedbackSubmitted')) {
                                 href = '#hero';
+                            } else if ((notification.type === 'App\\Notifications\\FeedbackToReview') || (
+                                    notification.type === 'App\\Notifications\\FeedbackReply')) {
+                                href = `{{ route('admin.displayFeedbacks') }}`;
+                            } else if ((notification.type === 'App\\Notifications\\FeedbackReplied')) {
+                                href = 'javascript:void(0)';
                             } else {
                                 href = `{{ route('user.itemDetail', ['id' => ':report_id']) }}`
                                     .replace(':report_id', notification.data.report_id);
@@ -2125,7 +2158,8 @@
 
                             return `
                 <div class="text-reset notification-item d-block dropdown-item position-relative ${isRead}" 
-                    data-notification-id="${notification.id}"
+                    data-notification-id="${notification.id}" data-notification-type="${notification.type}"
+                        data-feedback-id="${notification.data.feedback_id}"
                     style="background-color: ${backgroundColor};">
                     <div class="d-flex align-items-center">
                         <div class="avatar-xs me-3">
@@ -2134,7 +2168,7 @@
                             </span>
                         </div>
                         <div class="flex-grow-1">
-                            <a href=${href} class="stretched-link">
+                            <a href=${href} class="stretched-link notification-link">
                                 <h6 class="mt-0 mb-2 lh-base">${notification.data.message}</h6>
                             </a>
                             <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
@@ -2162,6 +2196,7 @@
 
                     if (notifications.length > 0) {
                         attachCheckboxListeners();
+                        attachNotificationLinkListeners();
                     }
                 }
 
@@ -2195,6 +2230,74 @@
                         });
                     });
                 }
+
+                function attachNotificationLinkListeners() {
+                    document.addEventListener('click', function(event) {
+                        const target = event.target;
+                        if (target.matches('.notification-link, .notification-link *')) {
+                            const notificationItem = target.closest('.notification-item');
+                            const notificationType = notificationItem.getAttribute('data-notification-type');
+
+                            if (notificationType === 'App\\Notifications\\FeedbackReplied') {
+                                event.preventDefault();
+                                const feedbackId = notificationItem.getAttribute('data-feedback-id');
+                                axios.get(`/admin/feedbacks/${feedbackId}`)
+                                    .then(response => {
+                                        const feedback = response.data;
+
+                                        const feedbackMessage = feedback.message ? feedback.message :
+                                            'No message available';
+                                        const feedbackReply = feedback.reply ? feedback.reply :
+                                            'No reply available';
+                                        const createdAt = feedback.created_at ? new Date(feedback
+                                            .created_at).toLocaleString('en-GB') : 'Date not available';
+                                        const updatedAt = feedback.updated_at ? new Date(feedback
+                                            .updated_at).toLocaleString('en-GB') : 'Date not available';
+
+                                        const feedbackContent = `
+                            <div class="card mb-3">
+                                <div class="card-header bg-info text-white">
+                                    <h6 class="mb-0">Feedback Message</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p>${feedbackMessage}</p>
+                                    <p><strong>Date:</strong> ${createdAt}</p>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0">Feedback Reply</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p>${feedbackReply}</p>
+                                    <p><strong>Date:</strong> ${updatedAt}</p>
+                                </div>
+                            </div>`;
+                                        document.getElementById('feedbackContent').innerHTML =
+                                            feedbackContent;
+                                        const feedbackReplyModal = new bootstrap.Modal(document.getElementById(
+                                            'feedbackReplyModal'));
+                                        feedbackReplyModal.show();
+
+                                        // Attach event listener to remove backdrop when modal is hidden
+                                        document.getElementById('feedbackReplyModal').addEventListener(
+                                            'hidden.bs.modal',
+                                            function() {
+                                                const backdrop = document.querySelector(
+                                                    '.modal-backdrop');
+                                                if (backdrop) {
+                                                    backdrop.remove();
+                                                }
+                                            });
+                                    })
+                                    .catch(error => {
+                                        console.error('Error fetching feedback:', error);
+                                    });
+                            }
+                        }
+                    });
+                }
+
                 // Handle feedback button click
                 document.querySelector('.btn-give-feedback').addEventListener('click', function(event) {
                     event.preventDefault();

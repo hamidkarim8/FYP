@@ -4,7 +4,8 @@
 <script src="{{ URL::asset('assets/libs/feather-icons/feather-icons.min.js') }}"></script>
 <script src="{{ URL::asset('assets/js/pages/plugins/lord-icon-2.1.0.min.js') }}"></script>
 <script src="{{ URL::asset('assets/js/plugins.min.js') }}"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
@@ -63,6 +64,11 @@
                             notification.type === 'App\\Notifications\\DeleteItemDetails') || (
                             notification.type === 'App\\Notifications\\FeedbackSubmitted')) {
                         href = '#hero';
+                    } else if ((notification.type === 'App\\Notifications\\FeedbackToReview') || (
+                            notification.type === 'App\\Notifications\\FeedbackReply')) {
+                        href = `{{ route('admin.displayFeedbacks') }}`;
+                    } else if ((notification.type === 'App\\Notifications\\FeedbackReplied')) {
+                        href = 'javascript:void(0)';
                     } else {
                         href = `{{ route('user.itemDetail', ['id' => ':report_id']) }}`
                             .replace(':report_id', notification.data.report_id);
@@ -70,8 +76,9 @@
 
                     return `
                                     <div class="text-reset notification-item d-block dropdown-item position-relative ${isRead}" 
-                                        data-notification-id="${notification.id}"
-                                        style="background-color: ${backgroundColor};">
+                    data-notification-id="${notification.id}" data-notification-type="${notification.type}"
+                        data-feedback-id="${notification.data.feedback_id}"
+                                                                style="background-color: ${backgroundColor};">
                                         <div class="d-flex align-items-center">
                                             <div class="avatar-xs me-3">
                                                 <span class="avatar-title bg-soft-info text-info rounded-circle fs-16">
@@ -79,7 +86,7 @@
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1">
-                                                <a href=${href} class="stretched-link">
+                            <a href=${href} class="stretched-link notification-link">
                                                     <h6 class="mt-0 mb-2 lh-base">${notification.data.message}</h6>
                                                 </a>
                                                 <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
@@ -107,6 +114,7 @@
 
             if (notifications.length > 0) {
                 attachCheckboxListeners();
+                attachNotificationLinkListeners();
             }
         }
 
@@ -129,18 +137,86 @@
                             });
                     } else {
                         axios.put(`/notifications/${notificationId}/mark-as-unread`)
-                                .then(response => {
-                                    fetchNotifications();
-                                })
-                                .catch(error => {
-                                    console.error('Error marking notification as unread:',
-                                        error);
-                                });
-                        }
-                    });
+                            .then(response => {
+                                fetchNotifications();
+                            })
+                            .catch(error => {
+                                console.error('Error marking notification as unread:',
+                                    error);
+                            });
+                    }
                 });
-            }
-        });
+            });
+        }
+
+        function attachNotificationLinkListeners() {
+            document.addEventListener('click', function(event) {
+                const target = event.target;
+                if (target.matches('.notification-link, .notification-link *')) {
+                    const notificationItem = target.closest('.notification-item');
+                    const notificationType = notificationItem.getAttribute('data-notification-type');
+
+                    if (notificationType === 'App\\Notifications\\FeedbackReplied') {
+                        event.preventDefault();
+                        const feedbackId = notificationItem.getAttribute('data-feedback-id');
+                        axios.get(`/admin/feedbacks/${feedbackId}`)
+                            .then(response => {
+                                const feedback = response.data;
+
+                                const feedbackMessage = feedback.message ? feedback.message :
+                                    'No message available';
+                                const feedbackReply = feedback.reply ? feedback.reply :
+                                    'No reply available';
+                                const createdAt = feedback.created_at ? new Date(feedback
+                                    .created_at).toLocaleString('en-GB') : 'Date not available';
+                                const updatedAt = feedback.updated_at ? new Date(feedback
+                                    .updated_at).toLocaleString('en-GB') : 'Date not available';
+
+                                const feedbackContent = `
+                            <div class="card mb-3">
+                                <div class="card-header bg-info text-white">
+                                    <h6 class="mb-0">Feedback Message</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p>${feedbackMessage}</p>
+                                    <p><strong>Date:</strong> ${createdAt}</p>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0">Feedback Reply</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p>${feedbackReply}</p>
+                                    <p><strong>Date:</strong> ${updatedAt}</p>
+                                </div>
+                            </div>`;
+                                document.getElementById('feedbackContent').innerHTML =
+                                    feedbackContent;
+                                const feedbackReplyModal = new bootstrap.Modal(document
+                                    .getElementById(
+                                        'feedbackReplyModal'));
+                                feedbackReplyModal.show();
+
+                                // Attach event listener to remove backdrop when modal is hidden
+                                document.getElementById('feedbackReplyModal').addEventListener(
+                                    'hidden.bs.modal',
+                                    function() {
+                                        const backdrop = document.querySelector(
+                                            '.modal-backdrop');
+                                        if (backdrop) {
+                                            backdrop.remove();
+                                        }
+                                    });
+                            })
+                            .catch(error => {
+                                console.error('Error fetching feedback:', error);
+                            });
+                    }
+                }
+            });
+        }
+    });
 </script>
 @yield('script')
 @yield('script-bottom')

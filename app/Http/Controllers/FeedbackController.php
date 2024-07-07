@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Feedback;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\FeedbackSubmitted;
+use App\Notifications\FeedbackToReview;
 
 class FeedbackController extends Controller
 {
@@ -29,6 +31,10 @@ class FeedbackController extends Controller
         //send notification successfully submitted a feedback
         $user = Auth::user();
         Notification::send($user, new FeedbackSubmitted($feedback));
+
+        //send notification to review
+        $admin = User::where('role', 'admin')->get();
+        Notification::send($admin, new FeedbackToReview($feedback));
 
         return response()->json(['success' => 'Feedback submitted successfully.']);
     }

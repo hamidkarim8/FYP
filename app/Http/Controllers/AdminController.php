@@ -12,6 +12,10 @@ use App\Models\Feedback;
 use Carbon\Carbon;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\FeedbackReply;
+use App\Notifications\FeedbackReplied;
 
 
 class AdminController extends Controller
@@ -342,6 +346,13 @@ class AdminController extends Controller
             $feedback = Feedback::findOrFail($validatedData['feedback_id']);
             $feedback->reply = $validatedData['reply'];
             $feedback->save();
+
+            $admin = Auth::user();
+            Notification::send($admin, new FeedbackReply());
+
+            $user = User::find($feedback->user_id);
+            // dd($user);
+            Notification::send($user, new FeedbackReplied($feedback));
 
             return response()->json(['success' => 'Reply sent successfully.']);
         } catch (\Exception $e) {

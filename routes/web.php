@@ -61,7 +61,7 @@ Route::delete('admin/users/{id}', [AdminController::class, 'deleteUsers'])->midd
 // Admin Feedbacks
 Route::get('/feedbacks', [AdminController::class, 'displayFeedbacks'])->middleware(['auth', 'role:admin'])->name('admin.displayFeedbacks');
 Route::get('/get-feedbacks', [AdminController::class, 'getFeedbacks'])->middleware(['auth', 'role:admin'])->name('admin.getFeedbacks');
-Route::get('admin/feedbacks/{id}', [AdminController::class, 'viewFeedback'])->middleware(['auth', 'role:admin'])->name('admin.viewFeedback');
+Route::get('admin/feedbacks/{id}', [AdminController::class, 'viewFeedback'])->middleware(['auth'])->name('admin.viewFeedback');
 Route::delete('admin/feedbacks/{id}', [AdminController::class, 'deleteFeedback'])->middleware(['auth', 'role:admin'])->name('admin.deleteFeedback');
 Route::post('/admin/replyFeedback', [AdminController::class, 'replyFeedback'])->middleware(['auth', 'role:admin'])->name('admin.replyFeedback');
 Route::post('/admin/toggleDisplay', [AdminController::class, 'toggleDisplay'])->middleware(['auth', 'role:admin'])->name('admin.toggleDisplay');
