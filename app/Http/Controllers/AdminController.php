@@ -86,7 +86,7 @@ class AdminController extends Controller
     public function calculatePercentageChange($currentValue, $previousValue)
     {
         if ($previousValue > 0) {
-            return number_format(($currentValue - $previousValue) / $previousValue * 100, 2);
+            return round(($currentValue - $previousValue) / $previousValue * 100, 2);
         } else {
             return 0;
         }
