@@ -2288,6 +2288,7 @@
                                                 if (backdrop) {
                                                     backdrop.remove();
                                                 }
+                                                location.reload();
                                             });
                                     })
                                     .catch(error => {

@@ -2310,6 +2310,7 @@ unset($__errorArgs, $__bag); ?>
                                                 if (backdrop) {
                                                     backdrop.remove();
                                                 }
+                                                location.reload();
                                             });
                                     })
                                     .catch(error => {
