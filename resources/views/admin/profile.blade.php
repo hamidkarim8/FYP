@@ -115,12 +115,12 @@
                                 Change Password
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#privacy" role="tab">
                                 <i class="far fa-envelope"></i>
                                 Privacy Policy
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
                 <div class="card-body p-4">
@@ -235,7 +235,7 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="tab-pane" id="privacy" role="tabpanel">
+                        {{-- <div class="tab-pane" id="privacy" role="tabpanel">
                             <div class="mb-3">
                                 <h5 class="card-title text-decoration-underline mb-3">Permissions:</h5>
                                 <ul class="list-unstyled mb-0">
@@ -285,7 +285,7 @@
                                     <a href="javascript:void(0);" class="btn btn-light">Cancel</a>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <!--end tab-pane-->
                     </div>
                 </div>

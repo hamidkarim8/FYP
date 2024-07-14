@@ -111,12 +111,7 @@
                                 Change Password
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#privacy" role="tab">
-                                <i class="far fa-envelope"></i>
-                                Privacy Policy
-                            </a>
-                        </li>
+                        
                     </ul>
                 </div>
                 <div class="card-body p-4">
@@ -231,57 +226,7 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="tab-pane" id="privacy" role="tabpanel">
-                            <div class="mb-3">
-                                <h5 class="card-title text-decoration-underline mb-3">Permissions:</h5>
-                                <ul class="list-unstyled mb-0">
-                                    <li class="d-flex mt-2">
-                                        <div class="flex-grow-1">
-                                            <label class="form-check-label fs-14" for="allowNotification">
-                                                Allow notifications
-                                            </label>
-                                            <p class="text-muted">Enable this to receive notifications and updates from the
-                                                system.</p>
-                                        </div>
-                                        <div class="flex-shrink-0">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch"
-                                                    id="allowNotification" />
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="d-flex mt-2">
-                                        <div class="flex-grow-1">
-                                            <label class="form-check-label fs-14" for="allowLocation">
-                                                Allow sharing current location
-                                            </label>
-                                            <p class="text-muted">Enable this to share your current location with the
-                                                system.</p>
-                                        </div>
-                                        <div class="flex-shrink-0">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch"
-                                                    id="allowLocation" />
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h5 class="card-title text-decoration-underline mb-3">Delete This Account:</h5>
-                                <p class="text-muted">Your account will be permanently removed from the system. Please
-                                    enter your password to confirm.</p>
-                                <div>
-                                    <input type="password" class="form-control" id="passwordInput" name="password"
-                                        placeholder="Enter your password" value="" style="max-width: 265px;">
-                                </div>
-                                <div class="hstack gap-2 mt-3">
-                                    <a href="javascript:void(0);" class="btn btn-soft-danger">Close & Delete This
-                                        Account</a>
-                                    <a href="javascript:void(0);" class="btn btn-light">Cancel</a>
-                                </div>
-                            </div>
-                        </div>
+                        
                         <!--end tab-pane-->
                     </div>
                 </div>
