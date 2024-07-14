@@ -46,16 +46,31 @@ class ReportController extends Controller
     public function storeSimpleReport(Request $request)
     {
         $messages = [
-            'required' => 'The :attribute field is required.',
-            'in' => 'The selected :attribute is invalid.',
-            'exists' => 'The selected :attribute is invalid.',
-            'numeric' => 'The :attribute must be a number.',
-            'date' => 'The :attribute must be a valid date.',
+            'title.required' => 'The title field is required.',
+            'title.string' => 'The title must be a string.',
+            
+            'type.required' => 'The type field is required.',
+            'type.in' => 'The selected type is invalid.',
+            
+            'category_id.required' => 'The category field is required.',
+            'category_id.exists' => 'The selected category is invalid.',
+            
+            'description.required' => 'The description field is required.',
+            'description.string' => 'The description must be a string.',
+            
+            'latitude.required' => 'The latitude field is required.',
+            'latitude.numeric' => 'The latitude must be a number.',
+            
+            'longitude.required' => 'The longitude field is required.',
+            'longitude.numeric' => 'The longitude must be a number.',
+            
+            'date.required' => 'The date field is required.',
+            'date.date' => 'The date must be a valid date.',
         ];
 
         try {
             $validatedData = $request->validate([
-                'title' => 'nullable|string',
+                'title' => 'required|string',
                 'type' => 'required|in:found,lost',
                 'category_id' => 'required|exists:categories,id',
                 'description' => 'required|string',
@@ -143,14 +158,51 @@ class ReportController extends Controller
         // }
         Log::info('Request received: ', $request->all());
         $messages = [
-            'required' => 'The :attribute field is required.',
-            'in' => 'The selected :attribute is invalid.',
-            'exists' => 'The selected :attribute is invalid.',
-            'numeric' => 'The :attribute must be a number.',
-            'date' => 'The :attribute must be a valid date.',
-            // 'mimes' => 'The :attribute must be a file of type: :values.',
-            // 'image' => 'The :attribute must be an image (jpeg, png, jpg, gif)',
-            // 'detailed-images.*.mimes' => 'The :attribute must be a file of type: jpeg, png, jpg, gif.',
+            'detailed-title.required' => 'The title field is required.',
+            'detailed-title.string' => 'The title must be a string.',
+            'detailed-title.max' => 'The title may not be greater than 255 characters.',
+            
+            'detailed-type.required' => 'The type field is required.',
+            'detailed-type.in' => 'The selected type is invalid.',
+            
+            'detailed-category.required' => 'The category field is required.',
+            'detailed-category.exists' => 'The selected category is invalid.',
+            
+            'detailed-description.string' => 'The description must be a string.',
+            
+            'detailed-images.required' => 'The images field is required.',
+            
+            'detailed-latitude.required' => 'The latitude field is required.',
+            'detailed-latitude.numeric' => 'The latitude must be a number.',
+            
+            'detailed-longitude.required' => 'The longitude field is required.',
+            'detailed-longitude.numeric' => 'The longitude must be a number.',
+            
+            'detailed-loc-desc.string' => 'The location description must be a string.',
+            
+            'detailed-fullname.required' => 'The full name field is required.',
+            'detailed-fullname.string' => 'The full name must be a string.',
+            'detailed-fullname.max' => 'The full name may not be greater than 255 characters.',
+            
+            'detailed-email.required' => 'The email field is required.',
+            'detailed-email.email' => 'The email must be a valid email address.',
+            'detailed-email.max' => 'The email may not be greater than 255 characters.',
+            
+            'detailed-phone.required' => 'The phone number field is required.',
+            'detailed-phone.string' => 'The phone number must be a string.',
+            'detailed-phone.max' => 'The phone number may not be greater than 20 characters.',
+            
+            'ig_username.string' => 'The Instagram username must be a string.',
+            'ig_username.max' => 'The Instagram username may not be greater than 255 characters.',
+            
+            'twitter_username.string' => 'The Twitter username must be a string.',
+            'twitter_username.max' => 'The Twitter username may not be greater than 255 characters.',
+            
+            'tiktok_username.string' => 'The TikTok username must be a string.',
+            'tiktok_username.max' => 'The TikTok username may not be greater than 255 characters.',
+            
+            'detailed-date.required' => 'The detailed date field is required.',
+            'detailed-date.date' => 'The detailed date must be a valid date.',
         ];
 
         try {
@@ -159,8 +211,7 @@ class ReportController extends Controller
                 'detailed-type' => 'required|in:found,lost',
                 'detailed-category' => 'required|exists:categories,id',
                 'detailed-description' => 'nullable|string',
-                // 'detailed-images.*' => 'required|mimes:jpeg,png,jpg,gif',
-                'detailed-images.*' => 'required', //need improvement
+                'detailed-images' => 'required',
                 'detailed-latitude' => 'required|numeric',
                 'detailed-longitude' => 'required|numeric',
                 'detailed-loc-desc' => 'nullable|string',

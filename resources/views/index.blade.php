@@ -700,7 +700,7 @@
                                                                         Images</label>
                                                                     <input type="file"
                                                                         class="filepond filepond-input-multiple" multiple
-                                                                        name="detailed-images[]" data-allow-reorder="true"
+                                                                        name="detailed-images[]" accept=".jpeg,.png,.jpg,.gif" data-allow-reorder="true"
                                                                         data-max-file-size="3MB" data-max-files="3">
                                                                     <p><span class="text-danger">*</span> Please upload only:
                                                                         jpeg, png, jpg, gif, Maximum number of files: 3</p>
@@ -1656,6 +1656,7 @@
         <script
             src="{{ URL::asset('assets/libs/filepond-plugin-file-validate-size/filepond-plugin-file-validate-size.min.js') }}">
         </script>
+        <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
         <script
             src="{{ URL::asset('assets/libs/filepond-plugin-image-exif-orientation/filepond-plugin-image-exif-orientation.min.js') }}">
         </script>

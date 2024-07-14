@@ -36,7 +36,9 @@ var __webpack_exports__ = {};
   FilePondPluginFileEncode, // validates the size of the file
   FilePondPluginFileValidateSize, // corrects mobile image orientation
   FilePondPluginImageExifOrientation, // previews dropped images
-  FilePondPluginImagePreview);
+  FilePondPluginImagePreview,
+  FilePondPluginFileValidateType,
+);
   var inputMultipleElements = document.querySelectorAll('input[type="file"].filepond');
   var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -51,7 +53,14 @@ var __webpack_exports__ = {};
             'X-CSRF-TOKEN': csrfToken
           }
         },
-        allowMultiple: true
+        allowMultiple: true,
+        maxFiles: 3,
+        acceptedFileTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
+        fileValidateTypeLabelExpectedTypesMap: {
+            'image/jpeg': '.jpg',
+            'image/png': '.png',
+            'image/gif': '.gif'
+        },
       });
     });
     FilePond.create(document.querySelector('.filepond-input-circle'), {
