@@ -1297,7 +1297,7 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                                 <div class="mb-3">
                                     <label for="message" class="form-label">Message</label>
-                                    <textarea id="message" name="message" class="form-control" rows="3" required></textarea>
+                                    <textarea id="message" name="message" class="form-control" rows="3" placeholder="Enter Message" required></textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label for="stars" class="form-label">Rating</label>
