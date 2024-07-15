@@ -100,14 +100,41 @@ class ItemController extends Controller
 
     public function delete($id)
     {
-        $report = Report::findOrFail($id);
-        $report->delete();
-
-        //send notification successfully updated item details
-        $user = Auth::user();
-        Notification::send($user, new DeleteItemDetails($report));
-
-        return response()->json(['status' => 'success', 'message' => 'Report deleted successfully']);
+        // Start a transaction to ensure both operations succeed or fail together
+        DB::beginTransaction();
+    
+        try {
+            // Find the report
+            $report = Report::findOrFail($id);
+    
+            // Retrieve the associated item
+            $item = $report->item;
+    
+            // Delete the report
+            $report->delete();
+    
+            // Delete the associated item
+            if ($item) {
+                $item->delete();
+            }
+    
+            // Commit the transaction
+            DB::commit();
+    
+            // Send notification successfully updated item details
+            $user = Auth::user();
+            Notification::send($user, new DeleteItemDetails($report));
+    
+            return response()->json(['status' => 'success', 'message' => 'Report and associated item deleted successfully']);
+        } catch (\Exception $e) {
+            // Rollback the transaction if an error occurs
+            DB::rollBack();
+    
+            // Log the error
+            Log::error('Error deleting report and associated item: ' . $e->getMessage());
+    
+            return response()->json(['status' => 'error', 'message' => 'Failed to delete report and associated item']);
+        }
     }
     public function latestReport()
     {
@@ -131,7 +158,7 @@ class ItemController extends Controller
             $latestReport = $user->reports()->latest()->first();
 
             if ($latestReport) {
-
+                
                 $similarItems = $latestReport->getSimilarItems();
 
                 return response()->json([

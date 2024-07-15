@@ -48,22 +48,22 @@ class ReportController extends Controller
         $messages = [
             'title.required' => 'The title field is required.',
             'title.string' => 'The title must be a string.',
-            
+
             'type.required' => 'The type field is required.',
             'type.in' => 'The selected type is invalid.',
-            
+
             'category_id.required' => 'The category field is required.',
             'category_id.exists' => 'The selected category is invalid.',
-            
+
             'description.required' => 'The description field is required.',
             'description.string' => 'The description must be a string.',
-            
+
             'latitude.required' => 'The latitude field is required.',
             'latitude.numeric' => 'The latitude must be a number.',
-            
+
             'longitude.required' => 'The longitude field is required.',
             'longitude.numeric' => 'The longitude must be a number.',
-            
+
             'date.required' => 'The date field is required.',
             'date.date' => 'The date must be a valid date.',
         ];
@@ -102,7 +102,7 @@ class ReportController extends Controller
 
             //send notification successfully submitted a report
             $user = Auth::user();
-            if($user){
+            if ($user) {
                 Notification::send($user, new SimpleReportSubmitted($report));
             }
 
@@ -161,46 +161,46 @@ class ReportController extends Controller
             'detailed-title.required' => 'The title field is required.',
             'detailed-title.string' => 'The title must be a string.',
             'detailed-title.max' => 'The title may not be greater than 255 characters.',
-            
+
             'detailed-type.required' => 'The type field is required.',
             'detailed-type.in' => 'The selected type is invalid.',
-            
+
             'detailed-category.required' => 'The category field is required.',
             'detailed-category.exists' => 'The selected category is invalid.',
-            
+
             'detailed-description.string' => 'The description must be a string.',
-            
+
             'detailed-images.required' => 'The images field is required.',
-            
+
             'detailed-latitude.required' => 'The latitude field is required.',
             'detailed-latitude.numeric' => 'The latitude must be a number.',
-            
+
             'detailed-longitude.required' => 'The longitude field is required.',
             'detailed-longitude.numeric' => 'The longitude must be a number.',
-            
+
             'detailed-loc-desc.string' => 'The location description must be a string.',
-            
+
             'detailed-fullname.required' => 'The full name field is required.',
             'detailed-fullname.string' => 'The full name must be a string.',
             'detailed-fullname.max' => 'The full name may not be greater than 255 characters.',
-            
+
             'detailed-email.required' => 'The email field is required.',
             'detailed-email.email' => 'The email must be a valid email address.',
             'detailed-email.max' => 'The email may not be greater than 255 characters.',
-            
+
             'detailed-phone.required' => 'The phone number field is required.',
             'detailed-phone.string' => 'The phone number must be a string.',
             'detailed-phone.max' => 'The phone number may not be greater than 20 characters.',
-            
+
             'ig_username.string' => 'The Instagram username must be a string.',
             'ig_username.max' => 'The Instagram username may not be greater than 255 characters.',
-            
+
             'twitter_username.string' => 'The Twitter username must be a string.',
             'twitter_username.max' => 'The Twitter username may not be greater than 255 characters.',
-            
+
             'tiktok_username.string' => 'The TikTok username must be a string.',
             'tiktok_username.max' => 'The TikTok username may not be greater than 255 characters.',
-            
+
             'detailed-date.required' => 'The detailed date field is required.',
             'detailed-date.date' => 'The detailed date must be a valid date.',
         ];
@@ -297,32 +297,44 @@ class ReportController extends Controller
     protected function notifyUsers($report)
     {
         $authUserId = Auth::id();
-
+        
         Log::info('Authenticated User ID: ' . $authUserId);
         Log::info('Report: ', $report->toArray());
-
-
-        //testing
-        $matchingReports = Report::whereHas('item', function ($itemQuery) use ($report) {
+        
+        // Extract the desc value from the report's item's location
+        $desc = $report->item->location['desc'];
+        $descWords = array_filter(explode(' ', $desc)); // Split the desc into words
+        $descPattern = implode('|', array_map('preg_quote', $descWords)); // Create a regex pattern from the words
+        $descPatternLower = strtolower($descPattern); // Convert the pattern to lowercase
+        
+        // Log the regex pattern
+        Log::info('Regex pattern for location desc: ' . $descPatternLower);
+        
+        // Testing: Find matching reports
+        $matchingReports = Report::whereHas('item', function ($itemQuery) use ($report, $descPatternLower) {
             $itemQuery->where('title', 'like', '%' . $report->item->title . '%')
-                ->orWhere('category_id', $report->item->category_id);
+                ->orWhere('category_id', $report->item->category_id)
+                ->orWhereRaw('LOWER(JSON_EXTRACT(location, "$.desc")) REGEXP ?', [$descPatternLower]);
         })->where('type', 'detailed')->get();
+        
         Log::info('Matching Reports: ', $matchingReports->toArray());
-
-        //find user to be notified
-        $users = User::whereHas('reports', function ($query) use ($report, $authUserId) {
+        
+        // Find users to be notified
+        $users = User::whereHas('reports', function ($query) use ($report, $authUserId, $descPatternLower) {
             $query->where('user_id', '!=', $authUserId)
                 ->where('type', 'detailed')
-                ->whereHas('item', function ($itemQuery) use ($report) {
+                ->whereHas('item', function ($itemQuery) use ($report, $descPatternLower) {
                     $itemQuery->where('title', 'like', '%' . $report->item->title . '%')
-                        ->orWhere('category_id', $report->item->category_id);
+                        ->orWhere('category_id', $report->item->category_id)
+                        ->orWhereRaw('LOWER(JSON_EXTRACT(location, "$.desc")) REGEXP ?', [$descPatternLower]);
                 });
         })->get();
-        // dd($report->id);
+        
         Log::info('Users to be notified: ', $users->toArray());
-
+        
         foreach ($users as $user) {
             $user->notify(new SimilarItem($report->item, $report));
         }
     }
+    
 }

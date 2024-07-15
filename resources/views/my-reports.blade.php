@@ -353,23 +353,27 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                const report = data.report.item;
-
-                                if (!report || !report.category_id || !report.title) {
-                                    console.error('Incomplete report data:', report);
+                                const similarItems = data.similarItems;
+                                console.log(similarItems);
+                                if (!similarItems || similarItems.length === 0) {
+                                    console.error('No similar items found.');
                                     return;
                                 }
 
-                                const category = report.category_id;
-                                const title = report.title.toLowerCase();
                                 let itemsToShow = [];
 
                                 items.forEach(item => {
                                     const itemCategory = item.getAttribute('data-category-id');
                                     const itemTitle = item.getAttribute('data-title');
 
-                                    if (itemCategory == category || itemTitle.toLowerCase().includes(
-                                            title)) {
+                                    // Check if item category or title matches any similar item
+                                    const matchFound = similarItems.some(similarItem => {
+                                        return similarItem.category_id == itemCategory ||
+                                            similarItem.title.toLowerCase() === itemTitle
+                                            .toLowerCase();
+                                    });
+
+                                    if (matchFound) {
                                         item.style.display = '';
                                         itemsToShow.push(item);
                                         updateItemCount(itemsToShow.length);

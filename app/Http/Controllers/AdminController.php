@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\FeedbackReply;
 use App\Notifications\FeedbackReplied;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 
 class AdminController extends Controller
@@ -146,18 +148,52 @@ class AdminController extends Controller
 
     public function deleteReport(Request $request, $id)
     {
-        $report = Report::find($id);
-        if ($report) {
-            DeletedReport::create([
-                'report_id' => $report->id,
-                'deleted_type' => $request->deleted_type,
-                'remarks' => $request->remarks,
-            ]);
-            $report->delete();
-            return response()->json(['success' => 'Report deleted successfully.']);
+        // Start a transaction to ensure both operations succeed or fail together
+        DB::beginTransaction();
+    
+        try {
+            // Find the report
+            $report = Report::find($id);
+            if ($report) {
+                // Retrieve the associated item
+                $item = $report->item;
+    
+                // Create a record in DeletedReport
+                DeletedReport::create([
+                    'report_id' => $report->id,
+                    'deleted_type' => $request->deleted_type,
+                    'remarks' => $request->remarks,
+                ]);
+    
+                // Delete the report
+                $report->delete();
+    
+                // Delete the associated item
+                if ($item) {
+                    $item->delete();
+                }
+    
+                // Commit the transaction
+                DB::commit();
+    
+                return response()->json(['success' => 'Report and associated item deleted successfully.']);
+            }
+    
+            // Rollback the transaction if the report is not found
+            DB::rollBack();
+    
+            return response()->json(['error' => 'Report not found.'], 404);
+        } catch (\Exception $e) {
+            // Rollback the transaction if an error occurs
+            DB::rollBack();
+    
+            // Log the error
+            Log::error('Error deleting report and associated item: ' . $e->getMessage());
+    
+            return response()->json(['error' => 'Failed to delete report and associated item.'], 500);
         }
-        return response()->json(['error' => 'Report not found.'], 404);
     }
+    
 
     public function getAdmins(Request $request)
     {

@@ -13,7 +13,7 @@
         }
 
         .swiper-image {
-            max-width: 30%;
+            max-width: 50%;
             height: auto;
             margin-bottom: 10px;
         }
@@ -245,7 +245,7 @@
                                             itemDetails += '<div class="swiper-slide">' +
                                                 '<img src="' + imagePath + '" alt="' + report
                                                 .item.title +
-                                                '" class="img-fluid swiper-image" />' +
+                                                '" class="swiper-image" />' +
                                                 '</div>';
                                         });
                                         itemDetails += '</div>' +

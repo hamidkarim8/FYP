@@ -13,7 +13,7 @@
         }
 
         .swiper-image {
-            max-width: 30%;
+            max-width: 50%;
             height: auto;
             margin-bottom: 10px;
         }
@@ -241,7 +241,7 @@
                                     userDetails += '<div class="swiper-slide">' +
                                         '<img src="images/' + admin.profile.avatar + '" alt="' + admin
                                         .profile.fullname +
-                                        '" class="img-fluid swiper-image" />' +
+                                        '" class="swiper-image" />' +
                                         '</div>';
                                     userDetails += '</div>' +
                                         '<div class="swiper-button-next bg-white shadow"></div>' +
