@@ -229,28 +229,59 @@ class AdminController extends Controller
     }
     public function deleteAdmin($id)
     {
-        $admin = User::find($id);
-
-        // Check if admin exists
-        if (!$admin) {
-            return response()->json(['error' => 'Admin not found.'], 404);
+        // Start a transaction to ensure both operations succeed or fail together
+        DB::beginTransaction();
+    
+        try {
+            $admin = User::find($id);
+    
+            // Check if admin exists
+            if (!$admin) {
+                // Rollback the transaction if the admin is not found
+                DB::rollBack();
+                return response()->json(['error' => 'Admin not found.'], 404);
+            }
+    
+            // Check if the admin is trying to delete themselves
+            if ($admin->id === auth()->user()->id) {
+                // Rollback the transaction if the admin is trying to delete themselves
+                DB::rollBack();
+                return response()->json(['error' => 'You cannot delete yourself.'], 403);
+            }
+    
+            // Check if this is the last admin user in the system
+            if ($admin->role === 'admin' && User::where('role', 'admin')->count() === 1) {
+                // Rollback the transaction if it's the last admin user
+                DB::rollBack();
+                return response()->json(['error' => 'Cannot delete the last admin user.'], 403);
+            }
+    
+            // Retrieve the associated profile
+            $profile = $admin->profile;
+    
+            // Delete the admin user
+            $admin->delete();
+    
+            // Delete the associated profile
+            if ($profile) {
+                $profile->delete();
+            }
+    
+            // Commit the transaction
+            DB::commit();
+    
+            return response()->json(['success' => 'Admin and associated profile deleted successfully.']);
+        } catch (\Exception $e) {
+            // Rollback the transaction if an error occurs
+            DB::rollBack();
+    
+            // Log the error
+            Log::error('Error deleting admin and associated profile: ' . $e->getMessage());
+    
+            return response()->json(['error' => 'Failed to delete admin and associated profile.'], 500);
         }
-
-        // Check if the admin is trying to delete themselves
-        if ($admin->id === auth()->user()->id) {
-            return response()->json(['error' => 'You cannot delete yourself.'], 403);
-        }
-
-        // Check if this is the last admin user in the system
-        if ($admin->role === 'admin' && User::where('role', 'admin')->count() === 1) {
-            return response()->json(['error' => 'Cannot delete the last admin user.'], 403);
-        }
-
-        // Delete the admin user
-        $admin->delete();
-
-        return response()->json(['success' => 'Admin deleted successfully.']);
     }
+    
 
     public function store(Request $request)
     {
