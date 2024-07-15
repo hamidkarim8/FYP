@@ -282,9 +282,6 @@
                                     <h4 class="text-center text-muted"><span id="modalTitle"></span> | <span
                                             id="modalCategory"></span></h4>
                                 </div>
-                                
-                                
-                                
                                 <div class="text-left mt-4">
                                     <div class="text-muted">Description : <span class="text-body fw-medium"><span
                                                 id="modalDescription"></span></span></div>
@@ -294,6 +291,10 @@
                             </div>
                             <div class="modal-footer hstack gap-2 justify-content-center">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <?php if(auth()->guard()->check()): ?>
+                                    <a id="seeDetailsButton" class="btn btn-primary" href="#"
+                                        style="display: none;">See Details</a>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -719,8 +720,9 @@ unset($__errorArgs, $__bag); ?>
                                                                         Images</label>
                                                                     <input type="file"
                                                                         class="filepond filepond-input-multiple" multiple
-                                                                        name="detailed-images[]" accept=".jpeg,.png,.jpg,.gif" data-allow-reorder="true"
-                                                                        data-max-file-size="3MB" data-max-files="3">
+                                                                        name="detailed-images[]" accept=".jpeg,.png,.jpg,.gif"
+                                                                        data-allow-reorder="true" data-max-file-size="3MB"
+                                                                        data-max-files="3">
                                                                     <p><span class="text-danger">*</span> Please upload only:
                                                                         jpeg, png, jpg, gif, Maximum number of files: 3</p>
                                                                 </div>
@@ -1824,6 +1826,8 @@ unset($__errorArgs, $__bag); ?>
 
                         $('#ribbonContainer').html(ribbonHTML);
 
+                        $('#seeDetailsButton').hide();
+
                         // Show modal
                         $('#reportDetailsModal').modal('show');
                     });
@@ -1860,6 +1864,10 @@ unset($__errorArgs, $__bag); ?>
                         }
 
                         $('#ribbonContainer').html(ribbonHTML);
+
+                        var detailsUrl = `<?php echo e(route('user.itemDetail', ['id' => ':report_id'])); ?>`
+                            .replace(':report_id', report.id);
+                        $('#seeDetailsButton').attr('href', detailsUrl).show();
 
                         // Show modal
                         $('#reportDetailsModal').modal('show');
@@ -2298,8 +2306,9 @@ unset($__errorArgs, $__bag); ?>
                             </div>`;
                                         document.getElementById('feedbackContent').innerHTML =
                                             feedbackContent;
-                                        const feedbackReplyModal = new bootstrap.Modal(document.getElementById(
-                                            'feedbackReplyModal'));
+                                        const feedbackReplyModal = new bootstrap.Modal(document
+                                            .getElementById(
+                                                'feedbackReplyModal'));
                                         feedbackReplyModal.show();
 
                                         // Attach event listener to remove backdrop when modal is hidden

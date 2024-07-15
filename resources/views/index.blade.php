@@ -284,23 +284,6 @@
                                     <h4 class="text-center text-muted"><span id="modalTitle"></span> | <span
                                             id="modalCategory"></span></h4>
                                 </div>
-                                {{-- opt 1 --}}
-                                {{-- <div class="table-responsive mt-4">
-                                    <table class="table mb-0">
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row" style="width: 10px;">Description: </th>
-                                                <td><span id="modalDescription"></span></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row" style="width: 10px;">Date (<span
-                                                        id="modalType"></span>): </th>
-                                                <td><span id="modalDate"></span></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div> --}}
-                                {{-- opt 2 --}}
                                 <div class="text-left mt-4">
                                     <div class="text-muted">Description : <span class="text-body fw-medium"><span
                                                 id="modalDescription"></span></span></div>
@@ -310,6 +293,10 @@
                             </div>
                             <div class="modal-footer hstack gap-2 justify-content-center">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                @auth
+                                    <a id="seeDetailsButton" class="btn btn-primary" href="#"
+                                        style="display: none;">See Details</a>
+                                @endauth
                             </div>
                         </div>
                     </div>
@@ -700,8 +687,9 @@
                                                                         Images</label>
                                                                     <input type="file"
                                                                         class="filepond filepond-input-multiple" multiple
-                                                                        name="detailed-images[]" accept=".jpeg,.png,.jpg,.gif" data-allow-reorder="true"
-                                                                        data-max-file-size="3MB" data-max-files="3">
+                                                                        name="detailed-images[]" accept=".jpeg,.png,.jpg,.gif"
+                                                                        data-allow-reorder="true" data-max-file-size="3MB"
+                                                                        data-max-files="3">
                                                                     <p><span class="text-danger">*</span> Please upload only:
                                                                         jpeg, png, jpg, gif, Maximum number of files: 3</p>
                                                                 </div>
@@ -1802,6 +1790,8 @@
 
                         $('#ribbonContainer').html(ribbonHTML);
 
+                        $('#seeDetailsButton').hide();
+
                         // Show modal
                         $('#reportDetailsModal').modal('show');
                     });
@@ -1838,6 +1828,10 @@
                         }
 
                         $('#ribbonContainer').html(ribbonHTML);
+
+                        var detailsUrl = `{{ route('user.itemDetail', ['id' => ':report_id']) }}`
+                            .replace(':report_id', report.id);
+                        $('#seeDetailsButton').attr('href', detailsUrl).show();
 
                         // Show modal
                         $('#reportDetailsModal').modal('show');
@@ -2276,8 +2270,9 @@
                             </div>`;
                                         document.getElementById('feedbackContent').innerHTML =
                                             feedbackContent;
-                                        const feedbackReplyModal = new bootstrap.Modal(document.getElementById(
-                                            'feedbackReplyModal'));
+                                        const feedbackReplyModal = new bootstrap.Modal(document
+                                            .getElementById(
+                                                'feedbackReplyModal'));
                                         feedbackReplyModal.show();
 
                                         // Attach event listener to remove backdrop when modal is hidden
