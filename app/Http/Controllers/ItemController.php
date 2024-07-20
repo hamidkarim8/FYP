@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Report;
 use App\Models\User;
+use App\Models\Claim;
 use App\Notifications\EditItemDetails;
 use App\Notifications\DeleteItemDetails;
 use App\Notifications\ResolvedItemDetails;
@@ -187,7 +188,13 @@ class ItemController extends Controller
         $report->isResolved = "Resolved";
         $report->save();
 
-        //send notification successfully updated item details
+        // Create a new claim
+        $claim = new Claim();
+        $claim->report_id = $report->id;
+        $claim->request_id = $request->requestId;
+        $claim->save();
+
+        //send notification successfully resolved item
         $user = Auth::user();
         Notification::send($user, new ResolvedItemDetails($report));
 

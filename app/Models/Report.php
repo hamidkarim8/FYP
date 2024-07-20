@@ -103,4 +103,8 @@ class Report extends Model
     {
         return $this->hasMany(Request::class, 'detailed_report_id')->where('status', 'declined');
     }
+    public function claim()
+    {
+        return $this->hasOne(Claim::class);
+    }
 }

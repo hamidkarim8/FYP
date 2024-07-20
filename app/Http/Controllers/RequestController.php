@@ -98,4 +98,15 @@ class RequestController extends Controller
         // dd($requests);
         return response()->json(['requests' => $requests]);
     }
+
+    public function getApprovedRequests($reportId)
+{
+    // dd($reportId);
+    $requests = ReportRequest::where('detailed_report_id', $reportId)
+        ->where('status', 'approved')
+        ->with('user.profile')
+        ->get();
+        // dd($requests);
+    return response()->json(['requests' => $requests]);
+}
 }

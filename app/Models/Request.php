@@ -23,6 +23,11 @@ class Request extends Model
     {
         return $this->belongsTo(Profile::class, 'user_id', 'user_id');
     }
+
+    public function claim()
+    {
+        return $this->hasOne(Claim::class);
+    }
 }
 
 
