@@ -21,10 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'avatar',
-        'userType',
-        'device_token'
-
+        'role',
     ];
 
     /**
@@ -46,19 +43,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function lostItems()
+    public function hasRole($role)
     {
-        return $this->hasMany(LostItem::class);
+        return $this->role === $role;
     }
 
-    public function foundItems()
+    public function items()
     {
-        return $this->hasMany(FoundItem::class);
-    }
-
-    public function feedbacks()
-    {
-        return $this->hasMany(Feedback::class);
+        return $this->hasMany(Item::class);
     }
 
     public function reports()
@@ -66,8 +58,20 @@ class User extends Authenticatable
         return $this->hasMany(Report::class);
     }
 
-    public function notifications()
+    public function requests()
     {
-        return $this->hasMany(Notification::class);
+        return $this->hasMany(Request::class);
     }
+
+    public function feedbacks()
+    {
+        return $this->hasMany(Feedback::class);
+    }
+
+
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
+
 }

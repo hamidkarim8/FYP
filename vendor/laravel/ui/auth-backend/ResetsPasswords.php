@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Log;
 
 trait ResetsPasswords
 {
@@ -27,6 +28,7 @@ trait ResetsPasswords
     public function showResetForm(Request $request)
     {
         $token = $request->route()->parameter('token');
+        Log::info('showResetForm method called with token: ' . $token); // Debug statement
 
         return view('auth.passwords.reset')->with(
             ['token' => $token, 'email' => $request->email]
@@ -41,6 +43,8 @@ trait ResetsPasswords
      */
     public function reset(Request $request)
     {
+        Log::info('reset method called'); // Debug statement
+        Log::info('Request data: ', $request->all()); // Log the request data
         $request->validate($this->rules(), $this->validationErrorMessages());
 
         // Here we will attempt to reset the user's password. If it is successful we
@@ -51,6 +55,9 @@ trait ResetsPasswords
                 $this->resetPassword($user, $password);
             }
         );
+
+        Log::info('Password broker reset response: ' . $response); // Log the response
+
 
         // If the password was successfully reset, we will redirect the user back to
         // the application's home authenticated view. If there is an error we can
@@ -81,8 +88,13 @@ trait ResetsPasswords
      */
     protected function validationErrorMessages()
     {
-        return [];
-    }
+        return [
+            'email.required' => 'Please enter your email address.',
+            'email.email' => 'Please enter a valid email address.',
+            'password.required' => 'Please enter your new password.',
+            'password.confirmed' => 'Password confirmation does not match.',
+            'password_confirmation.required' => 'Please confirm your new password.',
+        ];    }
 
     /**
      * Get the password reset credentials from the request.
@@ -138,12 +150,14 @@ trait ResetsPasswords
      */
     protected function sendResetResponse(Request $request, $response)
     {
+        $customMessage = 'Your password has been reset successfully.';
+
         if ($request->wantsJson()) {
-            return new JsonResponse(['message' => trans($response)], 200);
+            return new JsonResponse(['message' => $customMessage], 200);
         }
 
         return redirect($this->redirectPath())
-                            ->with('status', trans($response));
+                            ->with('success', $customMessage);
     }
 
     /**
@@ -155,15 +169,23 @@ trait ResetsPasswords
      */
     protected function sendResetFailedResponse(Request $request, $response)
     {
+        $errorMessage = 'Failed to reset the password.';
+
+        if ($response === Password::INVALID_TOKEN) {
+            $errorMessage = 'This password reset token is invalid.';
+        } elseif ($response === Password::INVALID_USER) {
+            $errorMessage = 'We can\'t find a user with that email address.';
+        }
+
         if ($request->wantsJson()) {
             throw ValidationException::withMessages([
-                'email' => [trans($response)],
+                'email' => [$errorMessage],
             ]);
         }
 
         return redirect()->back()
                     ->withInput($request->only('email'))
-                    ->withErrors(['email' => trans($response)]);
+                    ->withErrors(['email' => $errorMessage]);
     }
 
     /**

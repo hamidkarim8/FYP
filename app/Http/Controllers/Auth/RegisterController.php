@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Models\Profile;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -36,10 +37,10 @@ class RegisterController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('guest');
+    // }
 
     /**
      * Get a validator for an incoming registration request.
@@ -48,12 +49,41 @@ class RegisterController extends Controller
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
+    // {
+    //     return Validator::make($data, [
+    //         'name' => ['required', 'string', 'max:255'],
+    //         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+    //         'password' => ['required', 'string', 'min:8', 'confirmed'],
+    //         'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:1024'],
+    //     ], [
+    //         'name.required' => 'Please enter your name.',
+    //         'email.required' => 'Please enter your email address.',
+    //         'email.email' => 'Please enter a valid email address.',
+    //         'email.unique' => 'This email address is already registered.',
+    //         'password.required' => 'Please enter a password.',
+    //         'password.min' => 'Password must be at least 8 characters long.',
+    //         'password.confirmed' => 'Passwords do not match.',
+    //         'avatar.required' => 'Please upload an avatar image.',
+    //         'avatar.image' => 'The avatar must be an image.',
+    //         'avatar.mimes' => 'The avatar must be a file of type: jpg, jpeg, png.',
+    //         'avatar.max' => 'The avatar must not be greater than 1024 kilobytes.',
+    //     ]);
+    // }
+
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'avatar' => ['required', 'image' ,'mimes:jpg,jpeg,png','max:1024'],
+        ], [
+            'name.required' => 'Please enter your username.',
+            'name.unique' => 'This username is already registered.',
+            'email.required' => 'Please enter your email address.',
+            'email.email' => 'Please enter a valid email address.',
+            'email.unique' => 'This email address is already registered.',
+            'password.required' => 'Please enter a password.',
+            'password.min' => 'Password must be at least 8 characters long.',
+            'password.confirmed' => 'Passwords do not match.',
         ]);
     }
 
@@ -64,20 +94,35 @@ class RegisterController extends Controller
      * @return \App\Models\User
      */
     protected function create(array $data)
-    {
-        // return request()->file('avatar');
-        if (request()->has('avatar')) {
-            $avatar = request()->file('avatar');
-            $avatarName = time() . '.' . $avatar->getClientOriginalExtension();
-            $avatarPath = public_path('/images/');
-            $avatar->move($avatarPath, $avatarName);
-        }
+    // {
+    //     // return request()->file('avatar');
+    //     if (request()->has('avatar')) {
+    //         $avatar = request()->file('avatar');
+    //         $avatarName = time() . '.' . $avatar->getClientOriginalExtension();
+    //         $avatarPath = public_path('/images/');
+    //         $avatar->move($avatarPath, $avatarName);
+    //     }
 
-        return User::create([
+    //     return User::create([
+    //         'name' => $data['name'],
+    //         'email' => $data['email'],
+    //         'password' => Hash::make($data['password']),
+    //         'avatar' =>  $avatarName,
+    //     ]);
+    // }
+    {
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'avatar' =>  $avatarName,
+            'role' => 'normal_user',
         ]);
+
+        // Create a corresponding profile with default null values
+        Profile::create([
+            'user_id' => $user->id,
+        ]);
+
+        return $user;
     }
 }

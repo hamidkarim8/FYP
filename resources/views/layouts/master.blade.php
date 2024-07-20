@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>@yield('title')| Velzon - Admin & Dashboard Template</title>
+    <title>@yield('title')| ApFound</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />    
 
     @include('layouts.head-css')
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </head>
 
 @section('body')
@@ -30,6 +31,7 @@
             <div class="page-content">
                 <div class="container-fluid">
                     @yield('content')
+                    <x-custom-toast />
                 </div>
                 <!-- container-fluid -->
             </div>
@@ -40,7 +42,7 @@
     </div>
     <!-- END layout-wrapper -->
 
-    @include('layouts.customizer')
+    {{-- @include('layouts.customizer') --}}
 
     <!-- JAVASCRIPT -->
     @include('layouts.vendor-scripts')

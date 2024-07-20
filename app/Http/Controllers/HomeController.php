@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\FoundItem;
-use App\Models\LostItem;
+use App\Models\Item;
+use App\Models\Report;
+use App\Models\Feedback;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -19,10 +20,10 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
     /**
      * Show the application dashboard.
@@ -36,64 +37,33 @@ class HomeController extends Controller
         }
         return abort(404);
     }
-    public function count()
-    {
-        $countUser = User::count();
-        $countFound = FoundItem::count();
-        $countLost = LostItem::count();
-
-        return view('index', compact('countUser', 'countFound', 'countLost'));
-    }
-    public function test()
-    {
-        $foundItems = FoundItem::all();
-        // dd($foundItems);
-
-        return view('found-items.index', compact('foundItems'));
-    }
-    public function foundItemCount()
-    {
-        $countFound = FoundItem::count();
-        // dd($countFound);
-
-        return view('index', compact('countFound'));
-    }
-    public function userCount()
-    {
-        $countUser = User::count();
-        // dd($countUser);
-
-        return view('index', compact('countUser'));
-    }
-    public function lostItemCount()
-    {
-        $countLost = LostItem::count();
-        // dd($countLost);
-
-        return view('index', compact('countLost'));
-    }
 
     public function root()
     {
-        $countUser = User::count();
-        $countFound = FoundItem::count();
-        $countLost = LostItem::count();
-        return view('index', compact('countUser', 'countFound', 'countLost'));
+        $detailedReports = Report::with(['item', 'item.category'])->where('type', 'detailed')->whereNot('isResolved', 'resolved')->get();
+        $paginateDetailedReports = Report::with(['item', 'item.category'])->where('type', 'detailed')->whereNot('isResolved', 'resolved')->paginate(6);
+        $simpleReports = Report::with(['item', 'item.category'])->where('type', 'simple')->get();
+        $normalUsers = User::where('role', 'normal_user')->get();
+        // dd($detailedReports);
+        $resolvedReports = Report::with(['item', 'item.category'])->where('type', 'detailed')->where('isResolved', 'resolved')->get();
+        $feedbacks = Feedback::where('isDisplay', true)->with('user')->get();
+        return view('index', compact('detailedReports', 'simpleReports', 'normalUsers', 'paginateDetailedReports', 'resolvedReports', 'feedbacks'));
     }
+
 
     public function timeline(Request $request)
     {
         $filter = $request->query('filter', 'found');
-    
+
         Log::info("Received request for timeline with filter: $filter");
-    
+
         try {
             if ($filter === 'lost') {
-                $items = LostItem::orderBy('created_at', 'desc')->get();
+                $items = Item::orderBy('created_at', 'desc')->where('type', 'lost')->get();
             } else {
-                $items = FoundItem::orderBy('created_at', 'desc')->get();
+                $items = Item::orderBy('created_at', 'desc')->where('type', 'found')->get();
             }
-    
+
             $formattedItems = $items->map(function ($item) {
                 return [
                     'date' => $item->created_at->format('j/m/Y'),
@@ -102,12 +72,12 @@ class HomeController extends Controller
                     'description' => $item->description,
                 ];
             });
-    
+
             if ($request->expectsJson()) {
                 Log::info("Returning JSON response");
                 return response()->json(['items' => $formattedItems]);
             }
-    
+
             Log::info("Returning view response");
             return view('timeline', ['formattedItems' => $formattedItems]);
         } catch (\Exception $e) {
@@ -118,9 +88,6 @@ class HomeController extends Controller
             return view('timeline', ['formattedItems' => []]);
         }
     }
-    
-    
-    
 
     /*Language Translation*/
     public function lang($locale)
