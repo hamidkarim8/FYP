@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'laravel/laravel',
-        'pretty_version' => 'dev-28.Admin-Dashboard',
-        'version' => 'dev-28.Admin-Dashboard',
-        'reference' => '82193defab4bf4de8fd40cb7991d70c3ee3f2a64',
+        'pretty_version' => 'dev-33.Final-Fixing',
+        'version' => 'dev-33.Final-Fixing',
+        'reference' => '61631d153a72d462e47bb6d6b5ad550071e35787',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -419,9 +419,9 @@
             'dev_requirement' => false,
         ),
         'laravel/laravel' => array(
-            'pretty_version' => 'dev-28.Admin-Dashboard',
-            'version' => 'dev-28.Admin-Dashboard',
-            'reference' => '82193defab4bf4de8fd40cb7991d70c3ee3f2a64',
+            'pretty_version' => 'dev-33.Final-Fixing',
+            'version' => 'dev-33.Final-Fixing',
+            'reference' => '61631d153a72d462e47bb6d6b5ad550071e35787',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
