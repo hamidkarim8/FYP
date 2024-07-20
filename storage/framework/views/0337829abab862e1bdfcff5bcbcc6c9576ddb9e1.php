@@ -415,15 +415,14 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="resolvedItemModalLabel">Mark as Resolved</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            
                         </div>
                         <div class="modal-body">
                             <form id="resolveForm">
                                 <div class="mb-3">
                                     <label for="requestDropdown" class="form-label">Select Claimer</label>
-                                    <select class="form-select" id="requestDropdown">
-                                        <option selected disabled>Select a request</option>
+                                    <select class="form-select" id="requestDropdown" required>
+                                        <option selected disabled value="">Select a request</option>
                                     </select>
                                 </div>
                                 <div id="claimerInfo" style="display: none;">
