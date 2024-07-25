@@ -220,6 +220,18 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
         <script>
+            // Fetch categories and populate the dropdown
+            axios.get('/categories')
+                .then(function(response) {
+                    var categories = response.data;
+                    var categorySelect3 = $('#item-category');
+                    categories.forEach(function(category) {
+                        categorySelect3.append(new Option(category.name, category.id));
+                    });
+                })
+                .catch(function(error) {
+                    console.error('Error fetching categories:', error);
+                });
             document.addEventListener('DOMContentLoaded', function() {
 
                 //call notification
