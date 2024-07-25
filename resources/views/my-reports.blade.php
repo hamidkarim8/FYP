@@ -39,12 +39,12 @@
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link fw-medium" type="button" data-filter="found">Found</button>
                                     </li>
-                                    <li class="nav-item" role="presentation">
+                                    {{-- <li class="nav-item" role="presentation">
                                         <button class="nav-link fw-medium" type="button" data-toggle="tooltip"
                                             data-placement="bottom" title="Filtering based on your report"
                                             data-filter="auto" id="auto-matching-btn">Auto-matching</button>
 
-                                    </li>
+                                    </li> --}}
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link fw-medium" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#collapseWithicon2" aria-expanded="false"
