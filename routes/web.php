@@ -16,6 +16,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ClaimController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -85,6 +86,7 @@ Route::get('/item/edit/{id}', [ItemController::class, 'edit'])->name('item.edit'
 Route::post('/item/update/{id}', [ItemController::class, 'update'])->name('item.update');
 Route::delete('/item/delete/{id}', [ItemController::class, 'delete'])->name('item.delete');
 Route::post('/item/resolved/{id}', [ItemController::class, 'resolved'])->name('item.resolved');
+Route::get('/item/getApprovedRequests/{id}', [RequestController::class, 'getApprovedRequests']);
 
 //Simple Report
 Route::post('/simple-report', [ReportController::class, 'storeSimpleReport'])->name('simple-reports.store');
@@ -112,6 +114,8 @@ Route::post('/feedback', [FeedbackController::class, 'store'])->middleware('auth
 //Contact send email
 Route::post('/send-email', [ContactController::class, 'sendEmail'])->name('sendEmail');
 
+//Claimer Information
+Route::get('/fetchClaimerInfo/{reportId}', [ClaimController::class, 'fetchClaimerInfo']);
 
 // Fallback Route
 Route::fallback(function () {

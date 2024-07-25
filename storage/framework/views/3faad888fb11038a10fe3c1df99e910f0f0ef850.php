@@ -222,8 +222,10 @@
                         if (report.error) {
                             alert(report.error);
                         } else {
+                            console.log(report);
                             var itemDetails = '<div><h4 class="mb-4">Item Details</h4>';
                             var userDetails = '<div><h4 class="mt-4 mb-4">User Profile</h4>';
+                            var claimerDetails = '';
 
                             if (report.type === 'detailed') {
                                 itemDetails += '<p><strong>Title:</strong> ' + report.item.title +
@@ -244,8 +246,7 @@
                                         images.forEach(function(imagePath) {
                                             itemDetails += '<div class="swiper-slide">' +
                                                 '<img src="' + imagePath + '" alt="' + report
-                                                .item.title +
-                                                '" class="swiper-image" />' +
+                                                .item.title + '" class="swiper-image" />' +
                                                 '</div>';
                                         });
                                         itemDetails += '</div>' +
@@ -281,11 +282,11 @@
                                         }) : 'Not provided') + '</p>';
                                 itemDetails += '<p><strong>Location Description:</strong> ' + (report
                                     .item.location.desc ? report.item.location.desc : 'Not provided'
-                                ) + '</p>';
+                                    ) + '</p>';
 
                                 userDetails += '<p><strong>Name:</strong> ' + (report.user.profile
-                                    .fullname ? report.user.profile.fullname : 'Anonymous Reporter'
-                                ) + '</p>';
+                                        .fullname ? report.user.profile.fullname : 'Anonymous Reporter'
+                                        ) + '</p>';
                                 userDetails += '<p><strong>Email:</strong> ' + (report.user.email ?
                                     report.user.email : 'Not provided') + '</p>';
                                 userDetails += '<p><strong>Phone Number:</strong> ' + (report.user
@@ -320,7 +321,7 @@
                                     report.item.type.toUpperCase() + '</span></p>';
                                 itemDetails += '<p><strong>Location Description:</strong> ' + (report
                                     .item.location.desc ? report.item.location.desc : 'Not provided'
-                                ) + '</p>';
+                                    ) + '</p>';
                                 itemDetails += '<p><strong>' + (report.item.type === 'lost' ? "Lost" :
                                     "Found") + ' Date:</strong> ' + (report.item.date ? new Date(
                                     report.item.date).toLocaleString('en-GB', {
@@ -335,29 +336,96 @@
                                 userDetails += '<p><strong>Name:</strong> Anonymous Reporter</p>';
                             }
 
-                            itemDetails += '</div>';
-                            userDetails += '</div>';
+                            if (report.isResolved == "resolved") {
+                                axios.get("/fetchClaimerInfo/" + reportId)
+                                    .then(function(claimerResponse) {
+                                        var claimer = claimerResponse.data.claimer;
+                                        if (claimer) {
+                                            claimerDetails +=
+                                                '<div><h4 class="mt-4 mb-4">Claimer Profile</h4>';
+                                            claimerDetails += '<p><strong>Name:</strong> ' + (
+                                                claimer.fullname || 'Not provided') + '</p>';
+                                            claimerDetails += '<p><strong>Email:</strong> ' + (
+                                                claimer.email || 'Not provided') + '</p>';
+                                            claimerDetails += '<p><strong>Phone Number:</strong> ' +
+                                                (claimer.phoneNumber || 'Not provided') + '</p>';
 
-                            $('#report-details').html(itemDetails + '<hr>' + userDetails);
-                            $('#viewReportModal').modal('show');
-                            $('#viewReportModal').on('shown.bs.modal', function() {
-                                var mySwiper = new Swiper('.pagination-fraction-swiper', {
-                                    navigation: {
-                                        nextEl: '.swiper-button-next',
-                                        prevEl: '.swiper-button-prev',
-                                    },
-                                    pagination: {
-                                        el: '.swiper-pagination',
-                                        type: 'fraction',
-                                    },
+                                            if (claimer.socialMedia) {
+                                                var socialMedia = JSON.parse(claimer.socialMedia);
+                                                if (socialMedia.ig_username) {
+                                                    claimerDetails +=
+                                                        '<p><strong>Instagram:</strong> <a href="https://www.instagram.com/' +
+                                                        socialMedia.ig_username +
+                                                        '" target="_blank">' + socialMedia
+                                                        .ig_username + '</a></p>';
+                                                }
+                                                if (socialMedia.twitter_username) {
+                                                    claimerDetails +=
+                                                        '<p><strong>Twitter:</strong> <a href="https://twitter.com/' +
+                                                        socialMedia.twitter_username +
+                                                        '" target="_blank">' + socialMedia
+                                                        .twitter_username + '</a></p>';
+                                                }
+                                                if (socialMedia.tiktok_username) {
+                                                    claimerDetails +=
+                                                        '<p><strong>TikTok:</strong> <a href="https://www.tiktok.com/' +
+                                                        socialMedia.tiktok_username +
+                                                        '" target="_blank">' + socialMedia
+                                                        .tiktok_username + '</a></p>';
+                                                }
+                                            }
+                                            claimerDetails += '</div>';
+                                        }
+
+                                        itemDetails += '</div>';
+                                        userDetails += '</div>';
+
+                                        // Update the DOM after fetching claimer details
+                                        $('#report-details').html(itemDetails + '<hr>' +
+                                            userDetails + '<hr>' + claimerDetails);
+                                        $('#viewReportModal').modal('show');
+                                        $('#viewReportModal').on('shown.bs.modal', function() {
+                                            var mySwiper = new Swiper(
+                                                '.pagination-fraction-swiper', {
+                                                    navigation: {
+                                                        nextEl: '.swiper-button-next',
+                                                        prevEl: '.swiper-button-prev',
+                                                    },
+                                                    pagination: {
+                                                        el: '.swiper-pagination',
+                                                        type: 'fraction',
+                                                    },
+                                                });
+                                        });
+                                    })
+                                    .catch(function(error) {
+                                        console.error('Error fetching claimer details:', error);
+                                    });
+                            } else {
+                                itemDetails += '</div>';
+                                userDetails += '</div>';
+                                $('#report-details').html(itemDetails + '<hr>' + userDetails);
+                                $('#viewReportModal').modal('show');
+                                $('#viewReportModal').on('shown.bs.modal', function() {
+                                    var mySwiper = new Swiper('.pagination-fraction-swiper', {
+                                        navigation: {
+                                            nextEl: '.swiper-button-next',
+                                            prevEl: '.swiper-button-prev',
+                                        },
+                                        pagination: {
+                                            el: '.swiper-pagination',
+                                            type: 'fraction',
+                                        },
+                                    });
                                 });
-                            });
+                            }
                         }
                     })
                     .catch(function(error) {
                         alert('Error fetching report details: ' + error.message);
                     });
             });
+
 
             // Delete Report
             $('#reportList').on('click', '.delete-report', function(e) {

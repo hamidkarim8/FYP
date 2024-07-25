@@ -117,8 +117,12 @@
                                             {{-- self report --}}
                                             <!-- Button to open modal for self-reported item -->
                                             @if (Auth::check() && Auth::id() == $report->user_id)
-                                                <button class="btn btn-success w-100" data-bs-toggle="modal"
-                                                    data-bs-target="#requestsModal">View Requests</button>
+                                                @if ($report->isResolved != 'resolved')
+                                                    <button class="btn btn-success w-100" data-bs-toggle="modal"
+                                                        data-bs-target="#requestsModal">View Requests</button>
+                                                @else
+                                                <button class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#claimerInfoModal" data-report-id="{{ $report->id }}">View Claimer Info</button>
+                                                @endif
                                             @endif
                                         @endif
                                     </div>
@@ -275,6 +279,27 @@
                 </div>
             </section>
 
+<!-- Claimer Information Modal -->
+<div class="modal fade" id="claimerInfoModal" tabindex="-1" aria-labelledby="claimerInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="claimerInfoModalLabel">Claimer Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Full Name:</strong> <span id="claimerFullName"></span></p>
+                <p><strong>Username:</strong> <span id="claimerUserName"></span></p>
+                <p><strong>Email:</strong> <span id="claimerEmail"></span></p>
+                <p><strong>Address:</strong> <span id="claimerAddress"></span></p>
+                <p><strong>Request Date:</strong> <span id="claimerRequestDate"></span></p>
+                <p><strong>Phone Number:</strong> <span id="claimerPhoneNumber"></span></p>
+                <div id="claimerSocialMediaLinks"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
             <!-- Requests Modal -->
             <div class="modal fade" id="requestsModal" tabindex="-1" aria-labelledby="requestsModalLabel"
                 aria-hidden="true">
@@ -389,27 +414,52 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Resolved Confirmation Modal -->
-            <div class="modal fade" id="resolvedItemModal" tabindex="-1" aria-labelledby="resolvedModalLabel"
+            <!-- Mark as Resolved Modal -->
+            <div class="modal fade" id="resolvedItemModal" tabindex="-1" aria-labelledby="resolvedItemModalLabel"
                 aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-md modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="resolvedModalLabel">Confirm Resolved</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <h5 class="modal-title" id="resolvedItemModalLabel">Mark as Resolved</h5>
+                            {{-- <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button> --}}
                         </div>
                         <div class="modal-body">
-                            Are you sure you have resolved this report?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-success" id="confirmResolvedBtn">Confirm</button>
+                            <form id="resolveForm">
+                                <div class="mb-3">
+                                    <label for="requestDropdown" class="form-label">Select Claimer</label>
+                                    <select class="form-select" id="requestDropdown" required>
+                                        <option selected disabled value="">Select a request</option>
+                                    </select>
+                                </div>
+                                <div id="claimerInfo" style="display: none;">
+                                    <h4 class="mb-4">Claimer Information</h4>
+                                    <hr>
+                                    <p><strong>Full Name:</strong> <span id="fullName"></span></p>
+                                    <p><strong>Username:</strong> <span id="userName"></span></p>
+                                    <p><strong>Email:</strong> <span id="emaill"></span></p>
+                                    <p><strong>Address:</strong> <span id="address"></span></p>
+                                    <p><strong>Request Date:</strong> <span id="requestDate"></span></p>
+                                    <p><strong>Phone Number:</strong> <span id="phoneNumber"></span></p>
+                                    <div id="socialMediaLinks"></div>
+                                    <hr>
+                                </div>
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" type="checkbox" id="agreeTerms">
+                                    <label class="form-check-label" for="agreeTerms">
+                                        I agree to the terms and conditions.
+                                    </label>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary mt-3" id="confirmResolvedBtn"
+                                        disabled>Confirm</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
+
             <!-- Feedback Reply Modal -->
             <div class="modal fade" id="feedbackReplyModal" tabindex="-1" aria-labelledby="feedbackReplyModalLabel"
                 aria-hidden="true">
@@ -531,7 +581,55 @@
                 });
             }
             document.addEventListener('DOMContentLoaded', function() {
+                const claimerModal = document.querySelector('#claimerInfoModal');
+    
+    if (claimerModal) {
+        claimerModal.addEventListener('show.bs.modal', function(event) {
+            // Get the report ID from the button's data attribute
+            const button = event.relatedTarget;
+            const reportId = button.getAttribute('data-report-id');
 
+            // Fetch claimer information
+            fetch(`/fetchClaimerInfo/${reportId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const claimer = data.claimer;
+
+                    // Populate the modal with the fetched data
+                    document.getElementById('claimerFullName').textContent = claimer.fullname || 'Not provided';
+                    document.getElementById('claimerUserName').textContent = claimer.username || 'Not provided';
+                    document.getElementById('claimerEmail').textContent = claimer.email || 'Not provided';
+                    document.getElementById('claimerAddress').textContent = claimer.address || 'Not provided';
+                    document.getElementById('claimerRequestDate').textContent = new Date(claimer.requestDate).toLocaleString('en-GB', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    }) || 'Not provided';
+                    document.getElementById('claimerPhoneNumber').textContent = claimer.phoneNumber || 'Not provided';
+
+                    const socialMediaLinks = document.getElementById('claimerSocialMediaLinks');
+                    socialMediaLinks.innerHTML = '';
+                    if (claimer.socialMedia) {
+                        const socialMedia = JSON.parse(claimer.socialMedia);
+                        if (socialMedia.ig_username) {
+                            socialMediaLinks.innerHTML += `<p><strong>Instagram:</strong> <a href="https://www.instagram.com/${socialMedia.ig_username}" target="_blank">${socialMedia.ig_username}</a></p>`;
+                        }
+                        if (socialMedia.twitter_username) {
+                            socialMediaLinks.innerHTML += `<p><strong>Twitter:</strong> <a href="https://twitter.com/${socialMedia.twitter_username}" target="_blank">${socialMedia.twitter_username}</a></p>`;
+                        }
+                        if (socialMedia.tiktok_username) {
+                            socialMediaLinks.innerHTML += `<p><strong>TikTok:</strong> <a href="https://www.tiktok.com/${socialMedia.tiktok_username}" target="_blank">${socialMedia.tiktok_username}</a></p>`;
+                        }
+                    }
+                })
+                .catch(error => console.error('Error fetching claimer information:', error));
+        });
+    } else {
+        console.error('Element #claimerInfoModal not found');
+    }
                 //call notification
                 fetchNotifications();
                 setInterval(fetchNotifications, 60000);
@@ -735,8 +833,9 @@
                             </div>`;
                                         document.getElementById('feedbackContent').innerHTML =
                                             feedbackContent;
-                                        const feedbackReplyModal = new bootstrap.Modal(document.getElementById(
-                                            'feedbackReplyModal'));
+                                        const feedbackReplyModal = new bootstrap.Modal(document
+                                            .getElementById(
+                                                'feedbackReplyModal'));
                                         feedbackReplyModal.show();
 
                                         // Attach event listener to remove backdrop when modal is hidden
@@ -822,6 +921,7 @@
 
                 // Handle Delete confirmation
                 document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+                    event.preventDefault();
                     const reportId = '{{ $report->id }}';
                     fetch(`/item/delete/${reportId}`, {
                             method: 'DELETE',
@@ -839,21 +939,108 @@
                         .catch(error => console.error('Error deleting report:', error));
                 });
 
-                // Handle Resolved button click
+                let requestData = null;
+
                 document.querySelector('.resolved-item-btn').addEventListener('click', function(event) {
                     event.preventDefault();
                     const resolvedItemModal = new bootstrap.Modal(document.getElementById('resolvedItemModal'));
                     resolvedItemModal.show();
+
+                    const reportId = '{{ $report->id }}';
+                    // Fetch approved requests
+                    fetch(`/item/getApprovedRequests/${reportId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            window.requestData = data;
+
+                            const requestDropdown = document.getElementById('requestDropdown');
+                            requestDropdown.innerHTML =
+                                '<option selected disabled>Select a request</option>';
+                            data.requests.forEach(request => {
+                                const option = document.createElement('option');
+                                option.value = request.id;
+                                option.text = request.user.profile.fullname || 'No name provided';
+                                requestDropdown.appendChild(option);
+                            });
+                        })
+                        .catch(error => console.error('Error fetching requests:', error));
                 });
 
-                // Handle Resolved confirmation
+                document.getElementById('requestDropdown').addEventListener('change', function() {
+                    const requestId = this.value;
+
+                    // Ensure requestData is available
+                    if (window.requestData) {
+                        const request = window.requestData.requests.find(req => req.id == requestId);
+                        if (request) {
+                            console.log('Email:', request.user.email);
+
+                            document.getElementById('fullName').textContent = request.user.profile.fullname ||
+                                'Not provided';
+                            document.getElementById('userName').textContent = request.user.name ||
+                                'Not provided';
+                            document.getElementById('emaill').textContent = request.user.email ||
+                                'Not provided';
+                            document.getElementById('address').textContent = request.user.profile.address ||
+                                'Not provided';
+                            document.getElementById('requestDate').textContent = new Date(request.created_at)
+                                .toLocaleString('en-GB', {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    second: '2-digit'
+                                }) || 'Not provided';
+                            document.getElementById('phoneNumber').textContent = request.user.profile
+                                .phone_number || 'Not provided';
+
+                            const socialMediaLinks = document.getElementById('socialMediaLinks');
+                            socialMediaLinks.innerHTML = '';
+                            if (request.user.profile.social_media) {
+                                const socialMedia = JSON.parse(request.user.profile.social_media);
+                                if (socialMedia.ig_username) {
+                                    socialMediaLinks.innerHTML +=
+                                        `<p><strong>Instagram:</strong> <a href="https://www.instagram.com/${socialMedia.ig_username}" target="_blank">${socialMedia.ig_username}</a></p>`;
+                                }
+                                if (socialMedia.twitter_username) {
+                                    socialMediaLinks.innerHTML +=
+                                        `<p><strong>Twitter:</strong> <a href="https://twitter.com/${socialMedia.twitter_username}" target="_blank">${socialMedia.twitter_username}</a></p>`;
+                                }
+                                if (socialMedia.tiktok_username) {
+                                    socialMediaLinks.innerHTML +=
+                                        `<p><strong>TikTok:</strong> <a href="https://www.tiktok.com/${socialMedia.tiktok_username}" target="_blank">${socialMedia.tiktok_username}</a></p>`;
+                                }
+                            }
+
+                            document.getElementById('claimerInfo').style.display = 'block';
+                        } else {
+                            console.error('Request not found');
+                        }
+                    } else {
+                        console.error('requestData is not available');
+                    }
+                });
+
+                document.getElementById('agreeTerms').addEventListener('change', function() {
+                    document.getElementById('confirmResolvedBtn').disabled = !this.checked;
+                });
+
                 document.getElementById('confirmResolvedBtn').addEventListener('click', function() {
+                    event.preventDefault();
+
                     const reportId = '{{ $report->id }}';
+                    const requestId = document.getElementById('requestDropdown').value;
+
                     fetch(`/item/resolved/${reportId}`, {
                             method: 'POST',
                             headers: {
+                                'Content-Type': 'application/json',
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            }
+                            },
+                            body: JSON.stringify({
+                                requestId: requestId
+                            })
                         })
                         .then(response => response.json())
                         .then(data => {
