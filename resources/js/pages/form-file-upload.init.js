@@ -1,8 +1,16 @@
 /******/ (() => { // webpackBootstrap
+  var __webpack_exports__ = {};
+  /*!*****************************************************!*\
+    !*** ./resources/js/pages/form-file-upload.init.js ***!
+    \*****************************************************/
+  /******/
+  (function () {
+    // webpackBootstrap
     var __webpack_exports__ = {};
     /*!*****************************************************!*\
       !*** ./resources/js/pages/form-file-upload.init.js ***!
       \*****************************************************/
+  
     /*
     Template Name: Velzon - Admin & Dashboard Template
     Author: Themesbrand
@@ -13,7 +21,6 @@
     // Dropzone
     // var dropzonePreviewNode = document.querySelector("#dropzone-preview-list");
     // dropzonePreviewNode.id = "";
-    
     // if (dropzonePreviewNode) {
     //   var previewTemplate = dropzonePreviewNode.parentNode.innerHTML;
     //   dropzonePreviewNode.parentNode.removeChild(dropzonePreviewNode);
@@ -24,16 +31,17 @@
     //     previewsContainer: "#dropzone-preview"
     //   });
     // } // FilePond
-    
-    
+  
     FilePond.registerPlugin( // encodes the file as base64 data
     FilePondPluginFileEncode, // validates the size of the file
     FilePondPluginFileValidateSize, // corrects mobile image orientation
     FilePondPluginImageExifOrientation, // previews dropped images
-    FilePondPluginImagePreview);
+    FilePondPluginImagePreview,
+    FilePondPluginFileValidateType,
+  );
     var inputMultipleElements = document.querySelectorAll('input[type="file"].filepond');
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    
+    var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  
     if (inputMultipleElements) {
       // loop over input elements
       Array.from(inputMultipleElements).forEach(function (inputElement) {
@@ -42,11 +50,18 @@
           server: {
             process: '/uploads',
             headers: {
-                'X-CSRF-TOKEN': csrfToken,
+              'X-CSRF-TOKEN': csrfToken
             }
-        },
-        allowMultiple: true,
-      });
+          },
+          allowMultiple: true,
+          maxFiles: 3,
+          acceptedFileTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
+          fileValidateTypeLabelExpectedTypesMap: {
+              'image/jpeg': '.jpg',
+              'image/png': '.png',
+              'image/gif': '.gif'
+          },
+        });
       });
       FilePond.create(document.querySelector('.filepond-input-circle'), {
         labelIdle: 'Drag & Drop your picture or <span class="filepond--label-action">Browse</span>',
@@ -61,5 +76,8 @@
         styleButtonProcessItemPosition: 'right bottom'
       });
     }
-    /******/ })()
-    ;
+    /******/
+  
+  })();
+  /******/ })()
+  ;
