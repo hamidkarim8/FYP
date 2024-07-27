@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 
-
 class CategorySeeder extends Seeder
 {
     /**
@@ -19,6 +18,7 @@ class CategorySeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         DB::statement('TRUNCATE TABLE categories;');
         DB::statement('ALTER TABLE categories AUTO_INCREMENT = 1;');
+
         // Array of categories
         $categories = [
             'Electronics Devices',
@@ -45,12 +45,15 @@ class CategorySeeder extends Seeder
             'Accessories'
         ];
 
+        // Sort categories in ascending alphabetical order
+        sort($categories);
+
         foreach ($categories as $category) {
             Category::create([
                 'name' => $category,
             ]);
         }
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }
