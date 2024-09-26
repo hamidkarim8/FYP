@@ -16,7 +16,7 @@ Ensure you have the following installed on your local development environment:
 Clone the repository to your local machine using the following command:
 
 ```bash
-[git clone https://github.com/your-username/your-repo-name.git](https://github.com/hamidkarim8/FYP.git)
+[git clone https://github.com/hamidkarim8/FYP.git
 cd FYP
 
 # Install Dependencies
